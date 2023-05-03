@@ -16,19 +16,25 @@ class UserSeeder extends Seeder
         User::create([
             'name'=>'Alwan',
             'email'=>'alwan123@gmail.com',
-            'password'=>'$2y$10$SNirCdtPnpuUbhWpXm1nyeHATXkzwVbPOYxmXSQ6okjVdeG.ppkHq'
+            'sandi_id' => 1,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2006-03-10'
         ]);
 
         User::create([
             'name'=>'Akbar',
             'email'=>'akbar123@gmail.com',
-            'password'=>'$2y$10$NeYzADmJWfnirKYi3.AW0e/XTW52K.esZiLvosyw5zEe8EmIR2P5W'
+            'sandi_id' => 2,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2006-03-10'
         ]);
 
         User::create([
             'name'=>'Niebel',
             'email'=>'niebel123@gmail.com',
-            'password'=>'$2y$10$NeYzADmJWfnirKYi3.AW0e/XTW52K.esZiLvosyw5zEe8EmIR2P5W'
+            'sandi_id' => 3,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2005-03-10'
         ]);
     }
 }
