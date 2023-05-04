@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Toko;
+use App\Models\Katalog;
+
+use Illuminate\Support\Facades\DB;
+
 class TokoController extends Controller
 {
     /**
@@ -12,7 +17,23 @@ class TokoController extends Controller
      */
     public function index()
     {
-        //
+
+        // $selectionList = DB::table('tokos')
+        // ->leftJoin('katalogs', 'id_katalog', '=', 'tokos.katalog_id')
+        // ->select('katalogs.id_kategori')
+        // ->orderBy('katalogs.id_katalog','asc')
+        // ->take(100)
+        // ->get();
+
+        $list_toko = Toko::all();
+        $katalog_toko = Katalog::where('id_katalog','=', '1')->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Toko',
+            'data' => $list_toko,
+            'katalog' => $katalog_toko,
+        ]);
     }
 
     /**

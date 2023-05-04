@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('driver_personal_information', function (Blueprint $table) {
-            $table->id();
+        Schema::create('kategori', function (Blueprint $table) {
+            $table->id('id');
+            $table->string('kategori_img')->nullable();
+            $table->string('nama_kategori');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('driver_personal_information');
+        Schema::dropIfExists('kategori');
     }
 };
