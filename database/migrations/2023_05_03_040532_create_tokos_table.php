@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('tokos', function (Blueprint $table) {
             $table->id();
+            $table->string('img_profile')->nullable();
+            $table->string('img_header')->nullable();
+            $table->string('nama_toko');
+            $table->longText('deskripsi');
+            $table->unsignedBigInteger('seller_id')->nullable();
+            $table->foreign('seller_id')->references('id')->on('tokos');
+            $table->longText('alamat');
+            $table->string('location');
+            $table->time('open');
+            $table->time('close');
+            $table->unsignedBigInteger('katalog_id')->nullable();
+            $table->foreign('katalog_id')->references('id')->on('tokos');
             $table->timestamps();
         });
     }

@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
-            SandiSeeder::class
+            SandiSeeder::class,
+            TokoSeeder::class,
+            KategoriSeeder::class,
+            Katalogseeder::class,
+            AssignRoleToUserSeeder::class
         ]);
     }
 }
