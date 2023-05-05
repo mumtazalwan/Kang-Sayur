@@ -11,7 +11,8 @@ class Toko extends Model
 {
     use HasFactory;
 
-    public function katalog(){
-        return this->hasMany(Katalog::class, 'katalog_id');
+    public function katalog()
+    {
+        return $this->hasMany(Katalog::class, "id_katalog");
     }
 }
