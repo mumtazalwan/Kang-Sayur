@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Katalog;
 use Illuminate\Http\Request;
 
+use App\Models\Produk;
+
 class KatalogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
+        $katalogId = $request->katalogId;
+
+        $products = Produk::where('katalog_id', $katalogId)->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Product Toko',
+            'data' => $products->setHidden(['id', 'created_at', 'updated_at']),
+        ]);
     }
 
     /**

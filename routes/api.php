@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\User\UserPersonalInformationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Seller\TokoController;
+use App\Http\Controllers\KatalogController;
 
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -43,6 +44,7 @@ Route::group(['prefix'=>'auth'], function(){
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
     Route::get('/profile', [UserController::class, 'index']);
     Route::get('/toko', [TokoController::class, 'index']);
+    Route::get('/produk', [KatalogController::class, 'index']);
     Route::get('/logout', [UserPersonalInformationController::class, 'logout']);
 });
 // admin

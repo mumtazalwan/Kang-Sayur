@@ -3,35 +3,17 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\rs;
 use Illuminate\Http\Request;
 
-use App\Models\Toko;
-use App\Models\Katalog;
-
-use Illuminate\Support\Facades\DB;
-
-class TokoController extends Controller
+class ProdukController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-        // $selectionList = DB::table('tokos')
-        // ->leftJoin('katalogs', 'id_katalog', '=', 'tokos.katalog_id')
-        // ->select('katalogs.id_kategori')
-        // ->orderBy('katalogs.id_katalog','asc')
-        // ->take(100)
-        // ->get();
-
-        $list_toko = Toko::with('katalog')->get();
-
-        return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Toko',
-            'data' => $list_toko,
-        ]);
+        //
     }
 
     /**
@@ -53,7 +35,7 @@ class TokoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(rs $rs)
     {
         //
     }
@@ -61,7 +43,7 @@ class TokoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(rs $rs)
     {
         //
     }
@@ -69,7 +51,7 @@ class TokoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, rs $rs)
     {
         //
     }
@@ -77,7 +59,7 @@ class TokoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(rs $rs)
     {
         //
     }
