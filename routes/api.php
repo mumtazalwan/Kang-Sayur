@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\User\UserPersonalInformationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Seller\TokoController;
+use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\KatalogController;
 
 use App\Models\User;
@@ -37,15 +38,15 @@ Route::group(['prefix'=>'auth'], function(){
     Route::post('/login', [AuthenticationController::class, 'login']);
     Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
     Route::get('/profile', [AuthenticationController::class, 'getPersonalInformation'])->middleware(['auth:sanctum']);
-    // Route::get('/sandi', [AuthenticationController::class, 'getSandi'])->middleware(['auth:sanctum']);
 });
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
     Route::get('/profile', [UserController::class, 'index']);
+    Route::get('/logout', [UserPersonalInformationController::class, 'logout']);
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/produk', [KatalogController::class, 'index']);
-    Route::get('/logout', [UserPersonalInformationController::class, 'logout']);
+    Route::get('/produk/detail', [ProdukController::class, 'detail']);
 });
 // admin
 Route::group(['prefix'=>'admin', 'middleware'=> ['role:admin']], function(){});

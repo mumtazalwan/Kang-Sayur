@@ -21,7 +21,7 @@ class KatalogController extends Controller
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Product Toko',
-            'data' => $products->setHidden(['id', 'created_at', 'updated_at']),
+            'data' => $products->setHidden([ 'deskripsi', 'katalog_id', 'kategori_id', 'varian_id', 'ulasan_id', 'created_at', 'updated_at']),
         ]);
     }
 

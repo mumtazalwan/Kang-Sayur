@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\rs;
 use Illuminate\Http\Request;
 
+use App\Models\Produk;
+
 class ProdukController extends Controller
 {
     /**
@@ -14,6 +16,18 @@ class ProdukController extends Controller
     public function index()
     {
         //
+    }
+
+    public function detail(Request $request)
+    {
+        $produkId = $request->produkId;
+        $data = Produk::where('id', $produkId)->get();
+
+        return response()->json([
+            'status' => 'succes',
+            'message' => 'Detail Toko',
+            'data' => $data
+        ]);
     }
 
     /**
