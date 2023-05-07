@@ -10,6 +10,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\LogVisitorController;
 
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -31,23 +32,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix'=>'auth'], function(){
+    Route::post('/login', [AuthenticationController::class, 'login']);
+    Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
     Route::post('/user/register', [AuthenticationController::class, 'registerAsUser']);
     Route::post('/seller/register', [AuthenticationController::class, 'registerAsSeller']);
     Route::post('/driver/register', [AuthenticationController::class, 'registerAsDriver']);
-
     Route::post('/login', [AuthenticationController::class, 'login']);
     Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
-    Route::get('/profile', [AuthenticationController::class, 'getPersonalInformation'])->middleware(['auth:sanctum']);
 });
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
     Route::get('/profile', [UserController::class, 'index']);
-    Route::get('/logout', [UserPersonalInformationController::class, 'logout']);
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/produk', [KatalogController::class, 'index']);
     Route::get('/produk/detail', [ProdukController::class, 'detail']);
+    Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
+    Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
 });
+
+
 // admin
 Route::group(['prefix'=>'admin', 'middleware'=> ['role:admin']], function(){});
 // seller

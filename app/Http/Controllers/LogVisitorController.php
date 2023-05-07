@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\LogVisitor;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
+
+class LogVisitorController extends Controller
+{
+    // produk paling sering dikunjungi oleh semua user
+    public function getProductPopuler(){
+        $data = DB::table('log_visitor')
+        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id)'))
+        ->orderBy('product_id')
+        ->join('produk', function (JoinClause $join){
+            $join->on('log_visitor.product_id', '=', 'produk.id');
+        })
+        ->groupBy('nama_produk', 'id', 'img_id')
+        ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
+        ->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+    // produk paling sering dikunjungi oleh auth user
+    public function getUserMostVisitor(){
+        $user = Auth::user();
+        $data = DB::table('log_visitor')
+        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id)'))
+        ->orderBy('product_id')
+        ->join('produk', function (JoinClause $join){
+            $join->on('log_visitor.product_id', '=', 'produk.id');
+        })
+        ->where('log_visitor.user_id', '=', $user->id)
+        ->groupBy('nama_produk', 'id', 'img_id')
+        ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
+        ->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+}

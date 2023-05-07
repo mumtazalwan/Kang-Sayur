@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sandis', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('password');
             $table->string('new_password')->nullable();
             $table->timestamps();
