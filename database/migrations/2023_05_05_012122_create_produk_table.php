@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('varian_id');
             $table->integer('toko_id');
             $table->integer('ulasan_id');
+            $table->integer('is_onsale');
             $table->timestamps();
         });
     }

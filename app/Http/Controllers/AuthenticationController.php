@@ -30,7 +30,8 @@ class AuthenticationController extends Controller
                 'message' => "akun dengan email {$alrTaken->email} sudah terdaftar"
             ]);
         }else{
-            $sandiId = mt_rand(4, 10);
+            $sandiId = mt_rand(1000000, 9999999);
+
             $sandi = Sandi::create([
                 'id' => $sandiId,
                 'password' => Hash::make(request('password'))
@@ -177,39 +178,6 @@ class AuthenticationController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
     }
-
-    public function getPersonalInformation(Request $request)
-    {
-        $user = Auth::user();
-        
-        if ($user) {
-            return response()->json([
-                'message' => 'success',
-                'user'=> $user,
-            ]);
-        }else{
-            return response()->json([
-                'user'=>'user not found'
-            ], 404);
-        }
-    }
-
-    // public function getSandi(Request $request)
-    // {
-    //     $user = Auth::user();
-    //     $sandiId = $request->sandiId;
-    //     $sandi = Sandi::where('id', $sandiId)->first();
-
-    //     if ($user) {
-    //         return response()->json([
-    //             'message' => 'success',
-    //             'user'=> $user,
-    //             'sandi' => $sandi
-    //         ]);
-    //     }else{
-    //         return response()->json([
-    //             'user'=>'user not found'
-    //         ], 404);
-    //     }
-    // }
 }
+
+    

@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             Katalogseeder::class,
             AssignRoleToUserSeeder::class,
-            ProdukSeeder::class
+            ProdukSeeder::class,
+            LogVisitortSeeder::class
         ]);
     }
 }
