@@ -18,12 +18,12 @@ class TokoController extends Controller
     public function index()
     {
         // list toko
-        $list_toko = Toko::all();
+        $list_toko = Toko::with('Catalogue')->get();
 
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Toko',
-            'data' => $list_toko,
+            'data' => $list_toko->setHidden(['created_at', 'updated_at']),
         ]);
     }
 
