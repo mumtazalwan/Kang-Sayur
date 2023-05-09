@@ -9,7 +9,7 @@ use App\Http\Controllers\User\UserPersonalInformationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
-use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\LogVisitorController;
 
 use App\Models\User;
@@ -32,8 +32,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix'=>'auth'], function(){
-    Route::post('/login', [AuthenticationController::class, 'login']);
-    Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
     Route::post('/user/register', [AuthenticationController::class, 'registerAsUser']);
     Route::post('/seller/register', [AuthenticationController::class, 'registerAsSeller']);
     Route::post('/driver/register', [AuthenticationController::class, 'registerAsDriver']);
@@ -45,7 +43,8 @@ Route::group(['prefix'=>'auth'], function(){
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
     Route::get('/profile', [UserController::class, 'index']);
     Route::get('/toko', [TokoController::class, 'index']);
-    Route::get('/produk', [KatalogController::class, 'index']);
+    Route::get('/produk', [CatalogueController::class, 'index']);
+    Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/detail', [ProdukController::class, 'detail']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);

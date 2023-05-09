@@ -23,8 +23,7 @@ return new class extends Migration
             $table->string('location');
             $table->time('open');
             $table->time('close');
-            $table->unsignedBigInteger('katalog_id')->nullable();
-            $table->foreign('katalog_id')->references('id')->on('tokos');
+            $table->unsignedBigInteger('catalogue_id')->nullable();
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class TokoSeeder extends Seeder
             'location' => '-6.410438, 106.777111',
             'open' => '07:00:00',
             'close' => '15:00:00',
-            'katalog_id' => 1,
+            'catalogue_id' => 1,
         ]);
     }
 }

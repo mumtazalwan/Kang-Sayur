@@ -18,6 +18,25 @@ class ProdukController extends Controller
         //
     }
 
+    public function home_search($keyword)
+    {
+        $data = Produk::where('nama_produk', 'LIKE', '%'. $keyword . '%')->get();
+
+        if(count($data)){
+            return response()->json([
+                'status' => '200',
+                'message' => 'Rangkuman',
+                'data' => $data
+            ]);
+        }else{
+            return response()->json([
+                'status' => '200',
+                'message' => 'Rangkuman',
+                'data' => 'Data tidak ditemukan'
+            ]);
+        }
+    }
+
     public function detail(Request $request)
     {
         $produkId = $request->produkId;
