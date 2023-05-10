@@ -40,7 +40,14 @@ class ProdukController extends Controller
     public function detail(Request $request)
     {
         $produkId = $request->produkId;
-        $data = Produk::where('id', $produkId)->get();
+        $data = Produk::where('id', $produkId)
+            ->with(['review' => function($u){
+                $u
+                ->join('users', 'users.id', '=', 'reviews.id_user')
+                ->select('users.name', 'reviews.*')
+                ->get();
+            }])
+            ->get();
 
         return response()->json([
             'status' => 'succes',

@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
             AssignRoleToUserSeeder::class,
             ProdukSeeder::class,
             LogVisitortSeeder::class,
-            CatalogueSeeder::class
+            CatalogueSeeder::class,
+            ReviewSeeder::class,
+            LikeCommentSeeder::class
         ]);
     }
 }
