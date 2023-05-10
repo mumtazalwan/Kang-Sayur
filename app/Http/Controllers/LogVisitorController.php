@@ -14,7 +14,7 @@ class LogVisitorController extends Controller
     // produk paling sering dikunjungi oleh semua user
     public function getProductPopuler(){
         $data = DB::table('log_visitor')
-        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id)'))
+        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
         ->orderBy('product_id')
         ->join('produk', function (JoinClause $join){
             $join->on('log_visitor.product_id', '=', 'produk.id');
@@ -32,7 +32,7 @@ class LogVisitorController extends Controller
     public function getUserMostVisitor(){
         $user = Auth::user();
         $data = DB::table('log_visitor')
-        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id)'))
+        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
         ->orderBy('product_id')
         ->join('produk', function (JoinClause $join){
             $join->on('log_visitor.product_id', '=', 'produk.id');

@@ -25,7 +25,7 @@ class ProdukSeeder extends Seeder
             'katalog_id' => 2,
             'varian_id' => 1,
             'toko_id' => 1,
-            'ulasan_id' => 1,
+            'ulasan_id' => 2,
             'is_onsale' => 1
         ]);
 

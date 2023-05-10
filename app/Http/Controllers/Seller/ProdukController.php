@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\rs;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\Produk;
@@ -40,7 +41,16 @@ class ProdukController extends Controller
     public function detail(Request $request)
     {
         $produkId = $request->produkId;
-        $data = Produk::where('id', $produkId)->get();
+        $data = Produk::where('id', $produkId)
+            ->with(['review' => function($u){
+                $u
+                ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
+                ->join('users', 'users.id', '=', 'reviews.id_user')
+                ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
+                ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating','reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
+                ->get();
+            }])
+            ->get();
 
         return response()->json([
             'status' => 'succes',
