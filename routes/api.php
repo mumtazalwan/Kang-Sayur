@@ -11,6 +11,7 @@ use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\LogVisitorController;
+use App\Http\Controllers\SaleController;
 
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -45,9 +46,10 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/produk', [CatalogueController::class, 'index']);
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
-    Route::get('/produk/detail', [ProdukController::class, 'detail']);
+    Route::get('/produk/sale', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
+    Route::get('/produk/detail', [ProdukController::class, 'detail']);
 });
 
 

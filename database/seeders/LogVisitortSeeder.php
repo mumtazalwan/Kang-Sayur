@@ -81,5 +81,15 @@ class LogVisitortSeeder extends Seeder
             'product_id' => 3,
             'user_id' => 2
         ]);
+
+        LogVisitor::create([
+            'product_id' => 4,
+            'user_id' => 2
+        ]);
+
+        LogVisitor::create([
+            'product_id' => 4,
+            'user_id' => 2
+        ]);
     }
 }

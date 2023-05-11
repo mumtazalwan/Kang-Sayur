@@ -31,7 +31,9 @@ class DatabaseSeeder extends Seeder
             LogVisitortSeeder::class,
             CatalogueSeeder::class,
             ReviewSeeder::class,
-            LikeCommentSeeder::class
+            LikeCommentSeeder::class,
+            SaleSeeder::class,
+            SaleSessionSeeder::class
         ]);
     }
 }
