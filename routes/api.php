@@ -52,10 +52,11 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/detail', [ProdukController::class, 'detail']);
 });
 
+// seller
+Route::group(['prefix'=>'seller', 'middleware'=> ['role:seller']], function(){});
 
 // admin
 Route::group(['prefix'=>'admin', 'middleware'=> ['role:admin']], function(){});
-// seller
-Route::group(['prefix'=>'seller', 'middleware'=> ['role:seller']], function(){});
+
 // driver
 Route::group(['prefix'=>'driver', 'middleware'=> ['role:driver']], function(){});

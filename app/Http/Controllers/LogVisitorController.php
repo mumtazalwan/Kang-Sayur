@@ -16,16 +16,6 @@ class LogVisitorController extends Controller
 
         $kategoriId = $request->kategoriId;
 
-        // $data = DB::table('log_visitor')
-        // ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
-        // ->orderBy('product_id')
-        // ->join('produk', function (JoinClause $join){
-        //     $join->on('log_visitor.product_id', '=', 'produk.id');
-        // })
-        // ->groupBy('nama_produk', 'id', 'img_id')
-        // ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
-        // ->get();
-
         if($kategoriId){
             $data = DB::table('log_visitor')
             ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
