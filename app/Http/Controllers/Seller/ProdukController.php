@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\Produk;
+use App\Models\Review;
 
 class ProdukController extends Controller
 {
@@ -62,9 +63,32 @@ class ProdukController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'nama_produk' => 'required|string',
+            'deskripsi' => 'required|longtext',
+            'kategori_id' => 'required|integer',
+            'katalog_id' => 'required|integer',
+            'harga_produk' => 'required|double',
+            'stok_produk' => 'required|integer',
+            'toko_id' => 'required|integer',
+        ]);
+
+        $review = Review::create([
+
+        ]);
+
+        Produk::create([
+            'nama_produk' => request('nama_produk'),
+            'deskripsi' => request('deskripsi'),
+            'kategori_id' => request('katgeori_id'),
+            'katalog_id' => request('katalog_id'),
+            'harga_produk' => request('harga_produk'),
+            'stok_produk' => request('stok_produk'),
+            'toko_id' => request('toko_id'),
+            'ulasan_id' => $review->id
+        ]);
     }
 
     /**
