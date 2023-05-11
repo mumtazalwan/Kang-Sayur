@@ -9,5 +9,14 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'product_id',
+        'toko_id',
+        'id',
+        'id_user'
+    ];
+
     protected $table = 'reviews';
 }

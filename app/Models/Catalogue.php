@@ -9,6 +9,11 @@ class Catalogue extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function ListProduct()
     {
         return $this->hasMany(Catalogue::class,'toko_id');

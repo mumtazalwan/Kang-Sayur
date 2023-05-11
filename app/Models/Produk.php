@@ -13,6 +13,15 @@ class Produk extends Model
 
     public $table = 'produk';
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'kategori_id',
+        'katalog_id',
+        'varian_id',
+        'ulasan_id',
+    ];
+
     public function review()
     {
         return $this->hasMany(Review::class, 'product_id');

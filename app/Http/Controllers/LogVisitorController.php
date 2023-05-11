@@ -12,38 +12,88 @@ use Illuminate\Support\Facades\Auth;
 class LogVisitorController extends Controller
 {
     // produk paling sering dikunjungi oleh semua user
-    public function getProductPopuler(){
-        $data = DB::table('log_visitor')
-        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
-        ->orderBy('product_id')
-        ->join('produk', function (JoinClause $join){
-            $join->on('log_visitor.product_id', '=', 'produk.id');
-        })
-        ->groupBy('nama_produk', 'id', 'img_id')
-        ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
-        ->get();
+    public function getProductPopuler(Request $request){
 
-        return response()->json([
-            'data' => $data
-        ]);
+        $kategoriId = $request->kategoriId;
+
+        // $data = DB::table('log_visitor')
+        // ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
+        // ->orderBy('product_id')
+        // ->join('produk', function (JoinClause $join){
+        //     $join->on('log_visitor.product_id', '=', 'produk.id');
+        // })
+        // ->groupBy('nama_produk', 'id', 'img_id')
+        // ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
+        // ->get();
+
+        if($kategoriId){
+            $data = DB::table('log_visitor')
+            ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
+            ->join('produk', function (JoinClause $join){
+                $join->on('log_visitor.product_id', '=', 'produk.id');
+            })
+            ->groupBy('nama_produk', 'id', 'img_id')
+            ->orderBy('visited', 'DESC')
+            ->where('produk.kategori_id', $kategoriId)
+            ->get();
+
+            return response()->json([
+                'data' => $data
+            ]);
+            
+        }else{
+            $data = DB::table('log_visitor')
+            ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
+            ->join('produk', function (JoinClause $join){
+                $join->on('log_visitor.product_id', '=', 'produk.id');
+            })
+            ->groupBy('nama_produk', 'id', 'img_id')
+            ->orderBy('visited', 'DESC')
+            ->get();
+
+            return response()->json([
+                'data' => $data
+            ]);
+        }
+
+        
     }
 
     // produk paling sering dikunjungi oleh auth user
-    public function getUserMostVisitor(){
-        $user = Auth::user();
-        $data = DB::table('log_visitor')
-        ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
-        ->orderBy('product_id')
-        ->join('produk', function (JoinClause $join){
-            $join->on('log_visitor.product_id', '=', 'produk.id');
-        })
-        ->where('log_visitor.user_id', '=', $user->id)
-        ->groupBy('nama_produk', 'id', 'img_id')
-        ->orderBy(DB::raw('COUNT(produk.nama_produk)', 'DESC'))
-        ->get();
+    public function getUserMostVisitor(Request $request){
 
-        return response()->json([
-            'data' => $data
-        ]);
+        $kategoriId = $request->kategoriId;
+
+        if($kategoriId){
+            $user = Auth::user();
+            $data = DB::table('log_visitor')
+            ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
+            ->join('produk', function (JoinClause $join){
+                $join->on('log_visitor.product_id', '=', 'produk.id');
+            })
+            ->where('log_visitor.user_id', '=', $user->id)
+            ->groupBy('nama_produk', 'id', 'img_id')
+            ->orderBy('visited', 'DESC')
+            ->where('produk.kategori_id', $kategoriId)
+            ->get();
+
+            return response()->json([
+                'data' => $data
+            ]);
+        }else{
+            $user = Auth::user();
+            $data = DB::table('log_visitor')
+            ->select('produk.nama_produk', 'produk.id', 'img_id', DB::raw('COUNT(produk.id) as visited'))
+            ->join('produk', function (JoinClause $join){
+                $join->on('log_visitor.product_id', '=', 'produk.id');
+            })
+            ->groupBy('nama_produk', 'id', 'img_id')
+            ->orderBy('visited', 'DESC')
+            ->get();
+
+            return response()->json([
+                'data' => $data
+            ]);
+        }
     }
 }
