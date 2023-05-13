@@ -30,8 +30,8 @@ class SaleSessionSeeder extends Seeder
         ]);
 
         SaleSession::create([
-            'start' => '11:00:00',
-            'end' => '12:00:00'
+            'start' => '15:00:00',
+            'end' => '16:00:00'
         ]);
 
         SaleSession::create([

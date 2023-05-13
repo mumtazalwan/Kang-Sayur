@@ -15,12 +15,12 @@ class SaleSeeder extends Seeder
     public function run(): void
     {
         Sale::create([
-            'session_id' => 1,
+            'session_id' => 4,
             'produk_id' =>1
         ]);
 
         Sale::create([
-            'session_id' => 1,
+            'session_id' => 4,
             'produk_id' =>2
         ]);
 

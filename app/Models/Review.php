@@ -9,6 +9,13 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'id_user',
+        'product_id',
+        'toko_id'
+    ];
+
     protected $hidden = [
         'created_at',
         'updated_at',

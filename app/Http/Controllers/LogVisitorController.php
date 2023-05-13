@@ -22,6 +22,8 @@ class LogVisitorController extends Controller
             ->join('produk', function (JoinClause $join){
                 $join->on('log_visitor.product_id', '=', 'produk.id');
             })
+            ->join('statuses', 'statuses.produk_id', '=', 'log_visitor.product_id')
+            ->where('statuses.status', '=', 'Accepted')
             ->groupBy('nama_produk', 'id', 'img_id')
             ->orderBy('visited', 'DESC')
             ->where('produk.kategori_id', $kategoriId)
@@ -37,6 +39,8 @@ class LogVisitorController extends Controller
             ->join('produk', function (JoinClause $join){
                 $join->on('log_visitor.product_id', '=', 'produk.id');
             })
+            ->join('statuses', 'statuses.produk_id', '=', 'log_visitor.product_id')
+            ->where('statuses.status', '=', 'Accepted')
             ->groupBy('nama_produk', 'id', 'img_id')
             ->orderBy('visited', 'DESC')
             ->get();
@@ -61,6 +65,8 @@ class LogVisitorController extends Controller
             ->join('produk', function (JoinClause $join){
                 $join->on('log_visitor.product_id', '=', 'produk.id');
             })
+            ->join('statuses', 'statuses.produk_id', '=', 'log_visitor.product_id')
+            ->where('statuses.status', '=', 'Accepted')
             ->where('log_visitor.user_id', '=', $user->id)
             ->groupBy('nama_produk', 'id', 'img_id')
             ->orderBy('visited', 'DESC')
@@ -77,6 +83,8 @@ class LogVisitorController extends Controller
             ->join('produk', function (JoinClause $join){
                 $join->on('log_visitor.product_id', '=', 'produk.id');
             })
+            ->join('statuses', 'statuses.produk_id', '=', 'log_visitor.product_id')
+            ->where('statuses.status', '=', 'Accepted')
             ->groupBy('nama_produk', 'id', 'img_id')
             ->orderBy('visited', 'DESC')
             ->get();

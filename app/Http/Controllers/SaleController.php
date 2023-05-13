@@ -21,9 +21,12 @@ class SaleController extends Controller
 
         $session = Sale::with('getSession')
         ->join('sale_sessions', 'sale_sessions.id', '=', 'sales.session_id')
+        ->join('statuses', 'statuses.produk_id', '=', 'sales.produk_id')
+        ->where('statuses.status', '=', 'Accepted')
         ->select('sale_sessions.start', 'sales.*',)
         ->whereTime('sale_sessions.start', '<=', $mytime) 
-        ->whereTime('sale_sessions.end', '>=', $mytime) 
+        ->whereTime('sale_sessions.end', '>=', $mytime)
+        ->whereDate('created_at', '=', $mydate) 
         ->get();
 
         Sale::whereDate( 'created_at', '<', $mydate)->delete();

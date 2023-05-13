@@ -29,11 +29,11 @@ class DatabaseSeeder extends Seeder
             AssignRoleToUserSeeder::class,
             ProdukSeeder::class,
             LogVisitortSeeder::class,
-            CatalogueSeeder::class,
             ReviewSeeder::class,
             LikeCommentSeeder::class,
             SaleSeeder::class,
-            SaleSessionSeeder::class
+            SaleSessionSeeder::class,
+            StatusSeeder::class
         ]);
     }
 }

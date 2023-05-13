@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('catalogues', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->id(); 
+            $table->integer('produk_id');
             $table->integer('toko_id');
-            $table->integer('kategori_id');
-            $table->timestamps();
+            $table->enum('status', ['Pending', 'Accepted', 'Rejected'])->default('Pending');
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('catalogues');
+        Schema::dropIfExists('statuses');
     }
 };
