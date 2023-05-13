@@ -43,17 +43,22 @@ Route::group(['prefix'=>'auth'], function(){
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
     Route::get('/profile', [UserController::class, 'index']);
+
     Route::get('/toko', [TokoController::class, 'index']);
-    Route::get('/produk', [CatalogueController::class, 'index']);
+    Route::get('/toko/detail', [TokoController::class, 'detail']);
+    Route::get('/produk', [TokoController::class, 'produk']);
+    
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/sale', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
-    Route::get('/produk/detail', [ProdukController::class, 'detail']);
+    Route::get('/produk/detail', [TokoController::class, 'detail_produk']);
 });
 
 // seller
-Route::group(['prefix'=>'seller', 'middleware'=> ['role:seller']], function(){});
+Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function(){
+    Route::post('/produk/create', [ProdukController::class, 'create']);
+});
 
 // admin
 Route::group(['prefix'=>'admin', 'middleware'=> ['role:admin']], function(){});

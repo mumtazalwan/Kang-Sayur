@@ -24,8 +24,8 @@ return new class extends Migration
             $table->integer('katalog_id');
             $table->integer('varian_id')->nullable();
             $table->integer('toko_id');
-            $table->integer('ulasan_id');
-            $table->integer('is_onsale');
+            $table->integer('ulasan_id')->nullable();
+            $table->integer('is_onsale')->nullable();
             $table->timestamps();
         });
     }

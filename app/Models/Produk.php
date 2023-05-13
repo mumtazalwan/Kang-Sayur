@@ -13,6 +13,16 @@ class Produk extends Model
 
     public $table = 'produk';
 
+    protected $fillable = [
+        'nama_produk',
+        'deskripsi',
+        'kategori_id',
+        'katalog_id',
+        'harga_produk',
+        'stok_produk',
+        'toko_id'
+    ];
+
     protected $hidden = [
         'created_at',
         'updated_at',

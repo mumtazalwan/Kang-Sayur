@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\rs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 use App\Models\Produk;
 use App\Models\Review;
+use App\Models\LogVisitor;
+use App\Models\Status;
 
 class ProdukController extends Controller
 {
@@ -22,7 +26,9 @@ class ProdukController extends Controller
 
     public function home_search($keyword)
     {
-        $data = Produk::where('nama_produk', 'LIKE', '%'. $keyword . '%')->get();
+        $data = Produk::where('nama_produk', 'LIKE', '%'. $keyword . '%')
+        ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+        ->where('statuses.status', '=', 'Accepted')->get();
 
         if(count($data)){
             return response()->json([
@@ -53,6 +59,11 @@ class ProdukController extends Controller
             }])
             ->get();
 
+        LogVisitor::create([
+            'product_id' => $produkId,
+            'user_id' =>Auth::user()->id,
+        ]);
+
         return response()->json([
             'status' => 'succes',
             'message' => 'Detail Toko',
@@ -67,27 +78,30 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string',
-            'deskripsi' => 'required|longtext',
+            'deskripsi' => 'required|string ',
             'kategori_id' => 'required|integer',
             'katalog_id' => 'required|integer',
-            'harga_produk' => 'required|double',
+            'harga_produk' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'stok_produk' => 'required|integer',
             'toko_id' => 'required|integer',
         ]);
 
-        $review = Review::create([
+        $id = mt_rand(1000000, 9999999);
 
-        ]);
-
-        Produk::create([
+        $produk = Produk::create([
             'nama_produk' => request('nama_produk'),
             'deskripsi' => request('deskripsi'),
-            'kategori_id' => request('katgeori_id'),
+            'kategori_id' => request('kategori_id'),
             'katalog_id' => request('katalog_id'),
             'harga_produk' => request('harga_produk'),
             'stok_produk' => request('stok_produk'),
             'toko_id' => request('toko_id'),
-            'ulasan_id' => $review->id
+            'ulasan_id' => $id
+        ]);
+
+        Status::create([
+            'produk_id' => $produk->id,
+            'toko_id' => request('toko_id')
         ]);
     }
 

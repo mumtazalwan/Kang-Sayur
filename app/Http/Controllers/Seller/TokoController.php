@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Toko;
-use App\Models\Katalog;
+use App\Models\Produk;
 
 use Illuminate\Support\Facades\DB;
 
@@ -18,12 +18,63 @@ class TokoController extends Controller
     public function index()
     {
         // list toko
-        $list_toko = Toko::with('Catalogue')->get();
+
+        $data = Toko::all();
 
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Toko',
-            'data' => $list_toko->setHidden(['created_at', 'updated_at']),
+            'data' => $data->setHidden(['deskripsi', 'alamat', 'location', 'open', 'close', 'catalogue_id', 'created_at', 'updated_at', 'seller_id']),
+        ]);
+    }
+
+    public function detail(Request $request)
+    {
+        $tokoId = $request->tokoId;
+
+        $detail = DB::table('tokos')
+        ->select('tokos.*')
+        ->where('tokos.id', $tokoId)
+        ->first();
+
+        $kategori = DB::table('produk')
+        ->select('kategori.id','kategori.nama_kategori')
+        ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+        ->groupBy('kategori.id','kategori.nama_kategori')
+        ->where('produk.toko_id', $tokoId)
+        ->get(); 
+
+        $detail->category = $kategori;
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Toko',
+            'data' => $detail,
+        ]);
+    }
+
+    public function produk(Request $request){
+        $kategoriId = $request->kategoriId;
+        $tokoId = $request->tokoId;
+
+        $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Kategori',
+            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at','updated_at','kategori_id','katalog_id','varian_id','ulasan_id', 'is_onsale']),
+        ]);
+    }
+
+    public function detail_produk(Request $request){
+        $produkId = $request->produkId;
+
+        $data = Produk::where('id', $produkId)->first();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Kategori',
+            'data' => $data,
         ]);
     }
 
@@ -32,7 +83,7 @@ class TokoController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
