@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales', function (Blueprint $table) {
+            $table->id();
             $table->integer('session_id');
             $table->integer('produk_id');
             $table->timestamps();

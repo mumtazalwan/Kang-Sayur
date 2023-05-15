@@ -5,11 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 // controller
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\User\UserPersonalInformationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
-use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\LogVisitorController;
 use App\Http\Controllers\SaleController;
 
@@ -53,6 +51,8 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
     Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
+
+    Route::get('/produk/kategori/item', [ProdukController::class, 'produkByCategory']);
 });
 
 // seller

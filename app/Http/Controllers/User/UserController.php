@@ -17,7 +17,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'success',
-            'user'=> $user->setHidden(['id', 'created_at', 'updated_at']),
+            'user'=> $user,
         ]);
     }
 

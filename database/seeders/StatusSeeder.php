@@ -28,7 +28,8 @@ class StatusSeeder extends Seeder
 
         Status::create([
             'produk_id' => 3,
-            'toko_id' => 1
+            'toko_id' => 1,
+            'status' => 'Accepted'
         ]);
 
         Status::create([
@@ -39,12 +40,14 @@ class StatusSeeder extends Seeder
 
         Status::create([
             'produk_id' => 5,
-            'toko_id' => 1
+            'toko_id' => 1,
+            'status' => 'Accepted'
         ]);
 
         Status::create([
             'produk_id' => 6,
-            'toko_id' => 1
+            'toko_id' => 1,
+            'status' => 'Accepted'
         ]);
     }
 }
