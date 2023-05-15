@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('like_comments', function (Blueprint $table) {
+            $table->id();
             $table->integer('review_id');
             $table->integer('user_id');
             $table->timestamps();

@@ -121,11 +121,30 @@ class ProdukController extends Controller
     public function detail_produk(Request $request){
         $produkId = $request->produkId;
 
-        $data = Produk::where('id', $produkId)->first();
+        $data = Produk::with('review')->where('produk.id', $produkId)
+        ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+        ->where('statuses.status', '=', 'Accepted')
+        ->first();
 
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Produk Kategori',
+            'data' => $data,
+        ]);
+    }
+
+    public function produkByCategory(Request $request)
+    {
+        $kategoriId = $request->kategoriId;
+
+        $data = Produk::where('kategori_id', $kategoriId)
+        // ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+        // ->where('statuses.status', '=', 'Accepted')
+        ->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Berdasarkan Kategori',
             'data' => $data,
         ]);
     }

@@ -15,11 +15,13 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name'=>'Alwan',
+            'photo'=>'/images/profile/asa.jpg',
             'email'=>'alwan123@gmail.com',
             'sandi_id' => 1,
             'jenis_kelamin' => 1,
             'tanggal_lahir' => '2006-03-10'
         ]);
+
 
         User::create([
             'name'=>'Akbar',
