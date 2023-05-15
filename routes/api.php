@@ -46,13 +46,13 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/toko/detail', [TokoController::class, 'detail']);
-    Route::get('/produk', [TokoController::class, 'produk']);
+    Route::get('/produk', [ProdukController::class, 'produk']);
     
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/sale', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
-    Route::get('/produk/detail', [TokoController::class, 'detail_produk']);
+    Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
 });
 
 // seller

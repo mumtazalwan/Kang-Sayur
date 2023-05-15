@@ -105,6 +105,31 @@ class ProdukController extends Controller
         ]);
     }
 
+    public function produk(Request $request){
+        $kategoriId = $request->kategoriId;
+        $tokoId = $request->tokoId;
+
+        $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Kategori',
+            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at','updated_at','kategori_id','katalog_id','varian_id','ulasan_id', 'is_onsale']),
+        ]);
+    }
+
+    public function detail_produk(Request $request){
+        $produkId = $request->produkId;
+
+        $data = Produk::where('id', $produkId)->first();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Kategori',
+            'data' => $data,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
