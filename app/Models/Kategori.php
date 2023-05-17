@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Kategori;
 
-class Kategori extends Model
+class kategori extends Model
 {
     use HasFactory;
 
