@@ -33,7 +33,8 @@ class DatabaseSeeder extends Seeder
             LikeCommentSeeder::class,
             SaleSeeder::class,
             SaleSessionSeeder::class,
-            StatusSeeder::class
+            StatusSeeder::class,
+            CartSeeder::class
         ]);
     }
 }

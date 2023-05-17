@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Route;
 // controller
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\LogVisitorController;
 use App\Http\Controllers\SaleController;
-
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'auth'], function(){
+Route::group(['prefix' => 'auth'], function () {
     Route::post('/user/register', [AuthenticationController::class, 'registerAsUser']);
     Route::post('/seller/register', [AuthenticationController::class, 'registerAsSeller']);
     Route::post('/driver/register', [AuthenticationController::class, 'registerAsDriver']);
@@ -39,13 +39,18 @@ Route::group(['prefix'=>'auth'], function(){
 });
 
 // user
-Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function(){
+Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
     Route::get('/profile', [UserController::class, 'index']);
 
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/toko/detail', [TokoController::class, 'detail']);
     Route::get('/produk', [ProdukController::class, 'produk']);
-    
+
+    Route::get('/produk/cart', [CartController::class, 'listCart']);
+    Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
+    Route::get('/produk/cart/minus', [CartController::class, 'minus']);
+    Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
+
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/sale', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
@@ -56,12 +61,14 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 });
 
 // seller
-Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function(){
+Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
     Route::post('/produk/create', [ProdukController::class, 'create']);
 });
 
 // admin
-Route::group(['prefix'=>'admin', 'middleware'=> ['role:admin']], function(){});
+Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function () {
+});
 
 // driver
-Route::group(['prefix'=>'driver', 'middleware'=> ['role:driver']], function(){});
+Route::group(['prefix' => 'driver', 'middleware' => ['role:driver']], function () {
+});
