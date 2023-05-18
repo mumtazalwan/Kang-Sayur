@@ -45,6 +45,46 @@ class CartController extends Controller
         ]);
     }
 
+    public function custom(Request $request)
+    {
+        $customInpt = $request->customInpt;
+        $user = Auth::user();
+        $produkId = $request->produkId;
+        $tokoId = $request->tokoId;
+
+        $currentProduct = Cart::where('user_id', $user->id)
+            ->join('tokos', 'tokos.id', '=', 'toko_id')
+            ->groupBy('produk.id')
+            ->join('produk', 'produk.id', '=', 'produk_id')
+            ->select(DB::raw('COUNT(produk.id) as inCart'))
+            ->first();
+
+        if ($customInpt > $currentProduct->inCart) {
+
+            for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
+                Cart::create([
+                    'user_id' => $user->id,
+                    'produk_id' => $produkId,
+                    'toko_id' => $tokoId
+                ]);
+            }
+
+            return response()->json([
+                'message' => 'tambah'
+            ]);
+        } else if ($customInpt < $currentProduct->inCart) {
+
+            for ($i = $currentProduct->inCart; $i > $customInpt; $i--) {
+                $produk = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->first();
+                $produk->delete();
+            }
+
+            return response()->json([
+                'message' => 'kurang'
+            ]);
+        }
+    }
+
     public function minus(Request $request)
     {
         $produkId = $request->produkId;
