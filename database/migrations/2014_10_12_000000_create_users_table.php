@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('sandi_id');
             $table->integer('jenis_kelamin')->nullable();
             $table->timestamp('tanggal_lahir')->nullable();
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
