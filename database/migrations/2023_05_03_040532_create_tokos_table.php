@@ -20,7 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('seller_id')->nullable();
             $table->foreign('seller_id')->references('id')->on('tokos');
             $table->longText('alamat');
-            $table->string('location');
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
             $table->time('open');
             $table->time('close');
             $table->unsignedBigInteger('catalogue_id')->nullable();
