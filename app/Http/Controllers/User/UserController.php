@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
 class UserController extends Controller
 {
     /**
@@ -16,8 +18,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         return response()->json([
-            'message' => 'success',
-            'user'=> $user,
+            'status' => 200,
+            'message' => "user personal information",
+            'data' => $user,
         ]);
     }
 
