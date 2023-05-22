@@ -12,6 +12,7 @@ class Produk extends Model
     use HasFactory;
 
     public $table = 'produk';
+    public $timestamps = false;
 
     protected $fillable = [
         'nama_produk',

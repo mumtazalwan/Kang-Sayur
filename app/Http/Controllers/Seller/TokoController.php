@@ -33,16 +33,16 @@ class TokoController extends Controller
         $tokoId = $request->tokoId;
 
         $detail = DB::table('tokos')
-        ->select('tokos.*')
-        ->where('tokos.id', $tokoId)
-        ->first();
+            ->select('tokos.*')
+            ->where('tokos.id', $tokoId)
+            ->first();
 
         $kategori = DB::table('produk')
-        ->select('kategori.id','kategori.nama_kategori')
-        ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
-        ->groupBy('kategori.id','kategori.nama_kategori')
-        ->where('produk.toko_id', $tokoId)
-        ->get(); 
+            ->select('kategori.id', 'kategori.nama_kategori')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+            ->groupBy('kategori.id', 'kategori.nama_kategori')
+            ->where('produk.toko_id', $tokoId)
+            ->get();
 
         $detail->category = $kategori;
 
@@ -53,7 +53,8 @@ class TokoController extends Controller
         ]);
     }
 
-    public function produk(Request $request){
+    public function produk(Request $request)
+    {
         $kategoriId = $request->kategoriId;
         $tokoId = $request->tokoId;
 
@@ -62,11 +63,12 @@ class TokoController extends Controller
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Produk Kategori',
-            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at','updated_at','kategori_id','katalog_id','varian_id','ulasan_id', 'is_onsale']),
+            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
         ]);
     }
 
-    public function detail_produk(Request $request){
+    public function detail_produk(Request $request)
+    {
         $produkId = $request->produkId;
 
         $data = Produk::where('id', $produkId)->first();
@@ -83,7 +85,6 @@ class TokoController extends Controller
      */
     public function create()
     {
-        
     }
 
     /**
