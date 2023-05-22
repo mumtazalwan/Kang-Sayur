@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Sandi;
 use App\Models\Toko;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class AuthenticationController extends Controller
@@ -17,6 +17,7 @@ class AuthenticationController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'photo' => 'required',
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
@@ -28,21 +29,32 @@ class AuthenticationController extends Controller
                 'message' => "akun dengan email {$alrTaken->email} sudah terdaftar"
             ]);
         } else {
-            $sandiId = mt_rand(1000000, 9999999);
 
+            // store photo
+            $timestamp = time();
+            $photoName = $timestamp . $request->photo->getClientOriginalName();
+            $path = 'user_profile/' . $photoName;
+            Storage::disk('public')->put($path, file_get_contents($request->photo));
+
+            // create sandi
+            $sandiId = mt_rand(1000000, 9999999);
             $sandi = Sandi::create([
                 'id' => $sandiId,
                 'password' => Hash::make(request('password'))
             ]);
 
+            // create user
             $user = User::create([
                 'name' => request('name'),
+                'photo' => $path,
                 'email' => request('email'),
                 'sandi_id' => $sandiId
             ]);
 
+            // generate token
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            // assign role to user id
             $findUser = User::findOrFail($user->id);
             $role = Role::findOrFail(1);
 
@@ -188,7 +200,9 @@ class AuthenticationController extends Controller
             $token = $user->createToken('user log in')->plainTextToken;
 
             return response()->json([
-                'data' => $user,
+                'status' => 200,
+                'message' => "user personal information",
+                'data' => $user->setHidden(['id', 'sandi_id', 'longitude', 'latitude', 'created_at', 'updated_at', 'remember_token']),
                 'acces_token' => $token,
                 'token_type' => 'Bearer'
             ]);
