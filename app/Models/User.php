@@ -7,11 +7,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use App\Models\Sandi;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
     public $timestamps = false;
+    protected $appends = ['link_foto'];
+
+    public function getLinkFotoAttribute()
+    {
+        if ($this->photo) {
+            return url('/storage/'.$this->photo);
+        } else {
+            return url('/storage/profile/userdefault.png');
+        }
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +33,14 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'photo',
         'email',
         'password',
+        'sandi_id',
+        'phone_number',
+        'address',
+        'longitude',
+        'latitude'
     ];
 
     /**
@@ -42,4 +61,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function sandi()
+    {
+        return $this->hasOne(Sandi::class, 'sandi_id');
+    }
 }

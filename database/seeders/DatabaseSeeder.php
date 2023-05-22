@@ -20,7 +20,21 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            UserSeeder::class
+            UserSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            SandiSeeder::class,
+            TokoSeeder::class,
+            KategoriSeeder::class,
+            AssignRoleToUserSeeder::class,
+            ProdukSeeder::class,
+            LogVisitortSeeder::class,
+            ReviewSeeder::class,
+            LikeCommentSeeder::class,
+            SaleSeeder::class,
+            SaleSessionSeeder::class,
+            StatusSeeder::class,
+            CartSeeder::class
         ]);
     }
 }
