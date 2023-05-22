@@ -21,7 +21,6 @@ class TokoSeeder extends Seeder
             'latitude' => 110.843100,
             'open' => '07:00:00',
             'close' => '15:00:00',
-            'catalogue_id' => 1,
         ]);
     }
 }

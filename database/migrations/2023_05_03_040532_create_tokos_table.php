@@ -18,13 +18,11 @@ return new class extends Migration
             $table->string('nama_toko');
             $table->longText('deskripsi');
             $table->unsignedBigInteger('seller_id')->nullable();
-            $table->foreign('seller_id')->references('id')->on('tokos');
             $table->longText('alamat');
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
             $table->time('open');
             $table->time('close');
-            $table->unsignedBigInteger('catalogue_id')->nullable();
             $table->timestamps();
         });
     }

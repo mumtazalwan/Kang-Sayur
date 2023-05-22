@@ -13,6 +13,7 @@ use App\Models\Produk;
 use App\Models\Review;
 use App\Models\LogVisitor;
 use App\Models\Status;
+use App\Models\Toko;
 
 class ProdukController extends Controller
 {
@@ -26,17 +27,17 @@ class ProdukController extends Controller
 
     public function home_search($keyword)
     {
-        $data = Produk::where('nama_produk', 'LIKE', '%'. $keyword . '%')
-        ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-        ->where('statuses.status', '=', 'Accepted')->get();
+        $data = Produk::where('nama_produk', 'LIKE', '%' . $keyword . '%')
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Accepted')->get();
 
-        if(count($data)){
+        if (count($data)) {
             return response()->json([
                 'status' => '200',
                 'message' => 'Rangkuman',
                 'data' => $data
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => '200',
                 'message' => 'Rangkuman',
@@ -49,19 +50,19 @@ class ProdukController extends Controller
     {
         $produkId = $request->produkId;
         $data = Produk::where('id', $produkId)
-            ->with(['review' => function($u){
+            ->with(['review' => function ($u) {
                 $u
-                ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
-                ->join('users', 'users.id', '=', 'reviews.id_user')
-                ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
-                ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating','reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
-                ->get();
+                    ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
+                    ->join('users', 'users.id', '=', 'reviews.id_user')
+                    ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
+                    ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating', 'reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
+                    ->get();
             }])
             ->get();
 
         LogVisitor::create([
             'product_id' => $produkId,
-            'user_id' =>Auth::user()->id,
+            'user_id' => Auth::user()->id,
         ]);
 
         return response()->json([
@@ -76,14 +77,17 @@ class ProdukController extends Controller
      */
     public function create(Request $request)
     {
+        $user = Auth::user();
+        $tokoId = Toko::where('seller_id', $user->id)->first();
+
         $request->validate([
             'nama_produk' => 'required|string',
-            'deskripsi' => 'required|string ',
+            'deskripsi' => 'required',
             'kategori_id' => 'required|integer',
             'katalog_id' => 'required|integer',
             'harga_produk' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'stok_produk' => 'required|integer',
-            'toko_id' => 'required|integer',
+
         ]);
 
         $id = mt_rand(1000000, 9999999);
@@ -95,17 +99,18 @@ class ProdukController extends Controller
             'katalog_id' => request('katalog_id'),
             'harga_produk' => request('harga_produk'),
             'stok_produk' => request('stok_produk'),
-            'toko_id' => request('toko_id'),
+            'toko_id' => $tokoId->id,
             'ulasan_id' => $id
         ]);
 
         Status::create([
             'produk_id' => $produk->id,
-            'toko_id' => request('toko_id')
+            'toko_id' => $tokoId->id
         ]);
     }
 
-    public function produk(Request $request){
+    public function produk(Request $request)
+    {
         $kategoriId = $request->kategoriId;
         $tokoId = $request->tokoId;
 
@@ -114,17 +119,18 @@ class ProdukController extends Controller
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Produk Kategori',
-            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at','updated_at','kategori_id','katalog_id','varian_id','ulasan_id', 'is_onsale']),
+            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
         ]);
     }
 
-    public function detail_produk(Request $request){
+    public function detail_produk(Request $request)
+    {
         $produkId = $request->produkId;
 
         $data = Produk::with('review')->where('produk.id', $produkId)
-        ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-        ->where('statuses.status', '=', 'Accepted')
-        ->first();
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->first();
 
         return response()->json([
             'status_code' => 'succes',
@@ -138,9 +144,9 @@ class ProdukController extends Controller
         $kategoriId = $request->kategoriId;
 
         $data = Produk::where('kategori_id', $kategoriId)
-        // ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-        // ->where('statuses.status', '=', 'Accepted')
-        ->get();
+            // ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            // ->where('statuses.status', '=', 'Accepted')
+            ->get();
 
         return response()->json([
             'status_code' => 'succes',
@@ -149,43 +155,31 @@ class ProdukController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function listProduct()
     {
-        //
+        $data = Produk::where('produk.toko_id', 2)
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->get();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'Daftar Produk',
+            'data' => $data,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(rs $rs)
+    public function onVerify()
     {
-        //
-    }
+        $data = Produk::where('produk.toko_id', 2)
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Pending')
+            ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(rs $rs)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, rs $rs)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(rs $rs)
-    {
-        //
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'Verifikasi',
+            'data' => $data,
+        ]);
     }
 }

@@ -64,6 +64,8 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
     Route::post('/produk/create', [ProdukController::class, 'create']);
+    Route::get('/produk/display', [ProdukController::class, 'listProduct']);
+    Route::get('/produk/display/verify', [ProdukController::class, 'onVerify']);
 });
 
 // admin
