@@ -9,11 +9,22 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Sandi;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
     public $timestamps = false;
+    protected $appends = ['link_foto'];
+
+    public function getLinkFotoAttribute()
+    {
+        if ($this->photo) {
+            return url('/storage/'.$this->photo);
+        } else {
+            return url('/storage/profile/userdefault.png');
+        }
+    }
 
     /**
      * The attributes that are mass assignable.
