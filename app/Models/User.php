@@ -20,7 +20,7 @@ class User extends Authenticatable
     public function getLinkFotoAttribute()
     {
         if ($this->photo) {
-            return url('/storage/'.$this->photo);
+            return url('/storage/' . $this->photo);
         } else {
             return url('/storage/profile/userdefault.png');
         }
