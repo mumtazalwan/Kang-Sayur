@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\kategori;
 use App\Models\rs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -135,6 +136,19 @@ class ProdukController extends Controller
         return response()->json([
             'status_code' => 'succes',
             'message' => 'List Produk Kategori',
+            'data' => $data,
+        ]);
+    }
+
+    public function Categories(Request $request)
+    {
+        $kategoriId = $request->kategoriId;
+
+        $data = kategori::all();
+
+        return response()->json([
+            'status_code' => 'succes',
+            'message' => 'List Produk Berdasarkan Kategori',
             'data' => $data,
         ]);
     }

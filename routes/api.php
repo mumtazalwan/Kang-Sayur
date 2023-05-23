@@ -58,6 +58,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
     Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
 
+    Route::get('/produk/kategori', [ProdukController::class, 'Categories']);
     Route::get('/produk/kategori/item', [ProdukController::class, 'produkByCategory']);
 });
 
