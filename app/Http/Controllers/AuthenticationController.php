@@ -61,7 +61,11 @@ class AuthenticationController extends Controller
             $findUser->assignRole([$role]);
 
             return response()->json([
-                'data' => $user, 'acces_token' => $token, 'sandi' => $sandi, 'token_type' => 'Bearer'
+                'status' => 200,
+                'data' => $user,
+                'acces_token' => $token,
+                'sandi' => $sandi,
+                'token_type' => 'Bearer'
             ]);
         }
     }
@@ -131,6 +135,7 @@ class AuthenticationController extends Controller
             $findUser->assignRole([$role]);
 
             return response()->json([
+                'status' => 200,
                 'data' => $user,
                 'acces_token' => $token,
             ]);

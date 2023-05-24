@@ -19,21 +19,27 @@ class SaleController extends Controller
         $mytime = Carbon::now()->format('H:i:s');
         $mydate = Carbon::now()->format('Y.m.d');
 
-        $session = Sale::with('getSession')
-        ->join('sale_sessions', 'sale_sessions.id', '=', 'sales.session_id')
-        ->join('statuses', 'statuses.produk_id', '=', 'sales.produk_id')
-        ->where('statuses.status', '=', 'Accepted')
-        ->select('sale_sessions.start', 'sales.*',)
-        ->whereTime('sale_sessions.start', '<=', $mytime) 
-        ->whereTime('sale_sessions.end', '>=', $mytime)
-        ->whereDate('created_at', '=', $mydate) 
-        ->get();
+        $session = Sale::with('product')
+            ->join('sale_sessions', 'sale_sessions.id', '=', 'sales.session_id')
+            ->join('statuses', 'statuses.produk_id', '=', 'sales.produk_id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->whereTime('sale_sessions.start', '<=', $mytime)
+            ->whereTime('sale_sessions.end', '>=', $mytime)
+            ->whereDate('created_at', '=', $mydate)
+            ->get();
 
-        Sale::whereDate( 'created_at', '<', $mydate)->delete();
+        $time = SaleSession::whereTime('start', '<=', $mytime)
+            ->whereTime('end', '>=', $mytime)
+            ->first();
+
+        Sale::whereDate('created_at', '<', $mydate)->delete();
 
         return response()->json([
-            'status' => 'succes',
+            'status' => '200',
             'message' => 'List Sale',
+            'title' => 'Promo kilat',
+            'start' => $time->start,
+            'end' => $time->end,
             'data' => $session
         ]);
     }
