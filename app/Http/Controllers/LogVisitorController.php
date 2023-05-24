@@ -134,7 +134,7 @@ class LogVisitorController extends Controller
             * cos(radians(tokos.latitude)) 
             * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
             + sin(radians(" . $user->latitude . ")) 
-            * sin(radians(tokos.latitude))) AS distance"),
+            * sin(radians(tokos.latitude))) as distance"),
                     'produk.nama_produk',
                     'tokos.nama_toko',
                     'produk.harga_produk',
