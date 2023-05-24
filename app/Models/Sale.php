@@ -11,7 +11,7 @@ class Sale extends Model
 {
     use HasFactory;
 
-    public function getSession()
+    public function product()
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }

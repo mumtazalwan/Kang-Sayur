@@ -22,7 +22,7 @@ class TokoController extends Controller
         $data = Toko::all();
 
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'List Toko',
             'data' => $data->setHidden(['deskripsi', 'alamat', 'location', 'open', 'close', 'catalogue_id', 'created_at', 'updated_at', 'seller_id']),
         ]);
@@ -47,8 +47,8 @@ class TokoController extends Controller
         $detail->category = $kategori;
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Toko',
+            'status_code' => '200',
+            'message' => 'Detail toko',
             'data' => $detail,
         ]);
     }
@@ -61,8 +61,8 @@ class TokoController extends Controller
         $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Kategori',
+            'status_code' => '200',
+            'message' => 'List produk kategori',
             'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
         ]);
     }
@@ -74,8 +74,8 @@ class TokoController extends Controller
         $data = Produk::where('id', $produkId)->first();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Kategori',
+            'status_code' => '200',
+            'message' => 'Detail produk kategori',
             'data' => $data,
         ]);
     }

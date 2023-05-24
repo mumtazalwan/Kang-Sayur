@@ -23,7 +23,8 @@ class CartController extends Controller
             ->get();
 
         return response()->json([
-            'message' => 'list cart',
+            'status' => 200,
+            'message' => 'List cart',
             'data' => $list
         ]);
     }
@@ -70,7 +71,7 @@ class CartController extends Controller
             }
 
             return response()->json([
-                'message' => 'tambah'
+                'message' => 'jumlah barang berhasil ditabah'
             ]);
         } else if ($customInpt < $currentProduct->inCart) {
 
@@ -80,7 +81,7 @@ class CartController extends Controller
             }
 
             return response()->json([
-                'message' => 'kurang'
+                'message' => 'jumlah barang berhasil dikurang'
             ]);
         }
     }
@@ -94,7 +95,7 @@ class CartController extends Controller
         $produk->delete();
 
         return response()->json([
-            'message' => 'barang sudah dihapus dari keranjang'
+            'message' => 'jumlah barang berhasil dikurang'
         ]);
     }
 

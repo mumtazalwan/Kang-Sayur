@@ -34,43 +34,43 @@ class ProdukController extends Controller
         if (count($data)) {
             return response()->json([
                 'status' => '200',
-                'message' => 'Rangkuman',
+                'message' => 'List produk',
                 'data' => $data
             ]);
         } else {
             return response()->json([
                 'status' => '200',
-                'message' => 'Rangkuman',
+                'message' => 'List produk',
                 'data' => 'Data tidak ditemukan'
             ]);
         }
     }
 
-    public function detail(Request $request)
-    {
-        $produkId = $request->produkId;
-        $data = Produk::where('id', $produkId)
-            ->with(['review' => function ($u) {
-                $u
-                    ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
-                    ->join('users', 'users.id', '=', 'reviews.id_user')
-                    ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
-                    ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating', 'reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
-                    ->get();
-            }])
-            ->get();
+    // public function detail(Request $request)
+    // {
+    //     $produkId = $request->produkId;
+    //     $data = Produk::where('id', $produkId)
+    //         ->with(['review' => function ($u) {
+    //             $u
+    //                 ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
+    //                 ->join('users', 'users.id', '=', 'reviews.id_user')
+    //                 ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
+    //                 ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating', 'reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
+    //                 ->get();
+    //         }])
+    //         ->get();
 
-        LogVisitor::create([
-            'product_id' => $produkId,
-            'user_id' => Auth::user()->id,
-        ]);
+    // LogVisitor::create([
+    //     'product_id' => $produkId,
+    //     'user_id' => Auth::user()->id,
+    // ]);
 
-        return response()->json([
-            'status' => 'succes',
-            'message' => 'Detail Toko',
-            'data' => $data
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => '200',
+    //         'message' => 'Detail Toko',
+    //         'data' => $data
+    //     ]);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -117,7 +117,7 @@ class ProdukController extends Controller
         $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
 
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'List Produk Kategori',
             'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
         ]);
@@ -132,8 +132,13 @@ class ProdukController extends Controller
             ->where('statuses.status', '=', 'Accepted')
             ->first();
 
+        LogVisitor::create([
+            'product_id' => $produkId,
+            'user_id' => Auth::user()->id,
+        ]);
+
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'List Produk Kategori',
             'data' => $data,
         ]);
@@ -146,8 +151,8 @@ class ProdukController extends Controller
         $data = kategori::all();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Berdasarkan Kategori',
+            'status_code' => '200',
+            'message' => 'List kategori',
             'data' => $data,
         ]);
     }
@@ -162,8 +167,8 @@ class ProdukController extends Controller
             ->get();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Berdasarkan Kategori',
+            'status_code' => '200',
+            'message' => 'List produk berdasarkan kategori',
             'data' => $data,
         ]);
     }
@@ -176,8 +181,8 @@ class ProdukController extends Controller
             ->get();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'Daftar Produk',
+            'status_code' => '200',
+            'message' => 'Daftar produk',
             'data' => $data,
         ]);
     }
@@ -190,7 +195,7 @@ class ProdukController extends Controller
             ->get();
 
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'Verifikasi',
             'data' => $data,
         ]);
