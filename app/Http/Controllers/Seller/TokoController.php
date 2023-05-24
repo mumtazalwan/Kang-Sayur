@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Toko;
 use App\Models\Produk;
-
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TokoController extends Controller
@@ -76,6 +77,34 @@ class TokoController extends Controller
         return response()->json([
             'status_code' => '200',
             'message' => 'Detail produk kategori',
+            'data' => $data,
+        ]);
+    }
+
+    public function getNearestStore()
+    {
+        $radius = 25;
+        $user = Auth::user();
+
+        $data = DB::table('tokos')
+            ->select(
+                'tokos.id',
+                'tokos.nama_toko',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
+            * cos(radians(tokos.latitude)) 
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
+            + sin(radians(" . $user->latitude . ")) 
+            * sin(radians(tokos.latitude))) as distance"),
+                'tokos.nama_toko'
+            )
+            ->having('distance', '<=', $radius)
+            ->groupBy('id', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko')
+            ->orderBy('distance', 'ASC')
+            ->get();
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => 'Toko terdekat',
             'data' => $data,
         ]);
     }

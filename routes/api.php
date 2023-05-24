@@ -46,6 +46,8 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/toko/detail', [TokoController::class, 'detail']);
     Route::get('/produk', [ProdukController::class, 'produk']);
 
+    Route::get('/toko/terderkat', [TokoController::class, 'getNearestStore']);
+
     Route::get('/produk/cart', [CartController::class, 'listCart']);
     Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
     Route::get('/produk/cart/minus', [CartController::class, 'minus']);
