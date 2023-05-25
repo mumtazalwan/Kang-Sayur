@@ -85,6 +85,34 @@ class LogVisitorController extends Controller
         }
     }
 
+    public function mostPopularStore()
+    {
+        $user = Auth::user();
+        $data = DB::table('log_visitor')
+            ->select(
+                'tokos.id',
+                'tokos.img_profile',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
+                    * cos(radians(tokos.latitude)) 
+                    * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
+                    + sin(radians(" . $user->latitude . ")) 
+                    * sin(radians(tokos.latitude))) AS distance"),
+                'tokos.nama_toko',
+                DB::raw('COUNT(toko_id) as visited'),
+            )
+            ->join('tokos', 'tokos.id', '=', 'log_visitor.toko_id')
+            ->groupBy('id', 'img_profile', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko', 'toko_id')
+            ->orderBy('visited', 'DESC')
+            ->get();
+
+        return response()->json([
+            'satus' => 200,
+            'message' => 'Produk Terpopuler',
+            'title' => 'Toko Paling Banyak Dikunjungi',
+            'data' => $data
+        ]);
+    }
+
     // produk paling sering dikunjungi oleh auth user
     public function getUserMostVisitor(Request $request)
     {
