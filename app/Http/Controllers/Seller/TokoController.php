@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\LogVisitor;
 use Illuminate\Http\Request;
 
 use App\Models\Toko;
@@ -29,7 +30,7 @@ class TokoController extends Controller
         ]);
     }
 
-    public function detail(Request $request)
+    public function detail_toko(Request $request)
     {
         $tokoId = $request->tokoId;
 
@@ -46,6 +47,11 @@ class TokoController extends Controller
             ->get();
 
         $detail->category = $kategori;
+
+        LogVisitor::create([
+            'toko_id' => $tokoId,
+            'user_id' => Auth::user()->id,
+        ]);
 
         return response()->json([
             'status_code' => '200',

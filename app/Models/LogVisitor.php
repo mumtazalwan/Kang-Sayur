@@ -12,6 +12,7 @@ class LogVisitor extends Model
     protected $fillable = [
         'product_id',
         'user_id',
+        'toko_id'
     ];
 
     public $table = "log_visitor";
