@@ -10,6 +10,7 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\LogVisitorController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/cart/minus', [CartController::class, 'minus']);
     Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
     Route::get('/produk/cart/custom', [CartController::class, 'custom']);
+    Route::get('/produk/cart/pesan', [OrderController::class, 'order']);
 
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/sale', [SaleController::class, 'index']);

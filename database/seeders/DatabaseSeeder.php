@@ -34,7 +34,9 @@ class DatabaseSeeder extends Seeder
             SaleSeeder::class,
             SaleSessionSeeder::class,
             StatusSeeder::class,
-            CartSeeder::class
+            CartSeeder::class,
+            OrderSeeder::class,
+            TransactionSeeder::class
         ]);
     }
 }
