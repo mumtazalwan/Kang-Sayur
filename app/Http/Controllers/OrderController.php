@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Cart;
+use App\Models\Toko;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -25,43 +26,10 @@ class OrderController extends Controller
     public function order()
     {
         $dataUser = Auth::user();
-        $data = Cart::where('status', 'true')
-            ->where('user_id', $dataUser->id)
-            ->join('produk', 'produk.id', '=', 'produk_id')
-            ->join('tokos', 'tokos.id', '=', 'carts.toko_id')
-            ->select('tokos.img_profile', 'tokos.nama_toko', 'produk.id', 'produk.img_id', 'produk.nama_produk', 'produk.harga_produk')
-            ->get();
 
-        $subTotal = DB::table('carts')
-            ->where('user_id', $dataUser->id)
-            ->where('status', 'true')
-            ->select(DB::raw('SUM(harga_produk) as subtotal'))
-            ->join('produk', 'produk.id', '=', 'produk_id')
-            ->first()->subtotal;
+        $data = Toko::with('getProductCart')->get();
 
-        $distance = DB::table('carts')
-            ->join('tokos', 'tokos.id', '=', 'toko_id')
-            ->select(DB::raw("6371 * acos(cos(radians(" . $dataUser->latitude . ")) 
-        * cos(radians(tokos.latitude)) 
-        * cos(radians(tokos.longitude) - radians(" . $dataUser->longitude . ")) 
-        + sin(radians(" . $dataUser->latitude . ")) 
-        * sin(radians(tokos.latitude))) as distance"))
-            ->first()->distance;
-
-        $ongkos = $distance * 3000;
-
-        if ($subTotal <= 100000) {
-            $biayaLayanan = 2500;
-        } elseif ($subTotal <= 500000) {
-            $biayaLayanan = 3000;
-        } elseif ($subTotal <= 1000000) {
-            $biayaLayanan = 4000;
-        } elseif ($subTotal >= 1000000) {
-            $biayaLayanan = 5000;
-        }
-
-
-        $total = $subTotal + $ongkos + $biayaLayanan;
+        // $total_barang = Toko::with('getProductCart')->select(DB::raw('sum(' . $data->subtotal . ')'));
 
         return response()->json([
             'status' => '200',
@@ -70,13 +38,12 @@ class OrderController extends Controller
             'nama_user' => $dataUser->name,
             'alamat' => $dataUser->address,
             'data' => $data,
-            'subtotal' => $subTotal,
             'ringkasan_pembayaran' => [
-                'subtotal' => $subTotal,
-                'ongkos_kirim' => $ongkos,
-                'biaya_layanan' => $biayaLayanan
+                'total_barang' => 100000,
+                'ongkos_kirim' => 20000,
+                'biaya_layanan' => 2500
             ],
-            'total' => $total
+            'total_keseluruhan' => 10000
         ]);
     }
 

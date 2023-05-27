@@ -19,7 +19,6 @@ return new class extends Migration
             $table->longText('deskripsi');
             $table->integer('stok_produk');
             $table->double('rating')->nullable();
-            $table->double('jarak')->nullable();
             $table->integer('kategori_id');
             $table->integer('katalog_id');
             $table->integer('varian_id')->nullable();
