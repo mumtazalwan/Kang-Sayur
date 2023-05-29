@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('payment_method');
             $table->dateTime('delivery_time');
             $table->text('catatan')->nullable();
-            $table->enum('status', ['Prepared', 'Delivered', 'Arived', 'Done'])->default('Prepared');
             $table->timestamps();
         });
     }

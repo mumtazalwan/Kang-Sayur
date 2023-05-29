@@ -55,7 +55,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/cart/minus', [CartController::class, 'minus']);
     Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
     Route::get('/produk/cart/custom', [CartController::class, 'custom']);
-    Route::get('/produk/cart/pesan', [OrderController::class, 'order']);
+    Route::post('/produk/cart/pesan', [OrderController::class, 'store']);
 
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/sale', [SaleController::class, 'index']);
