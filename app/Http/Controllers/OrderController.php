@@ -7,8 +7,11 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Cart;
 use App\Models\Toko;
+use GuzzleHttp\Promise\Create;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Nette\Utils\Random;
 
 class OrderController extends Controller
 {
@@ -50,9 +53,24 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(Request $request)
     {
-        //
+        $checkout = $request->checkout;
+
+        $code = fake()->unique()->numberBetween(1, 9999999999999);
+
+        foreach ($checkout as $key) {
+            $result = Order::create([
+                'transaction_code' => $code,
+                'product_id' => $key['product_id'],
+                'store_id' => $key['store_id'],
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'succes',
+            'data' => $result->get(),
+        ]);
     }
 
     /**

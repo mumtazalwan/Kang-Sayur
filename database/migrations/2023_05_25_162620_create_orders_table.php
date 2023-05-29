@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('transaction_code');
             $table->integer('product_id');
             $table->integer('store_id');
-            $table->double('price');
+            $table->enum('status', ['Menunggu Pembayaran', 'Sedang disiapkan', 'Sedang diantar', 'Sudah Sampai', 'Selesai'])->default('Menunggu Pembayaran');
             $table->timestamps();
         });
     }
