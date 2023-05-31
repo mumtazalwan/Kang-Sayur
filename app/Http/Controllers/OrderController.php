@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Cart;
 use App\Models\Toko;
+use App\Models\User;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,23 @@ class OrderController extends Controller
             'total_keseluruhan' => 10000
         ]);
     }
+    public function confirm()
+    {
+        $data = User::with('getProductCart')->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'Data Pesanan',
+            'title' => 'Konfirmasi',
+            'data' => $data,
+            // 'ringkasan_pembayaran' => [
+            //     'total_barang' => 100000,
+            //     'ongkos_kirim' => 20000,
+            //     'biaya_layanan' => 2500
+            // ],
+            // 'total_keseluruhan' => 10000
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,7 +74,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $checkout = $request->checkout;
-
+        $dataUser = Auth::user();
         $code = fake()->unique()->numberBetween(1, 9999999999999);
 
         foreach ($checkout as $key) {
@@ -64,6 +82,7 @@ class OrderController extends Controller
                 'transaction_code' => $code,
                 'product_id' => $key['product_id'],
                 'store_id' => $key['store_id'],
+                "user_id" => $dataUser->id
             ]);
         }
 

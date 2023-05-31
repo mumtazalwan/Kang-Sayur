@@ -70,8 +70,16 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
     Route::post('/produk/create', [ProdukController::class, 'create']);
-    Route::get('/produk/display', [ProdukController::class, 'listProduct']);
-    Route::get('/produk/display/verify', [ProdukController::class, 'onVerify']);
+
+    Route::group(['prefix' => '/produk/display'], function () {
+        Route::get('', [ProdukController::class, 'listProduct']);
+        Route::get('/verify', [ProdukController::class, 'onVerify']);
+    });
+
+    Route::group(['prefix' => '/status/product'], function () {
+        Route::get('/confirmed', [OrderController::class, 'confirm']);
+        Route::get('/prepared', [ProdukController::class, ' ']);
+    });
 });
 
 // admin

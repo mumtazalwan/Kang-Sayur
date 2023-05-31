@@ -12,6 +12,8 @@ class Order extends Model
     protected $fillable = [
         'transaction_code',
         'product_id',
-        'store_id'
+        'status',
+        'store_id',
+        "user_id"
     ];
 }
