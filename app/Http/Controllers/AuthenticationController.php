@@ -17,7 +17,7 @@ class AuthenticationController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'photo' => 'required',
+            // 'photo' => 'required',
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
@@ -31,10 +31,10 @@ class AuthenticationController extends Controller
         } else {
 
             // store photo
-            $timestamp = time();
-            $photoName = $timestamp . $request->photo->getClientOriginalName();
-            $path = 'user_profile/' . $photoName;
-            Storage::disk('public')->put($path, file_get_contents($request->photo));
+            // $timestamp = time();
+            // $photoName = $timestamp . $request->photo->getClientOriginalName();
+            // $path = 'user_profile/' . $photoName;
+            // Storage::disk('public')->put($path, file_get_contents($request->photo));
 
             // create sandi
             $sandiId = mt_rand(1000000, 9999999);
@@ -46,7 +46,8 @@ class AuthenticationController extends Controller
             // create user
             $user = User::create([
                 'name' => request('name'),
-                'photo' => $path,
+                // 'photo' => $path,
+                'photo' => "",
                 'email' => request('email'),
                 'sandi_id' => $sandiId
             ]);
