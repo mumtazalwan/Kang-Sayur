@@ -10,6 +10,13 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'transaction_code',
+        "user_id",
+        "payment_method",
+        "notes"
+    ];
+
     public function getProductCart()
     {
         $user = Auth::user();
