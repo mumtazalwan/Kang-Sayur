@@ -8,6 +8,7 @@ use App\Models\Toko;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -70,52 +71,32 @@ class OrderController extends Controller
     {
         $checkout = $request->checkout;
         $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->first();
         $code = fake()->unique()->numberBetween(1, 9999999999999);
 
         foreach ($checkout as $key) {
-            $result = Order::create([
+            Order::create([
                 'transaction_code' => $code,
                 'product_id' => $key['product_id'],
                 'store_id' => $key['store_id'],
-                "user_id" => $dataUser->id
+                'user_id' => $dataUser->id
             ]);
         }
 
+        $total_transaction = DB::table('orders')
+            ->where('transaction_code', $code)
+            ->where('store_id', $tokoId)
+            ->select(DB::raw('sum(produk.harga_produk) as subtotal'));
+
+        Transaction::create([
+            'transaction_code' => $code,
+            'user_id' => $dataUser->id,
+            'payment_method' => 'BRIVA',
+            'notes' => 'Nanasnya dikupa kulitnya, tapi jangan dimakan'
+        ]);
+
         return response()->json([
             'status' => 'succes',
-            'data' => $result->get(),
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
     }
 }

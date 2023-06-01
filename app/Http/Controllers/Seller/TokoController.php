@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Toko;
 use App\Models\Produk;
+use App\Models\Transaction;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -115,50 +116,33 @@ class TokoController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function analysis()
     {
-    }
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $pengunjung = DB::table('log_visitor')
+            ->select(
+                DB::raw('COUNT(toko_id) as visited'),
+            )
+            ->where('toko_id', 1)
+            ->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $order_count = DB::table('transactions')
+            ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
+            ->where('orders.store_id', 1)
+            ->groupBy('orders.transaction_code')->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'pesanan' => count($order_count),
+                'pengunjung_toko' => $pengunjung->visited,
+                'rating_produk' => 4.5,
+                'produk_terjual' => 100,
+                'laporan' => 0,
+                'rating_pelayanan' => 5
+            ],
+        ]);
     }
 }

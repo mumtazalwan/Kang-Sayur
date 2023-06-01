@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('product_id');
             $table->integer('store_id');
             $table->integer('user_id');
-            $table->enum('status', ['Menunggu Pembayaran', 'Menunggu konfirmasi', 'Sedang disiapkan', 'Menunggu driver', 'Sedang diantar', 'Sudah Sampai', 'Selesai'])->default('Menunggu Pembayaran');
+            $table->enum('status', ['Menunggu konfirmasi', 'Sedang disiapkan', 'Menunggu driver', 'Sedang diantar', 'Sudah Sampai', 'Selesai'])->default('Menunggu konfirmasi');
             $table->timestamps();
         });
     }
