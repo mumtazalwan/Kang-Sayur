@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Models\Cart;
 use App\Models\Toko;
-use App\Models\User;
-use GuzzleHttp\Promise\Create;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Nette\Utils\Random;
 
 class OrderController extends Controller
 {
@@ -52,7 +47,7 @@ class OrderController extends Controller
     }
     public function confirm()
     {
-        $data = User::with('getProductCart')->get();
+        $data = Transaction::with('getProductCart')->get();
 
         return response()->json([
             'status' => '200',

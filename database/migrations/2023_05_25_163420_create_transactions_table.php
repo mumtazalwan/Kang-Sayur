@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('transaction_code');
             $table->integer('store_id');
+            $table->integer('user_id');
             $table->string('payment_method');
             $table->dateTime('delivery_time');
             $table->text('catatan')->nullable();
