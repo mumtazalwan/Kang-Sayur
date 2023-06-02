@@ -45,10 +45,10 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
     Route::get('/toko', [TokoController::class, 'index']);
     Route::get('/toko/detail', [TokoController::class, 'detail_toko']);
-    Route::get('/produk', [ProdukController::class, 'produk']);
-
     Route::get('/toko/terderkat', [TokoController::class, 'getNearestStore']);
     Route::get('/toko/popular', [LogVisitorController::class, 'mostPopularStore']);
+
+    Route::get('/produk', [ProdukController::class, 'produk']);
 
     Route::get('/produk/cart', [CartController::class, 'listCart']);
     Route::get('/produk/cart/add', [CartController::class, 'addToChart']);

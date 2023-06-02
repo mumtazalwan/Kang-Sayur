@@ -22,12 +22,13 @@ class TokoController extends Controller
     {
         // list toko
 
-        $data = Toko::all();
+        $data = DB::table('tokos')->select('*')->get();
 
         return response()->json([
             'status_code' => '200',
             'message' => 'List Toko',
-            'data' => $data->setHidden(['deskripsi', 'alamat', 'location', 'open', 'close', 'catalogue_id', 'created_at', 'updated_at', 'seller_id']),
+            'data' => $data,
+            // 'data' => $data->setHidden(['deskripsi', 'alamat', 'location', 'open', 'close', 'catalogue_id', 'created_at', 'updated_at', 'seller_id']),
         ]);
     }
 
@@ -94,14 +95,24 @@ class TokoController extends Controller
         $user = Auth::user();
 
         $data = DB::table('tokos')
+            // ->select(
+            //     'tokos.id',
+            //     'tokos.nama_toko',
+            //     DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
+            // * cos(radians(tokos.latitude)) 
+            // * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
+            // + sin(radians(" . $user->latitude . ")) 
+            // * sin(radians(tokos.latitude))) as distance"),
+            //     'tokos.nama_toko'
+            // )
             ->select(
                 'tokos.id',
                 'tokos.nama_toko',
-                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            + sin(radians(" . $user->latitude . ")) 
-            * sin(radians(tokos.latitude))) as distance"),
+                DB::raw("6371 * acos(cos(radians(tokos.latitude)) 
+            * cos(radians(" . $user->latitude . ")) 
+            * cos(radians(" . $user->longitude . ") - radians(tokos.longitude)) 
+            + sin(radians(tokos.latitude)) 
+            * sin(radians(" . $user->latitude . "))) as distance"),
                 'tokos.nama_toko'
             )
             ->having('distance', '<=', $radius)
