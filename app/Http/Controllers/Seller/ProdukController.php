@@ -105,6 +105,11 @@ class ProdukController extends Controller
             'produk_id' => $produk->id,
             'toko_id' => $tokoId->id
         ]);
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang',
+        ]);
     }
 
     public function produk(Request $request)
