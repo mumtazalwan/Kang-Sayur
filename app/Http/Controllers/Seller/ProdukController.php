@@ -84,7 +84,6 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string',
             'deskripsi' => 'required',
             'kategori_id' => 'required|integer',
-            'katalog_id' => 'required|integer',
             'harga_produk' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'stok_produk' => 'required|integer',
 
@@ -96,7 +95,6 @@ class ProdukController extends Controller
             'nama_produk' => request('nama_produk'),
             'deskripsi' => request('deskripsi'),
             'kategori_id' => request('kategori_id'),
-            'katalog_id' => request('katalog_id'),
             'harga_produk' => request('harga_produk'),
             'stok_produk' => request('stok_produk'),
             'toko_id' => $tokoId->id,
