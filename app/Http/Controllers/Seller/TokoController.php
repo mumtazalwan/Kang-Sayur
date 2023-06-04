@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Toko;
 use App\Models\Produk;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -95,16 +96,6 @@ class TokoController extends Controller
         $user = Auth::user();
 
         $data = DB::table('tokos')
-            // ->select(
-            //     'tokos.id',
-            //     'tokos.nama_toko',
-            //     DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            // * cos(radians(tokos.latitude)) 
-            // * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            // + sin(radians(" . $user->latitude . ")) 
-            // * sin(radians(tokos.latitude))) as distance"),
-            //     'tokos.nama_toko'
-            // )
             ->select(
                 'tokos.id',
                 'tokos.nama_toko',
@@ -154,6 +145,219 @@ class TokoController extends Controller
                 'laporan' => 0,
                 'rating_pelayanan' => 5
             ],
+        ]);
+    }
+
+    public function income(Request $request)
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
+
+        $custom = $request->custom;
+        $today = Carbon::now()->format('Y.m.d');
+        $thisMonth = Carbon::now()->format('m');
+        $thisYear = Carbon::now()->format('Y');
+
+        $three_month_back = $thisMonth - 3;
+        $six_month_back = $thisMonth - 6;
+        $one_year_back = $thisYear - 1;
+
+        if ($three_month_back <= 0) {
+            $three_month_back = 1;
+        }
+
+        if ($six_month_back <= 0) {
+            $six_month_back = 1;
+        }
+
+        switch ($custom) {
+                // bulan ini
+            case '1':
+                $pemasukan_custom = DB::table('orders')
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->whereMonth('orders.created_at', $thisMonth)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->where('orders.status', 'Selesai')
+                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                break;
+
+                // 3 bulan terakhir
+            case '2':
+                $pemasukan_custom = DB::table('orders')
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->whereMonth('orders.created_at', '<=', $thisMonth)
+                    ->whereMonth('orders.created_at', '>=', $three_month_back)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->where('orders.status', 'Selesai')
+                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                break;
+
+                // 6 bulan terakhir
+            case '3':
+                $pemasukan_custom = DB::table('orders')
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->whereMonth('orders.created_at', '<=', $thisMonth)
+                    ->whereMonth('orders.created_at', '>=', $six_month_back)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->where('orders.status', 'Selesai')
+                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                break;
+
+                // 1 tahun terakhir
+            case '4':
+                $pemasukan_custom = DB::table('orders')
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->whereYear('orders.created_at', '<=', $thisYear)
+                    ->whereYear('orders.created_at', '>=', $one_year_back)
+                    ->where('orders.status', 'Selesai')
+                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                break;
+
+            default:
+                $pemasukan_custom = DB::table('orders')
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->whereDate('orders.created_at', $today)
+                    ->where('orders.status', 'Selesai')
+                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                break;
+        }
+
+        $order_count = DB::table('orders')
+            ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->where('orders.store_id', 1)
+            ->where('orders.status', 'Selesai')
+            ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+
+        return response()->json([
+            'status' => 200,
+            'pemasukan' => [
+                'total_keseluruhan' => $order_count,
+                'pemasukan_pilihan' => $pemasukan_custom,
+            ],
+        ]);
+    }
+
+    public function graphic(Request $request)
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
+
+        $custom = $request->custom;
+        $today = Carbon::now()->format('Y.m.d');
+        $thisMonth = Carbon::now()->format('m');
+        $thisYear = Carbon::now()->format('Y');
+
+        $three_month_back = $thisMonth - 3;
+        $six_month_back = $thisMonth - 6;
+        $one_year_back = $thisYear - 1;
+
+        if ($three_month_back < 0) {
+            $three_month_back = 1;
+        }
+
+        if ($six_month_back < 0) {
+            $six_month_back = 1;
+        }
+        switch ($custom) {
+                // 3 bulan terakhir
+            case '1':
+                $order_count = DB::table('orders')
+                    ->select(
+                        DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
+                        DB::raw('SUM(produk.harga_produk) as total')
+                    )
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->where('orders.status', 'Selesai')
+                    ->whereMonth('orders.created_at', '<=', $thisMonth)
+                    ->whereMonth('orders.created_at', '>=', $three_month_back)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->groupBy('date')
+                    ->get();
+                break;
+
+                // 6 bulan terakhir
+            case '2':
+                $order_count = DB::table('orders')
+                    ->select(
+                        DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
+                        DB::raw('SUM(produk.harga_produk) as total')
+                    )
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->where('orders.status', 'Selesai')
+                    ->whereMonth('orders.created_at', '<=', $thisMonth)
+                    ->whereMonth('orders.created_at', '>=', $six_month_back)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->groupBy('date')
+                    ->get();
+                break;
+
+                // 1 tahun terakhir
+            case '3':
+                $order_count = DB::table('orders')
+                    ->select(
+                        DB::raw("DATE_FORMAT(orders.created_at, '%b-%Y') as date"),
+                        DB::raw('SUM(produk.harga_produk) as total')
+                    )
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->where('orders.status', 'Selesai')
+                    ->whereYear('orders.created_at', '<=', $thisYear)
+                    ->whereYear('orders.created_at', '>=', $one_year_back)
+                    ->groupBy('date')
+                    ->get();
+                break;
+
+            case '4':
+                $order_count = DB::table('orders')
+                    ->select(
+                        DB::raw("DATE_FORMAT(orders.created_at, '%b-%Y') as date"),
+                        DB::raw('SUM(produk.harga_produk) as total')
+                    )
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->where('orders.status', 'Selesai')
+                    ->groupBy('date')
+                    ->get();
+                break;
+
+            default:
+                $order_count = DB::table('orders')
+                    ->select(
+                        DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
+                        DB::raw('SUM(produk.harga_produk) as total')
+                    )
+                    ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->where('orders.store_id', 1)
+                    ->where('orders.status', 'Selesai')
+                    ->whereMonth('orders.created_at', $thisMonth)
+                    ->whereYear('orders.created_at', $thisYear)
+                    ->groupBy('date')
+                    ->get();
+                break;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'grafik_penjualan' => $order_count
+
         ]);
     }
 }
