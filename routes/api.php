@@ -41,45 +41,57 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
+    // home
+    Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
+    Route::get('/produk/promo/kilat', [SaleController::class, 'index']);
+    Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
+    Route::get('/produk/sering/user/kunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
+
+    // explore
+    Route::get('/produk/kategori', [ProdukController::class, 'nearestProdukByCategoryId']);
+    Route::get('/kategori', [ProdukController::class, 'categories']);
+
+    // profile
     Route::get('/profile', [UserController::class, 'index']);
 
-    Route::get('/toko', [TokoController::class, 'index']);
-    Route::get('/toko/detail', [TokoController::class, 'detail_toko']);
-    Route::get('/toko/terderkat', [TokoController::class, 'getNearestStore']);
-    Route::get('/toko/popular', [LogVisitorController::class, 'mostPopularStore']);
+    Route::group(['prefix' => '/toko'], function () {
+        Route::get('/all', [TokoController::class, 'index']);
+        Route::get('/detail', [TokoController::class, 'detail_toko']);
 
-    Route::get('/produk', [ProdukController::class, 'produk']);
+        Route::group(['prefix' => '/katalog'], function () {
+            Route::get('/produkByCategoryId', [ProdukController::class, 'produkStoreByCategoryId']);
+        });
 
+        Route::get('/terderkat', [TokoController::class, 'getNearestStore']);
+        Route::get('/popular', [LogVisitorController::class, 'mostPopularStore']);
+    });
+
+    Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
+
+    // cart
     Route::get('/produk/cart', [CartController::class, 'listCart']);
     Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
     Route::get('/produk/cart/minus', [CartController::class, 'minus']);
     Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
     Route::get('/produk/cart/custom', [CartController::class, 'custom']);
     Route::post('/produk/cart/pesan', [OrderController::class, 'store']);
-
-    Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
-    Route::get('/produk/sale', [SaleController::class, 'index']);
-    Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
-    Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
-    Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
-
-    Route::get('/produk/kategori', [ProdukController::class, 'Categories']);
-    Route::get('/produk/kategori/item', [ProdukController::class, 'produkByCategory']);
 });
 
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
-    Route::post('/produk/create', [ProdukController::class, 'create']);
     Route::get('/analysis', [TokoController::class, 'analysis']);
 
-    Route::group(['prefix' => '/produk/display'], function () {
-        Route::get('', [ProdukController::class, 'listProduct']);
-        Route::get('/verify', [ProdukController::class, 'onVerify']);
+    Route::group(['prefix' => '/produk'], function () {
+        Route::post('/create', [ProdukController::class, 'create']);
+        Route::get('/display', [ProdukController::class, 'listProduct']);
+        Route::get('/display/verify', [ProdukController::class, 'onVerify']);
     });
 
-    Route::group(['prefix' => '/status/product'], function () {
-        Route::get('/confirmed', [OrderController::class, 'confirm']);
-        Route::get('/prepared', [ProdukController::class, ' ']);
+    Route::group(['prefix' => '/status'], function () {
+        Route::group(['prefix' => '/product'], function () {
+            Route::get('/confirmed', [OrderController::class, 'confirm']);
+            Route::get('/prepared', [ProdukController::class, ' ']);
+        });
     });
 });
 
