@@ -133,7 +133,7 @@ class TokoController extends Controller
         $order_count = DB::table('transactions')
             ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
             ->where('orders.store_id', 1)
-            ->groupBy('orders.transaction_code')->get();
+            ->get();
 
         return response()->json([
             'status' => 200,
