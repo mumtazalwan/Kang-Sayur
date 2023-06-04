@@ -80,6 +80,8 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
     Route::get('/analysis', [TokoController::class, 'analysis']);
+    Route::get('/pemasukan', [TokoController::class, 'income']);
+    Route::get('/grafik/penjualan', [TokoController::class, 'graphic']);
 
     Route::group(['prefix' => '/produk'], function () {
         Route::post('/create', [ProdukController::class, 'create']);
@@ -89,7 +91,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 
     Route::group(['prefix' => '/status'], function () {
         Route::group(['prefix' => '/product'], function () {
-            Route::get('/confirmed', [OrderController::class, 'confirm']);
+            Route::get('/confirm', [OrderController::class, 'confirm']);
             Route::get('/prepared', [ProdukController::class, ' ']);
         });
     });

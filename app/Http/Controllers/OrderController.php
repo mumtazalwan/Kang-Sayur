@@ -46,9 +46,12 @@ class OrderController extends Controller
             'total_keseluruhan' => 10000
         ]);
     }
+
+    // status order yang perlu dikonfirmasi
+
     public function confirm()
     {
-        $data = Transaction::with('getProductCart')->get();
+        $data = Transaction::with('getProductOrder')->get();
 
         return response()->json([
             'status' => '200',
@@ -67,6 +70,8 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    // mendaftarkan produk
     public function store(Request $request)
     {
         $checkout = $request->checkout;
