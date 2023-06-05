@@ -106,6 +106,8 @@ class TokoController extends Controller
             ->select(
                 'tokos.id',
                 'tokos.nama_toko',
+                'tokos.longitude',
+                'tokos.latitude',
                 DB::raw("6371 * acos(cos(radians(tokos.latitude)) 
             * cos(radians(" . $user->latitude . ")) 
             * cos(radians(" . $user->longitude . ") - radians(tokos.longitude)) 
