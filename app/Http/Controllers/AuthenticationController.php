@@ -17,7 +17,7 @@ class AuthenticationController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            // 'photo' => 'required',
+            'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
@@ -30,12 +30,6 @@ class AuthenticationController extends Controller
             ]);
         } else {
 
-            // store photo
-            // $timestamp = time();
-            // $photoName = $timestamp . $request->photo->getClientOriginalName();
-            // $path = 'user_profile/' . $photoName;
-            // Storage::disk('public')->put($path, file_get_contents($request->photo));
-
             // create sandi
             $sandiId = mt_rand(1000000, 9999999);
             $sandi = Sandi::create([
@@ -43,14 +37,28 @@ class AuthenticationController extends Controller
                 'password' => Hash::make(request('password'))
             ]);
 
-            // create user
-            $user = User::create([
-                'name' => request('name'),
-                // 'photo' => $path,
-                'photo' => "",
-                'email' => request('email'),
-                'sandi_id' => $sandiId
-            ]);
+            if ($request->photo) {
+                // store photo
+                $timestamp = time();
+                $photoName = $timestamp . $request->photo->getClientOriginalName();
+                $path = '/user_profile/' . $photoName;
+                Storage::disk('public')->put($path, file_get_contents($request->photo));
+
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'photo' => '/storage' . $path,
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId
+                ]);
+            } else {
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId
+                ]);
+            }
 
             // generate token
             $token = $user->createToken('auth_token')->plainTextToken;
@@ -65,8 +73,7 @@ class AuthenticationController extends Controller
                 'status' => 200,
                 'data' => $user,
                 'acces_token' => $token,
-                'sandi' => $sandi,
-                'token_type' => 'Bearer'
+                'sandi' => $sandi
             ]);
         }
     }
