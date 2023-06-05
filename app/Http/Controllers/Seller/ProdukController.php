@@ -51,7 +51,7 @@ class ProdukController extends Controller
     public function create(Request $request)
     {
         $user = Auth::user();
-        $tokoId = Toko::where('seller_id', $user->id)->first();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $request->validate([
             'nama_produk' => 'required|string',
@@ -70,13 +70,13 @@ class ProdukController extends Controller
             'kategori_id' => request('kategori_id'),
             'harga_produk' => request('harga_produk'),
             'stok_produk' => request('stok_produk'),
-            'toko_id' => $tokoId->id,
+            'toko_id' => $tokoId,
             'ulasan_id' => $id
         ]);
 
         Status::create([
             'produk_id' => $produk->id,
-            'toko_id' => $tokoId->id
+            'toko_id' => $tokoId
         ]);
 
         return response()->json([
@@ -191,8 +191,15 @@ class ProdukController extends Controller
     // list produk seller yang sudah di acc admin
     public function listProduct()
     {
-        $data = Produk::where('produk.toko_id', 2)
+
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = DB::table('produk')
+            ->select('tokos.id', 'tokos.nama_toko', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk',)
+            ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->get();
 
@@ -206,8 +213,14 @@ class ProdukController extends Controller
     // list produk seller yang belum di acc admin
     public function onVerify()
     {
-        $data = Produk::where('produk.toko_id', 2)
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = DB::table('produk')
+            ->select('tokos.id', 'tokos.nama_toko', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk', 'produk.created_at as tanggal_verivikasi')
+            ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Pending')
             ->get();
 
