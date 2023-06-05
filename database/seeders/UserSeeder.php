@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Akbar',
+            'photo' => '/images/profile/starcat.jpg',
             'email' => 'akbar123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
