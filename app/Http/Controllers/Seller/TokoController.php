@@ -25,7 +25,7 @@ class TokoController extends Controller
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $data = DB::table('tokos')
-            ->select('tokos.id', 'tokos.nama_toko', 'users.name', 'users.email', 'users.phone_number')
+            ->select('tokos.id', 'tokos.nama_toko', 'tokos.img_profile', 'users.name', 'users.email', 'users.phone_number')
             ->join('users', 'users.id', '=', 'tokos.seller_id')
             ->where('tokos.seller_id', $user->id)
             ->first();
