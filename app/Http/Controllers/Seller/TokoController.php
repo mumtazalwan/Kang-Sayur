@@ -19,6 +19,13 @@ class TokoController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function FunctionName()
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+    }
+
+
     public function index()
     {
         // list toko
