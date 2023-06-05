@@ -24,10 +24,16 @@ class TokoController extends Controller
         $user = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
+        $data = DB::table('tokos')
+            ->select('tokos.id', 'tokos.nama_toko', 'users.name', 'users.email', 'users.phone_number')
+            ->join('users', 'users.id', '=', 'tokos.seller_id')
+            ->where('tokos.seller_id', $user->id)
+            ->first();
+
         return response()->json([
             'status' => 200,
             'message' => "Seller personal information",
-            'data' => $user,
+            'data' => $data,
         ]);
     }
 
