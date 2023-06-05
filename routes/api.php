@@ -79,7 +79,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
-    Route::get('/profile', [UserController::class, 'index']);
+    Route::get('/profile', [TokoController::class, 'sellerPersonalInformation']);
 
     Route::get('/analysis', [TokoController::class, 'analysis']);
     Route::get('/pemasukan', [TokoController::class, 'income']);
