@@ -118,6 +118,7 @@ class TokoController extends Controller
             ->select(
                 'tokos.id',
                 'tokos.nama_toko',
+                'tokos.alamat',
                 'tokos.longitude',
                 'tokos.latitude',
                 DB::raw("6371 * acos(cos(radians(tokos.latitude)) 
@@ -128,7 +129,7 @@ class TokoController extends Controller
                 'tokos.nama_toko'
             )
             ->having('distance', '<=', $radius)
-            ->groupBy('id', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko')
+            ->groupBy('id', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko', 'tokos.alamat',)
             ->orderBy('distance', 'ASC')
             ->get();
 
