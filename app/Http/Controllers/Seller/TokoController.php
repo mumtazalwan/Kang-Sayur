@@ -19,10 +19,16 @@ class TokoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function FunctionName()
+    public function sellerPersonalInformation()
     {
         $user = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Seller personal information",
+            'data' => $user,
+        ]);
     }
 
 
