@@ -86,16 +86,13 @@ class AuthenticationController extends Controller
             'owner_name' => 'required|string',
             'phone_number' => 'required|numeric|digits:11',
             'owner_address' => 'required',
-            'owner_longitude' => 'required|between:-180,180',
-            'owner_latitude' => 'required|between:-90,90',
             'store_name' => 'required|string',
             'description' => 'required',
             'store_address' => 'required',
             'store_longitude' => 'required|between:-180,180',
             'store_latitude' => 'required|between:-90,90',
-            'open' => 'required|date_format:H:i:s',
-            'close' => 'required|date_format:H:i:s|after:open',
-
+            'open' => 'required|date_format:H:i',
+            'close' => 'required|date_format:H:i|after:open',
         ]);
 
         $alrTaken = User::where('email', $request->email)->first();
@@ -119,8 +116,8 @@ class AuthenticationController extends Controller
                 'sandi_id' => $sandiId,
                 'phone_number' => request('phone_number'),
                 'address' => request('owner_address'),
-                'longitude' => request('owner_longitude'),
-                'latitude' => request('owner_latitude')
+                'longitude' => request('store_longitude'),
+                'latitude' => request('store_latitude')
             ]);
 
             Toko::create([
