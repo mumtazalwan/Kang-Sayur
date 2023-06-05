@@ -121,18 +121,18 @@ class TokoController extends Controller
     public function analysis()
     {
         $user = Auth::user();
-        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $pengunjung = DB::table('log_visitor')
             ->select(
                 DB::raw('COUNT(toko_id) as visited'),
             )
-            ->where('toko_id', 1)
+            ->where('toko_id', $tokoId)
             ->first();
 
         $order_count = DB::table('transactions')
             ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
-            ->where('orders.store_id', 1)
+            ->where('orders.store_id', $tokoId)
             ->get();
 
         return response()->json([
@@ -151,7 +151,7 @@ class TokoController extends Controller
     public function income(Request $request)
     {
         $user = Auth::user();
-        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $custom = $request->custom;
         $today = Carbon::now()->format('Y.m.d');
@@ -176,7 +176,7 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', $thisMonth)
                     ->whereYear('orders.created_at', $thisYear)
                     ->where('orders.status', 'Selesai')
@@ -188,7 +188,7 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $three_month_back)
                     ->whereYear('orders.created_at', $thisYear)
@@ -201,7 +201,7 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $six_month_back)
                     ->whereYear('orders.created_at', $thisYear)
@@ -214,7 +214,7 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->whereYear('orders.created_at', '<=', $thisYear)
                     ->whereYear('orders.created_at', '>=', $one_year_back)
                     ->where('orders.status', 'Selesai')
@@ -225,7 +225,7 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->whereDate('orders.created_at', $today)
                     ->where('orders.status', 'Selesai')
                     ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
@@ -235,7 +235,7 @@ class TokoController extends Controller
         $order_count = DB::table('orders')
             ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
-            ->where('orders.store_id', 1)
+            ->where('orders.store_id', $tokoId)
             ->where('orders.status', 'Selesai')
             ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
 
@@ -251,7 +251,7 @@ class TokoController extends Controller
     public function graphic(Request $request)
     {
         $user = Auth::user();
-        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->first();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $custom = $request->custom;
         $today = Carbon::now()->format('Y.m.d');
@@ -279,7 +279,7 @@ class TokoController extends Controller
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $three_month_back)
@@ -297,7 +297,7 @@ class TokoController extends Controller
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $six_month_back)
@@ -315,7 +315,7 @@ class TokoController extends Controller
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereYear('orders.created_at', '<=', $thisYear)
                     ->whereYear('orders.created_at', '>=', $one_year_back)
@@ -331,7 +331,7 @@ class TokoController extends Controller
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->groupBy('date')
                     ->get();
@@ -345,7 +345,7 @@ class TokoController extends Controller
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
-                    ->where('orders.store_id', 1)
+                    ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', $thisMonth)
                     ->whereYear('orders.created_at', $thisYear)
