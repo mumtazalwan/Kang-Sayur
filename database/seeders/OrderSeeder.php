@@ -294,5 +294,53 @@ class OrderSeeder extends Seeder
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
+
+        //
+
+        Order::create(
+            [
+                'transaction_code' => 5571005688725,
+                'product_id' => 8,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'selesai',
+                'created_at' => '2023-03-04 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 5571005688725,
+                'product_id' => 2,
+                'store_id' => 1,
+                'user_id' => 1,
+                'status' => 'selesai',
+                'created_at' => '2023-03-04 00:00:00'
+            ]
+        );
+
+        //
+
+        Order::create(
+            [
+                'transaction_code' => 6571005688725,
+                'product_id' => 8,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'selesai',
+                'created_at' => '2023-01-04 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 6571005688725,
+                'product_id' => 2,
+                'store_id' => 1,
+                'user_id' => 1,
+                'status' => 'selesai',
+                'created_at' => '2023-01-04 00:00:00'
+            ]
+        );
     }
 }

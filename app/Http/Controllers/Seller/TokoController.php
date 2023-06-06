@@ -117,6 +117,7 @@ class TokoController extends Controller
         $data = DB::table('tokos')
             ->select(
                 'tokos.id',
+                'tokos.img_profile',
                 'tokos.nama_toko',
                 'tokos.alamat',
                 'tokos.longitude',
