@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('produk_id');
             $table->integer('toko_id');
+            $table->enum('status', ['false', 'true'])->default('false');
         });
     }
 

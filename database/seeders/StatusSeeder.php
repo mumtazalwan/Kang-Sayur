@@ -49,5 +49,29 @@ class StatusSeeder extends Seeder
             'toko_id' => 1,
             'status' => 'Accepted'
         ]);
+
+        Status::create([
+            'produk_id' => 7,
+            'toko_id' => 2,
+            'status' => 'Accepted'
+        ]);
+
+        Status::create([
+            'produk_id' => 8,
+            'toko_id' => 2,
+            'status' => 'Accepted'
+        ]);
+
+        Status::create([
+            'produk_id' => 9,
+            'toko_id' => 3,
+            'status' => 'Accepted'
+        ]);
+
+        Status::create([
+            'produk_id' => 10,
+            'toko_id' => 4,
+            'status' => 'Accepted'
+        ]);
     }
 }

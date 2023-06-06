@@ -17,7 +17,7 @@ class AuthenticationController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'photo' => 'required',
+            'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
@@ -30,12 +30,6 @@ class AuthenticationController extends Controller
             ]);
         } else {
 
-            // store photo
-            $timestamp = time();
-            $photoName = $timestamp . $request->photo->getClientOriginalName();
-            $path = 'user_profile/' . $photoName;
-            Storage::disk('public')->put($path, file_get_contents($request->photo));
-
             // create sandi
             $sandiId = mt_rand(1000000, 9999999);
             $sandi = Sandi::create([
@@ -43,13 +37,28 @@ class AuthenticationController extends Controller
                 'password' => Hash::make(request('password'))
             ]);
 
-            // create user
-            $user = User::create([
-                'name' => request('name'),
-                'photo' => $path,
-                'email' => request('email'),
-                'sandi_id' => $sandiId
-            ]);
+            if ($request->photo) {
+                // store photo
+                $timestamp = time();
+                $photoName = $timestamp . $request->photo->getClientOriginalName();
+                $path = '/user_profile/' . $photoName;
+                Storage::disk('public')->put($path, file_get_contents($request->photo));
+
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'photo' => '/storage' . $path,
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId
+                ]);
+            } else {
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId
+                ]);
+            }
 
             // generate token
             $token = $user->createToken('auth_token')->plainTextToken;
@@ -61,7 +70,10 @@ class AuthenticationController extends Controller
             $findUser->assignRole([$role]);
 
             return response()->json([
-                'data' => $user, 'acces_token' => $token, 'sandi' => $sandi, 'token_type' => 'Bearer'
+                'status' => 200,
+                'data' => $user,
+                'acces_token' => $token,
+                'sandi' => $sandi
             ]);
         }
     }
@@ -72,18 +84,16 @@ class AuthenticationController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:8',
             'owner_name' => 'required|string',
+            'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'phone_number' => 'required|numeric|digits:11',
             'owner_address' => 'required',
-            'owner_longitude' => 'required|between:-180,180',
-            'owner_latitude' => 'required|between:-90,90',
             'store_name' => 'required|string',
             'description' => 'required',
             'store_address' => 'required',
             'store_longitude' => 'required|between:-180,180',
             'store_latitude' => 'required|between:-90,90',
-            'open' => 'required|date_format:H:i:s',
-            'close' => 'required|date_format:H:i:s|after:open',
-
+            'open' => 'required|date_format:H:i',
+            'close' => 'required|date_format:H:i|after:open',
         ]);
 
         $alrTaken = User::where('email', $request->email)->first();
@@ -96,44 +106,94 @@ class AuthenticationController extends Controller
             ]);
         } else {
 
-            Sandi::create([
-                'id' => $sandiId,
-                'password' => Hash::make(request('password'))
-            ]);
+            if ($request->photo) {
 
-            $user = User::create([
-                'name' => request('owner_name'),
-                'email' => request('email'),
-                'sandi_id' => $sandiId,
-                'phone_number' => request('phone_number'),
-                'address' => request('owner_address'),
-                'longitude' => request('owner_longitude'),
-                'latitude' => request('owner_latitude')
-            ]);
+                // store photo
+                $timestamp = time();
+                $photoName = $timestamp . $request->photo->getClientOriginalName();
+                $path = '/user_profile/' . $photoName;
+                Storage::disk('public')->put($path, file_get_contents($request->photo));
+                Sandi::create([
+                    'id' => $sandiId,
+                    'password' => Hash::make(request('password'))
+                ]);
 
-            Toko::create([
-                'nama_toko' => request('store_name'),
-                'deskripsi' => request('description'),
-                'seller_id' => $user->id,
-                'alamat' => request('store_address'),
-                'longitude' => request('store_longitude'),
-                'latitude' => request('store_latitude'),
-                'open' => request('open'),
-                'close' => request('close'),
+                $user = User::create([
+                    'name' => request('owner_name'),
+                    'email' => request('email'),
+                    'photo' => '/storage' . $path,
+                    'sandi_id' => $sandiId,
+                    'phone_number' => request('phone_number'),
+                    'address' => request('owner_address'),
+                    'longitude' => request('store_longitude'),
+                    'latitude' => request('store_latitude')
+                ]);
 
-            ]);
+                Toko::create([
+                    'nama_toko' => request('store_name'),
+                    'deskripsi' => request('description'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('store_address'),
+                    'longitude' => request('store_longitude'),
+                    'latitude' => request('store_latitude'),
+                    'open' => request('open'),
+                    'close' => request('close'),
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+                ]);
 
-            $findUser = User::findOrFail($user->id);
-            $role = Role::findOrFail(2);
+                $token = $user->createToken('auth_token')->plainTextToken;
 
-            $findUser->assignRole([$role]);
+                $findUser = User::findOrFail($user->id);
+                $role = Role::findOrFail(2);
 
-            return response()->json([
-                'data' => $user,
-                'acces_token' => $token,
-            ]);
+                $findUser->assignRole([$role]);
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => $user,
+                    'acces_token' => $token,
+                ]);
+            } else {
+                Sandi::create([
+                    'id' => $sandiId,
+                    'password' => Hash::make(request('password'))
+                ]);
+
+                $user = User::create([
+                    'name' => request('owner_name'),
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId,
+                    'phone_number' => request('phone_number'),
+                    'address' => request('owner_address'),
+                    'longitude' => request('store_longitude'),
+                    'latitude' => request('store_latitude')
+                ]);
+
+                Toko::create([
+                    'nama_toko' => request('store_name'),
+                    'deskripsi' => request('description'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('store_address'),
+                    'longitude' => request('store_longitude'),
+                    'latitude' => request('store_latitude'),
+                    'open' => request('open'),
+                    'close' => request('close'),
+
+                ]);
+
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                $findUser = User::findOrFail($user->id);
+                $role = Role::findOrFail(2);
+
+                $findUser->assignRole([$role]);
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => $user,
+                    'acces_token' => $token,
+                ]);
+            }
         }
     }
 

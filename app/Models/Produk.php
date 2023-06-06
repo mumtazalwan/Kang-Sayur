@@ -12,7 +12,6 @@ class Produk extends Model
     use HasFactory;
 
     public $table = 'produk';
-    public $timestamps = false;
 
     protected $fillable = [
         'nama_produk',
@@ -35,6 +34,6 @@ class Produk extends Model
 
     public function review()
     {
-        return $this->hasMany(Review::class, 'product_id');
+        return $this->hasMany(Review::class, 'product_id')->join('users', 'users.id', '=', 'reviews.id_user');
     }
 }

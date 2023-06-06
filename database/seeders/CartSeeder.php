@@ -17,7 +17,22 @@ class CartSeeder extends Seeder
         Cart::create([
             'user_id' => 1,
             'produk_id' => 1,
-            'toko_id' => 1
+            'toko_id' => 1,
+            'status' => 'true'
+        ]);
+
+        Cart::create([
+            'user_id' => 1,
+            'produk_id' => 2,
+            'toko_id' => 1,
+            'status' => 'true'
+        ]);
+
+        Cart::create([
+            'user_id' => 1,
+            'produk_id' => 7,
+            'toko_id' => 2,
+            'status' => 'true'
         ]);
     }
 }

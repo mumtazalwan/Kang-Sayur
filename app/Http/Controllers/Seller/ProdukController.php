@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
-use App\Models\rs;
+use App\Models\Kategori;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +25,7 @@ class ProdukController extends Controller
         //
     }
 
+    // search all produk
     public function home_search($keyword)
     {
         $data = Produk::where('nama_produk', 'LIKE', '%' . $keyword . '%')
@@ -34,57 +35,28 @@ class ProdukController extends Controller
         if (count($data)) {
             return response()->json([
                 'status' => '200',
-                'message' => 'Rangkuman',
+                'message' => 'List produk',
                 'data' => $data
             ]);
         } else {
             return response()->json([
                 'status' => '200',
-                'message' => 'Rangkuman',
+                'message' => 'List produk',
                 'data' => 'Data tidak ditemukan'
             ]);
         }
     }
 
-    public function detail(Request $request)
-    {
-        $produkId = $request->produkId;
-        $data = Produk::where('id', $produkId)
-            ->with(['review' => function ($u) {
-                $u
-                    ->select('users.name', 'reviews.*', DB::raw('COUNT(like_comments.review_id) as count_like'))
-                    ->join('users', 'users.id', '=', 'reviews.id_user')
-                    ->join('like_comments', 'like_comments.review_id', '=', 'reviews.id')
-                    ->groupBy('users.name', 'reviews.id_user', 'reviews.id', 'reviews.rating', 'reviews.img_product', 'reviews.comment', 'reviews.product_id', 'reviews.toko_id', 'reviews.created_at', 'reviews.updated_at', 'like_comments.review_id')
-                    ->get();
-            }])
-            ->get();
-
-        LogVisitor::create([
-            'product_id' => $produkId,
-            'user_id' => Auth::user()->id,
-        ]);
-
-        return response()->json([
-            'status' => 'succes',
-            'message' => 'Detail Toko',
-            'data' => $data
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    // seller create produk
     public function create(Request $request)
     {
         $user = Auth::user();
-        $tokoId = Toko::where('seller_id', $user->id)->first();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $request->validate([
             'nama_produk' => 'required|string',
             'deskripsi' => 'required',
             'kategori_id' => 'required|integer',
-            'katalog_id' => 'required|integer',
             'harga_produk' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'stok_produk' => 'required|integer',
 
@@ -96,33 +68,46 @@ class ProdukController extends Controller
             'nama_produk' => request('nama_produk'),
             'deskripsi' => request('deskripsi'),
             'kategori_id' => request('kategori_id'),
-            'katalog_id' => request('katalog_id'),
             'harga_produk' => request('harga_produk'),
             'stok_produk' => request('stok_produk'),
-            'toko_id' => $tokoId->id,
+            'toko_id' => $tokoId,
             'ulasan_id' => $id
         ]);
 
         Status::create([
             'produk_id' => $produk->id,
-            'toko_id' => $tokoId->id
+            'toko_id' => $tokoId
+        ]);
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang',
         ]);
     }
 
-    public function produk(Request $request)
+    //list produk berdasarkan kategori id dan toko id
+    public function produkStoreByCategoryId(Request $request)
     {
         $kategoriId = $request->kategoriId;
         $tokoId = $request->tokoId;
 
         $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
 
-        return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Kategori',
-            'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
-        ]);
+        if (count($data)) {
+            return response()->json([
+                'status_code' => '200',
+                'message' => 'List produk berdasarkan kategori',
+                'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
+            ]);
+        } else {
+            return response()->json([
+                'status_code' => '200',
+                'message' => 'Tidak ada produk di kategori ini!',
+            ]);
+        }
     }
 
+    // detail produk
     public function detail_produk(Request $request)
     {
         $produkId = $request->produkId;
@@ -132,52 +117,115 @@ class ProdukController extends Controller
             ->where('statuses.status', '=', 'Accepted')
             ->first();
 
+        LogVisitor::create([
+            'product_id' => $produkId,
+            'user_id' => Auth::user()->id,
+        ]);
+
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'List Produk Kategori',
             'data' => $data,
         ]);
     }
 
-    public function produkByCategory(Request $request)
+    // list kategori
+    public function categories(Request $request)
     {
         $kategoriId = $request->kategoriId;
 
-        $data = Produk::where('kategori_id', $kategoriId)
-            // ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-            // ->where('statuses.status', '=', 'Accepted')
-            ->get();
+        $data = kategori::all();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'List Produk Berdasarkan Kategori',
+            'status_code' => '200',
+            'message' => 'List kategori',
             'data' => $data,
         ]);
     }
 
+    //list produk terdekat berdasarkan kategori id
+    public function nearestProdukByCategoryId(Request $request)
+    {
+        $kategoriId = $request->kategoriId;
+        $user = Auth::user();
+
+        $data =  DB::table('produk')
+            ->select(
+                'produk.id',
+                'produk.img_id',
+                'produk.kategori_id',
+                'tokos.alamat',
+                'produk.nama_produk',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
+                * cos(radians(tokos.latitude)) 
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
+                + sin(radians(" . $user->latitude . ")) 
+                * sin(radians(tokos.latitude))) AS distance"),
+            )
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->groupBy(
+                'produk.id',
+                'produk.nama_produk',
+                'produk.img_id',
+                'produk.kategori_id',
+                'tokos.alamat'
+            )
+            ->orderBy('distance', 'ASC')
+            ->where('produk.kategori_id', $kategoriId)
+            ->get();
+
+        if (count($data)) {
+            return response()->json([
+                'status_code' => '200',
+                'message' => 'List produk terdekat berdasarkan kategori id',
+                'data' => $data,
+            ]);
+        } else {
+            return response()->json([
+                'status_code' => '200',
+                'message' => 'Maaf tidak ada produk dengan jarak toko kurang dari 25 km berdasarkan kategori id ini',
+            ]);
+        }
+    }
+
+    // list produk seller yang sudah di acc admin
     public function listProduct()
     {
-        $data = Produk::where('produk.toko_id', 2)
+
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = DB::table('produk')
+            ->select('tokos.id', 'tokos.nama_toko', 'produk.nama_produk', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk',)
+            ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->get();
 
         return response()->json([
-            'status_code' => 'succes',
-            'message' => 'Daftar Produk',
+            'status_code' => '200',
+            'message' => 'Daftar produk',
             'data' => $data,
         ]);
     }
 
+    // list produk seller yang belum di acc admin
     public function onVerify()
     {
-        $data = Produk::where('produk.toko_id', 2)
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = DB::table('produk')
+            ->select('tokos.id', 'tokos.nama_toko', 'produk.nama_produk', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk', 'produk.created_at as tanggal_verivikasi', 'statuses.status')
+            ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Pending')
             ->get();
 
         return response()->json([
-            'status_code' => 'succes',
+            'status_code' => '200',
             'message' => 'Verifikasi',
             'data' => $data,
         ]);

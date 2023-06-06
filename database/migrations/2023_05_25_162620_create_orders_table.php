@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_visitor', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->nullable();
+            $table->unsignedBigInteger('transaction_code');
+            $table->integer('product_id');
+            $table->integer('store_id');
             $table->integer('user_id');
-            $table->integer('toko_id')->nullable();
+            $table->enum('status', ['Menunggu konfirmasi', 'Sedang disiapkan', 'Menunggu driver', 'Sedang diantar', 'Sudah Sampai', 'Selesai'])->default('Menunggu konfirmasi');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_visitor');
+        Schema::dropIfExists('orders');
     }
 };

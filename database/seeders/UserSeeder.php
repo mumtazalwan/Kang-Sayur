@@ -15,18 +15,18 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Alwan',
-            'photo' => '/images/profile/asa.jpg',
+            'photo' => '/storage/user_profile/1686007095asa.jpg',
             'email' => 'alwan123@gmail.com',
             'sandi_id' => 1,
             'jenis_kelamin' => 1,
             'tanggal_lahir' => '2006-03-10',
-            'longitude' => -6.753808,
-            'latitude' => 110.842843
+            'longitude' => 110.842843,
+            'latitude' => -6.753808
         ]);
-
 
         User::create([
             'name' => 'Akbar',
+            'photo' => '/storage/user_profile/1685948985kwan.jpg',
             'email' => 'akbar123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
@@ -35,10 +35,27 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Niebel',
+            'photo' => '/storage/user_profile/16859492231b1b5c67a92d16a2711317ca8be2ac48.jpg',
             'email' => 'niebel123@gmail.com',
             'sandi_id' => 3,
             'jenis_kelamin' => 1,
             'tanggal_lahir' => '2005-03-10'
+        ]);
+
+        User::create([
+            'name' => 'Joko',
+            'email' => 'joko123@gmail.com',
+            'sandi_id' => 2,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2006-03-10'
+        ]);
+
+        User::create([
+            'name' => 'Nunik',
+            'email' => 'nunik123@gmail.com',
+            'sandi_id' => 2,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2006-03-10'
         ]);
     }
 }

@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_visitor', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->nullable();
+            $table->unsignedBigInteger('transaction_code');
+            // $table->integer('store_id');
             $table->integer('user_id');
-            $table->integer('toko_id')->nullable();
+            $table->string('payment_method');
+            // $table->dateTime('delivery_time');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_visitor');
+        Schema::dropIfExists('transactions');
     }
 };

@@ -10,6 +10,7 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\LogVisitorController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -40,32 +41,62 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
+    // home
+    Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
+    Route::get('/produk/promo/kilat', [SaleController::class, 'index']);
+    Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
+    Route::get('/produk/sering/user/kunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
+
+    // explore
+    Route::get('/produk/kategori', [ProdukController::class, 'nearestProdukByCategoryId']);
+    Route::get('/kategori', [ProdukController::class, 'categories']);
+
+    // profile
     Route::get('/profile', [UserController::class, 'index']);
 
-    Route::get('/toko', [TokoController::class, 'index']);
-    Route::get('/toko/detail', [TokoController::class, 'detail']);
-    Route::get('/produk', [ProdukController::class, 'produk']);
+    Route::group(['prefix' => '/toko'], function () {
+        Route::get('/all', [TokoController::class, 'index']);
+        Route::get('/detail', [TokoController::class, 'detail_toko']);
 
+        Route::group(['prefix' => '/katalog'], function () {
+            Route::get('/produkByCategoryId', [ProdukController::class, 'produkStoreByCategoryId']);
+        });
+
+        Route::get('/terderkat', [TokoController::class, 'getNearestStore']);
+        Route::get('/popular', [LogVisitorController::class, 'mostPopularStore']);
+    });
+
+    Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
+
+    // cart
     Route::get('/produk/cart', [CartController::class, 'listCart']);
     Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
     Route::get('/produk/cart/minus', [CartController::class, 'minus']);
     Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
     Route::get('/produk/cart/custom', [CartController::class, 'custom']);
-
-    Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
-    Route::get('/produk/sale', [SaleController::class, 'index']);
-    Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
-    Route::get('/produk/sering-dikunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
-    Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
-
-    Route::get('/produk/kategori/item', [ProdukController::class, 'produkByCategory']);
+    Route::post('/produk/cart/pesan', [OrderController::class, 'store']);
 });
 
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
-    Route::post('/produk/create', [ProdukController::class, 'create']);
-    Route::get('/produk/display', [ProdukController::class, 'listProduct']);
-    Route::get('/produk/display/verify', [ProdukController::class, 'onVerify']);
+    Route::get('/profile', [TokoController::class, 'sellerPersonalInformation']);
+
+    Route::get('/analysis', [TokoController::class, 'analysis']);
+    Route::get('/pemasukan', [TokoController::class, 'income']);
+    Route::get('/grafik/penjualan', [TokoController::class, 'graphic']);
+
+    Route::group(['prefix' => '/produk'], function () {
+        Route::post('/create', [ProdukController::class, 'create']);
+        Route::get('/display', [ProdukController::class, 'listProduct']);
+        Route::get('/display/verify', [ProdukController::class, 'onVerify']);
+    });
+
+    Route::group(['prefix' => '/status'], function () {
+        Route::group(['prefix' => '/product'], function () {
+            Route::get('/confirm', [OrderController::class, 'confirm']);
+            Route::get('/prepared', [ProdukController::class, ' ']);
+        });
+    });
 });
 
 // admin
