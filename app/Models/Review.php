@@ -17,7 +17,6 @@ class Review extends Model
     ];
 
     protected $hidden = [
-        'created_at',
         'updated_at',
         'product_id',
         'toko_id',
