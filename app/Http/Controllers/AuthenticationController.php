@@ -111,7 +111,7 @@ class AuthenticationController extends Controller
                 // store photo
                 $timestamp = time();
                 $photoName = $timestamp . $request->photo->getClientOriginalName();
-                $path = '/user_profile/' . $photoName;
+                $path = '/store_profile/' . $photoName;
                 Storage::disk('public')->put($path, file_get_contents($request->photo));
                 Sandi::create([
                     'id' => $sandiId,
@@ -131,6 +131,7 @@ class AuthenticationController extends Controller
 
                 Toko::create([
                     'nama_toko' => request('store_name'),
+                    'photo' => '/storage' . $path,
                     'deskripsi' => request('description'),
                     'seller_id' => $user->id,
                     'alamat' => request('store_address'),
