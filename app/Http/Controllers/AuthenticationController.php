@@ -135,7 +135,7 @@ class AuthenticationController extends Controller
 
                 Toko::create([
                     'nama_toko' => request('store_name'),
-                    'photo' => '/storage' . $path,
+                    'img_profile' => '/storage' . $path,
                     'deskripsi' => request('description'),
                     'seller_id' => $user->id,
                     'alamat' => request('store_address'),
