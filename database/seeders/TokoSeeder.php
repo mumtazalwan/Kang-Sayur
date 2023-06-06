@@ -15,7 +15,7 @@ class TokoSeeder extends Seeder
     {
         Toko::create([
             'nama_toko' => 'Toko Sayuer Bu Juju',
-            'img_profile' => '/storage/store_photo/bujujue.jpg',
+            'img_profile' => '/storage/user_profile/bujujue.jpg',
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industr\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'alamat' => 'Jl Jawa XV Bl A/2 Kawasan Industri Cakung,Rorotanu',
             'latitude' => -6.753804,
@@ -26,7 +26,7 @@ class TokoSeeder extends Seeder
 
         Toko::create([
             'nama_toko' => 'Toko Bebek Pak Kwan',
-            'img_profile' => '/storage/store_photo/bebekkwan.jpg',
+            'img_profile' => '/storage/user_profile/bebekkwan.jpg',
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industr\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'seller_id' => 2,
             'alamat' => 'Jl Jawa XV Bl A/2 Kawasan Industri Cakung,Rorotanu',
@@ -38,7 +38,7 @@ class TokoSeeder extends Seeder
 
         Toko::create([
             'nama_toko' => 'Selada Hidroponik Kudus',
-            'img_profile' => '/storage/store_photo/selada.jpg',
+            'img_profile' => '/storage/user_profile/selada.jpg',
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industr\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'seller_id' => 4,
             'alamat' => 'Langgardalem RT. 01 RW. 02 No. 75, Kec. Kota Kudus, Kabupaten Kudus, Jawa Tengah',
@@ -50,7 +50,7 @@ class TokoSeeder extends Seeder
 
         Toko::create([
             'nama_toko' => 'Petani Bawang',
-            'img_profile' => '/storage/store_photo/petanibawang.jpg',
+            'img_profile' => '/storage/user_profile/petanibawang.jpg',
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industr\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'seller_id' => 5,
             'alamat' => '4V7M+5FF, Sidorejo, Wotan, Kec. Sukolilo, Kabupaten Pati, Jawa Tengah 59172',
