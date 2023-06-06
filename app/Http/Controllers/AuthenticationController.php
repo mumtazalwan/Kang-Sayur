@@ -19,6 +19,8 @@ class AuthenticationController extends Controller
             'name' => 'required|string',
             'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'email' => 'required|email',
+            'longitude' => 'required|between:-180,180',
+            'latitude' => 'required|between:-90,90',
             'password' => 'required|string|min:8'
         ]);
 
@@ -49,6 +51,8 @@ class AuthenticationController extends Controller
                     'name' => request('name'),
                     'photo' => '/storage' . $path,
                     'email' => request('email'),
+                    'latitude' => request('latitude'),
+                    'longitude' => request('longitude'),
                     'sandi_id' => $sandiId
                 ]);
             } else {
