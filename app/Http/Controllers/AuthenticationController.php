@@ -111,7 +111,7 @@ class AuthenticationController extends Controller
                 // store photo
                 $timestamp = time();
                 $photoName = $timestamp . $request->photo->getClientOriginalName();
-                $path = '/store_profile/' . $photoName;
+                $path = '/user_profile/' . $photoName;
                 Storage::disk('public')->put($path, file_get_contents($request->photo));
                 Sandi::create([
                     'id' => $sandiId,

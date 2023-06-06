@@ -47,5 +47,19 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'notes' => "tolong lubangi sedikit kantung plastiknya ya min"
         ]);
+
+        Transaction::create([
+            'transaction_code' => 5571005688725,
+            'user_id' => 1,
+            'payment_method' => "BRIVA",
+            'notes' => "tolong lubangi sedikit kantung plastiknya ya min"
+        ]);
+
+        Transaction::create([
+            'transaction_code' => 6571005688725,
+            'user_id' => 1,
+            'payment_method' => "BRIVA",
+            'notes' => "tolong lubangi sedikit kantung plastiknya ya min"
+        ]);
     }
 }
