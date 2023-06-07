@@ -60,6 +60,8 @@ class AuthenticationController extends Controller
                 $user = User::create([
                     'name' => request('name'),
                     'email' => request('email'),
+                    'latitude' => request('latitude'),
+                    'longitude' => request('longitude'),
                     'sandi_id' => $sandiId
                 ]);
             }

@@ -41,6 +41,10 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
+
+    // produk
+    Route::get('/produk/all', [ProdukController::class, 'index']);
+
     // home
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
     Route::get('/produk/promo/kilat', [SaleController::class, 'index']);

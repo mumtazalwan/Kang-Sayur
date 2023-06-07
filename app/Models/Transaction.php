@@ -24,6 +24,6 @@ class Transaction extends Model
         // $user = Auth::user();
         // $tokoId = Toko::where('seller_id', $user->id)->first();
 
-        return $this->hasMany(Order::class, 'transaction_code');
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu konfirmasi');
     }
 }
