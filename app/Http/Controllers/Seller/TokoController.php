@@ -199,11 +199,12 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', $thisMonth)
                     ->whereYear('orders.created_at', $thisYear)
                     ->where('orders.status', 'Selesai')
-                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                    ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
                 // 3 bulan terakhir
@@ -211,12 +212,13 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $three_month_back)
                     ->whereYear('orders.created_at', $thisYear)
                     ->where('orders.status', 'Selesai')
-                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                    ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
                 // 6 bulan terakhir
@@ -224,12 +226,13 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $six_month_back)
                     ->whereYear('orders.created_at', $thisYear)
                     ->where('orders.status', 'Selesai')
-                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                    ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
                 // 1 tahun terakhir
@@ -237,30 +240,33 @@ class TokoController extends Controller
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->whereYear('orders.created_at', '<=', $thisYear)
                     ->whereYear('orders.created_at', '>=', $one_year_back)
                     ->where('orders.status', 'Selesai')
-                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                    ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
             default:
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->whereDate('orders.created_at', $today)
                     ->where('orders.status', 'Selesai')
-                    ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+                    ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
         }
 
         $order_count = DB::table('orders')
             ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->where('orders.store_id', $tokoId)
             ->where('orders.status', 'Selesai')
-            ->select(DB::raw('SUM(produk.harga_produk) as total'))->value('total');
+            ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
 
         return response()->json([
             'status' => 200,
@@ -298,16 +304,18 @@ class TokoController extends Controller
                 $order_count = DB::table('orders')
                     ->select(
                         DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
-                        DB::raw('SUM(produk.harga_produk) as total')
+                        DB::raw('SUM(variants.harga_variant) as total')
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $three_month_back)
                     ->whereYear('orders.created_at', $thisYear)
                     ->groupBy('date')
+                    ->orderBy('orders.created_at', 'ASC')
                     ->get();
                 break;
 
@@ -316,16 +324,18 @@ class TokoController extends Controller
                 $order_count = DB::table('orders')
                     ->select(
                         DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
-                        DB::raw('SUM(produk.harga_produk) as total')
+                        DB::raw('SUM(variants.harga_variant) as total')
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', '<=', $thisMonth)
                     ->whereMonth('orders.created_at', '>=', $six_month_back)
                     ->whereYear('orders.created_at', $thisYear)
                     ->groupBy('date')
+                    ->orderBy('orders.created_at', 'ASC')
                     ->get();
                 break;
 
@@ -334,15 +344,17 @@ class TokoController extends Controller
                 $order_count = DB::table('orders')
                     ->select(
                         DB::raw("DATE_FORMAT(orders.created_at, '%b-%Y') as date"),
-                        DB::raw('SUM(produk.harga_produk) as total')
+                        DB::raw('SUM(variants.harga_variant) as total')
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereYear('orders.created_at', '<=', $thisYear)
                     ->whereYear('orders.created_at', '>=', $one_year_back)
                     ->groupBy('date')
+                    ->orderBy('orders.created_at', 'ASC')
                     ->get();
                 break;
 
@@ -350,13 +362,15 @@ class TokoController extends Controller
                 $order_count = DB::table('orders')
                     ->select(
                         DB::raw("DATE_FORMAT(orders.created_at, '%b-%Y') as date"),
-                        DB::raw('SUM(produk.harga_produk) as total')
+                        DB::raw('SUM(variants.harga_variant) as total')
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->groupBy('date')
+                    ->orderBy('orders.created_at', 'ASC')
                     ->get();
                 break;
 
@@ -364,15 +378,17 @@ class TokoController extends Controller
                 $order_count = DB::table('orders')
                     ->select(
                         DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
-                        DB::raw('SUM(produk.harga_produk) as total')
+                        DB::raw('SUM(variants.harga_variant) as total')
                     )
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->join('variants', 'variants.id', '=', 'orders.variant_id')
                     ->where('orders.store_id', $tokoId)
                     ->where('orders.status', 'Selesai')
                     ->whereMonth('orders.created_at', $thisMonth)
                     ->whereYear('orders.created_at', $thisYear)
                     ->groupBy('date')
+                    ->orderBy('orders.created_at', 'ASC')
                     ->get();
                 break;
         }

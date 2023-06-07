@@ -16,9 +16,7 @@ class ProdukSeeder extends Seeder
     {
         Produk::create([
             'nama_produk' => 'Selada Hijau',
-            'harga_produk' => 4500,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 2,
             'varian_id' => 1,
@@ -29,9 +27,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Selada Muda',
-            'harga_produk' => 5000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 2,
             'varian_id' => 1,
@@ -42,9 +38,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Selada Merah',
-            'harga_produk' => 4500,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 2,
             'varian_id' => 1,
@@ -54,23 +48,8 @@ class ProdukSeeder extends Seeder
         ]);
 
         Produk::create([
-            'nama_produk' => 'Selada Muda Banget',
-            'harga_produk' => 5000,
-            'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
-            'rating' => 4.5,
-            'kategori_id' => 1,
-            'varian_id' => 1,
-            'toko_id' => 1,
-            'ulasan_id' => 1,
-            'is_onsale' => 1
-        ]);
-
-        Produk::create([
             'nama_produk' => 'Sawi Muda',
-            'harga_produk' => 5000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 1,
             'varian_id' => 1,
@@ -81,9 +60,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Timun Suri',
-            'harga_produk' => 5000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 1,
             'varian_id' => 1,
@@ -94,9 +71,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Bebek Jepang',
-            'harga_produk' => 34000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.5,
             'kategori_id' => 1,
             'varian_id' => 1,
@@ -107,9 +82,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Bebek Negri',
-            'harga_produk' => 24000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 10,
             'rating' => 4.8,
             'kategori_id' => 1,
             'varian_id' => 1,
@@ -120,9 +93,7 @@ class ProdukSeeder extends Seeder
 
         Produk::create([
             'nama_produk' => 'Selada Hijau Hidroponik',
-            'harga_produk' => 4000,
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 100,
             'rating' => 4.9,
             'kategori_id' => 2,
             'varian_id' => 1,
@@ -132,10 +103,8 @@ class ProdukSeeder extends Seeder
         ]);
 
         Produk::create([
-            'nama_produk' => 'Bawang merah 1kg',
-            'harga_produk' => 20000,
+            'nama_produk' => 'Bawang merah',
             'deskripsi' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-            'stok_produk' => 100,
             'rating' => 4.9,
             'kategori_id' => 2,
             'varian_id' => 1,

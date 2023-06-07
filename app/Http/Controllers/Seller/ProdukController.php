@@ -14,6 +14,7 @@ use App\Models\Review;
 use App\Models\LogVisitor;
 use App\Models\Status;
 use App\Models\Toko;
+use App\Models\Variant;
 
 class ProdukController extends Controller
 {
@@ -22,7 +23,13 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        //
+        // $data = Produk::with(['variant', 'review'])->get();
+
+        // return response()->json([
+        //     'status' => '200',
+        //     'message' => 'List produk',
+        //     'data' => $data
+        // ]);
     }
 
     // search all produk
@@ -112,7 +119,7 @@ class ProdukController extends Controller
     {
         $produkId = $request->produkId;
 
-        $data = Produk::with('review')->where('produk.id', $produkId)
+        $data = Produk::with(['variant', 'review'])->where('produk.id', $produkId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->where('statuses.status', '=', 'Accepted')
             ->first();
@@ -152,24 +159,19 @@ class ProdukController extends Controller
         $data =  DB::table('produk')
             ->select(
                 'produk.id',
-                'produk.img_id',
-                'produk.kategori_id',
-                'tokos.alamat',
                 'produk.nama_produk',
+                'tokos.alamat',
                 DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
                 * cos(radians(tokos.latitude)) 
                 * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
                 + sin(radians(" . $user->latitude . ")) 
                 * sin(radians(tokos.latitude))) AS distance"),
+                'variants.variant_img',
+                'variants.harga_variant',
             )
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
-            ->groupBy(
-                'produk.id',
-                'produk.nama_produk',
-                'produk.img_id',
-                'produk.kategori_id',
-                'tokos.alamat'
-            )
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->groupBy('produk.id')
             ->orderBy('distance', 'ASC')
             ->where('produk.kategori_id', $kategoriId)
             ->get();
