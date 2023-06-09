@@ -23,29 +23,6 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function order()
-    {
-        $dataUser = Auth::user();
-
-        $data = Toko::with('getProductCart')->get();
-
-        // $total_barang = Toko::with('getProductCart')->select(DB::raw('sum(' . $data->subtotal . ')'));
-
-        return response()->json([
-            'status' => '200',
-            'message' => 'Data Pesanan',
-            'title' => 'Pesanan',
-            'nama_user' => $dataUser->name,
-            'alamat' => $dataUser->address,
-            'data' => $data,
-            'ringkasan_pembayaran' => [
-                'total_barang' => 100000,
-                'ongkos_kirim' => 20000,
-                'biaya_layanan' => 2500
-            ],
-            'total_keseluruhan' => 10000
-        ]);
-    }
 
     // status order yang perlu dikonfirmasi
 
@@ -83,6 +60,7 @@ class OrderController extends Controller
             Order::create([
                 'transaction_code' => $code,
                 'product_id' => $key['product_id'],
+                'variant_id' => $key['variant_id'],
                 'store_id' => $key['store_id'],
                 'user_id' => $dataUser->id
             ]);
