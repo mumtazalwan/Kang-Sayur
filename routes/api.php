@@ -73,11 +73,11 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
 
     // cart
-    Route::get('/produk/cart', [CartController::class, 'listCart']);
-    Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
-    Route::get('/produk/cart/minus', [CartController::class, 'minus']);
-    Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
-    Route::get('/produk/cart/custom', [CartController::class, 'custom']);
+    // Route::get('/produk/cart', [CartController::class, 'listCart']);
+    // Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
+    // Route::get('/produk/cart/minus', [CartController::class, 'minus']);
+    // Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
+    // Route::get('/produk/cart/custom', [CartController::class, 'custom']);
     Route::post('/produk/cart/pesan', [OrderController::class, 'store']);
 });
 
