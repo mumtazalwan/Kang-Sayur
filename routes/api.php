@@ -13,6 +13,7 @@ use App\Http\Controllers\LogVisitorController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use App\Models\User;
+use Illuminate\Routing\RouteGroup;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -73,12 +74,15 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/detail', [ProdukController::class, 'detail_produk']);
 
     // cart
-    // Route::get('/produk/cart', [CartController::class, 'listCart']);
-    // Route::get('/produk/cart/add', [CartController::class, 'addToChart']);
-    // Route::get('/produk/cart/minus', [CartController::class, 'minus']);
-    // Route::get('/produk/cart/delete', [CartController::class, 'deleteAll']);
-    // Route::get('/produk/cart/custom', [CartController::class, 'custom']);
-    Route::post('/produk/cart/pesan', [OrderController::class, 'store']);
+    Route::group(['prefix' => '/produk/cart'], function () {
+        Route::get('/', [CartController::class, 'listCart']);
+        Route::get('/add', [CartController::class, 'addToChart']);
+        Route::get('/minus', [CartController::class, 'minus']);
+        Route::get('/delete', [CartController::class, 'deleteAll']);
+        Route::get('/custom', [CartController::class, 'custom']);
+        Route::post('/pesan', [OrderController::class, 'store']);
+        Route::post('/midtrans/callback', [OrderController::class, 'callback']);
+    });
 });
 
 // seller
@@ -97,8 +101,11 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 
     Route::group(['prefix' => '/status'], function () {
         Route::group(['prefix' => '/product'], function () {
-            Route::get('/confirm', [OrderController::class, 'confirm']);
-            Route::get('/prepared', [ProdukController::class, ' ']);
+            Route::get('/pesanan', [OrderController::class, 'pesanan']);
+            Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
+            Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
+            Route::get('/diantar', [OrderController::class, 'diantar']);
+            Route::get('/selesai', [OrderController::class, 'selesai']);
         });
     });
 });
