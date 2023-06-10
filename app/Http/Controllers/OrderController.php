@@ -26,21 +26,61 @@ class OrderController extends Controller
 
     // status order yang perlu dikonfirmasi
 
-    public function confirm()
+    public function pesanan()
     {
-        $data = Transaction::with('getProductOrder')->get();
+        $data = Transaction::with('statusOrder')
+            ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('transactions.status', 'Belum dibayar')->get();
 
         return response()->json([
             'status' => '200',
-            'message' => 'Data Pesanan',
-            'title' => 'Konfirmasi',
-            'data' => $data,
-            // 'ringkasan_pembayaran' => [
-            //     'total_barang' => 100000,
-            //     'ongkos_kirim' => 20000,
-            //     'biaya_layanan' => 2500
-            // ],
-            // 'total_keseluruhan' => 10000
+            'message' => 'List pesanan',
+            'data' => $data
+        ]);
+    }
+
+    public function disiapkan()
+    {
+        $data = Transaction::with('statusPrepared')->where('transactions.status', 'Sudah dibayar')->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List barang yang harus disipkan',
+            'data' => $data
+        ]);
+    }
+
+    public function menunggu_driver()
+    {
+        $data = Transaction::with('statusReadyDelivered')->where('transactions.status', 'Sudah dibayar')->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List barang yang siap diantar driver',
+            'data' => $data
+        ]);
+    }
+
+    public function diantar()
+    {
+        $data = Transaction::with('statusDelivered')->where('transactions.status', 'Sudah dibayar')->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List barang yang sedang diantar driver',
+            'data' => $data
+        ]);
+    }
+
+    public function selesai()
+    {
+        $data = Transaction::with('statusDone')->where('transactions.status', 'Sudah dibayar')->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List pesanan selesai',
+            'data' => $data
         ]);
     }
 
@@ -48,7 +88,7 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      */
 
-    // mendaftarkan produk
+    // checkout produk
     public function store(Request $request)
     {
         $checkout = $request->checkout;
@@ -66,20 +106,62 @@ class OrderController extends Controller
             ]);
         }
 
-        $total_transaction = DB::table('orders')
-            ->where('transaction_code', $code)
-            ->where('store_id', $tokoId)
-            ->select(DB::raw('sum(produk.harga_produk) as subtotal'));
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $dataUser->id,
+                'gross_amount' => 20000,
+            ),
+            'customer_details' => array(
+                'first_name' => $dataUser->name,
+                'last_name' => '',
+                'address' => $dataUser->address,
+                'phone' => $dataUser->phone_number,
+                'qty' => 2,
+                'total_price' => 20000
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
 
         Transaction::create([
             'transaction_code' => $code,
             'user_id' => $dataUser->id,
             'payment_method' => 'BRIVA',
-            'notes' => 'Nanasnya dikupa kulitnya, tapi jangan dimakan'
+            'notes' => 'Nanasnya dikupa kulitnya, tapi jangan dimakan',
+            'transaction_token' => $snapToken,
+            'client_key' => config('midtrans.client_key')
         ]);
 
         return response()->json([
             'status' => 'succes',
         ]);
+    }
+
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
+                $dataOrder = Order::findOrfail($request->order_id);
+                $dataTransaction = Transaction::findOrFail($dataOrder->transaction_code);
+
+                $dataTransaction->status = 'Sudah dibayar';
+                $dataTransaction->save();
+
+                $dataOrder->status = 'Menunggu konfirmasi';
+                $dataOrder->save();
+            }
+        }
     }
 }

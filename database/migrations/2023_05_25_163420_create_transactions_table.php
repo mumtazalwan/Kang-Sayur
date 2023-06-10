@@ -16,7 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('transaction_code');
             $table->integer('user_id');
             $table->string('payment_method');
+            $table->string('transaction_token');
+            $table->string('client_key');
             $table->text('notes')->nullable();
+            $table->enum('status', ['Belum dibayar', 'Sudah dibayar'])->default('Belum dibayar');
             $table->timestamps();
         });
     }

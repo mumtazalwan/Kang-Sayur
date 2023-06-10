@@ -16,14 +16,33 @@ class Transaction extends Model
         'transaction_code',
         "user_id",
         "payment_method",
+        'transaction_token',
+        'client_key',
         "notes"
     ];
 
-    public function getProductOrder()
+    public function statusOrder()
     {
-        // $user = Auth::user();
-        // $tokoId = Toko::where('seller_id', $user->id)->first();
-
         return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu konfirmasi');
+    }
+
+    public function statusPrepared()
+    {
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang disiapkan');
+    }
+
+    public function statusReadyDelivered()
+    {
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu driver');
+    }
+
+    public function statusDelivered()
+    {
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang diantar');
+    }
+
+    public function statusDone()
+    {
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Selesai');
     }
 }
