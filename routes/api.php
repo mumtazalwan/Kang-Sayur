@@ -80,6 +80,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/minus', [CartController::class, 'minus']);
         Route::get('/delete', [CartController::class, 'deleteAll']);
         Route::get('/custom', [CartController::class, 'custom']);
+        Route::get('/checkout', [CartController::class, 'checkout']);
         Route::post('/pesan', [OrderController::class, 'store']);
         Route::post('/midtrans/callback', [OrderController::class, 'callback']);
     });

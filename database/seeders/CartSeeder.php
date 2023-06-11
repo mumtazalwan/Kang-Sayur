@@ -18,6 +18,7 @@ class CartSeeder extends Seeder
             'user_id' => 1,
             'produk_id' => 1,
             'toko_id' => 1,
+            'variant_id' => 2,
             'status' => 'true'
         ]);
 
@@ -25,6 +26,7 @@ class CartSeeder extends Seeder
             'user_id' => 1,
             'produk_id' => 2,
             'toko_id' => 1,
+            'variant_id' => 3,
             'status' => 'true'
         ]);
 
@@ -32,6 +34,7 @@ class CartSeeder extends Seeder
             'user_id' => 1,
             'produk_id' => 7,
             'toko_id' => 2,
+            'variant_id' => 14,
             'status' => 'true'
         ]);
     }

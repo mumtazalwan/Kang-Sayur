@@ -13,29 +13,34 @@ class Toko extends Model
 {
     use HasFactory;
 
-    protected $appends = ['subtotal', 'ongkir'];
+    // protected $appends = [
+    //     'subtotal', 'ongkir'
+    // ];
 
-    public function getSubtotalAttribute()
-    {
-        return $this->hasMany(Cart::class, 'toko_id')
-            ->join('produk', 'produk.id', '=', 'carts.produk_id')
-            ->select(DB::raw('sum(produk.harga_produk) as subtotal'))
-            ->first()->subtotal;
-    }
+    // public function getSubtotalAttribute()
+    // {
+    //     return $this->hasMany(Cart::class, 'toko_id')
+    //         ->join('produk', 'produk.id', '=', 'carts.produk_id')
+    //         ->join('variants', 'variants.product_id', '=', 'produk.id')
+    //         ->select(DB::raw('sum(variants.harga_variant) as subtotal'))
+    //         ->first()->subtotal;
+    // }
 
-    public function getOngkirAttribute()
-    {
-        $distance = $this->hasMany(Cart::class, 'toko_id')
-            ->join('tokos', 'tokos.id', '=', 'toko_id')
-            ->select(DB::raw("6371 * acos(cos(radians(" . Auth::user()->latitude . ")) 
-        * cos(radians(tokos.latitude)) 
-        * cos(radians(tokos.longitude) - radians(" . Auth::user()->longitude . ")) 
-        + sin(radians(" . Auth::user()->latitude . ")) 
-        * sin(radians(tokos.latitude))) as distance"))
-            ->first()->distance;
+    // public function getOngkirAttribute()
+    // {
+    //     $user = Auth::user();
 
-        return $distance * 3000;
-    }
+    // $distance = $this->hasMany(Cart::class, 'toko_id')
+    //     ->join('tokos', 'tokos.id', '=', 'toko_id')
+    //     ->select(DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
+    // * cos(radians(tokos.latitude)) 
+    // * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
+    // + sin(radians(" . $user->latitude . ")) 
+    // * sin(radians(tokos.latitude))) as distance"))
+    //     ->value('distance');
+
+    //     return $distance * 3000;
+    // }
 
     protected $fillable = [
         'nama_toko',
@@ -51,6 +56,48 @@ class Toko extends Model
 
     public function getProductCart()
     {
-        return $this->hasMany(Cart::class, 'toko_id');
+        return $this
+            ->hasMany(Cart::class, 'toko_id')
+            ->join('variants', 'variants.id', '=', 'carts.variant_id')
+            ->select(
+                [
+                    'user_id',
+                    'toko_id',
+                    'produk_id',
+                    'variant_id',
+                    'variant_img',
+                    'variant',
+                    'stok',
+                    'harga_variant',
+                    DB::raw('COUNT(produk_id) as inCart')
+                ]
+            )
+            ->groupBy('produk_id', 'variant_id');
+    }
+
+    public function getProdukCheckout()
+    {
+
+        $data = $this
+            ->hasMany(Cart::class, 'toko_id')
+            ->join('variants', 'variants.id', '=', 'carts.variant_id')
+            ->select(
+                [
+                    'user_id',
+                    'toko_id',
+                    'produk_id',
+                    'variant_id',
+                    'variant_img',
+                    'variant',
+                    'stok',
+                    'harga_variant',
+                    'carts.status',
+                    DB::raw('COUNT(produk_id) as inCart')
+                ]
+            )
+            ->where('status', 'true')
+            ->groupBy('produk_id', 'variant_id');
+
+        return $data;
     }
 }

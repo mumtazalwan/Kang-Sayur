@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('produk_id');
             $table->integer('toko_id');
+            $table->integer('produk_id');
+            $table->integer('variant_id');
             $table->enum('status', ['false', 'true'])->default('false');
         });
     }
