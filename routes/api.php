@@ -82,6 +82,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/custom', [CartController::class, 'custom']);
         Route::get('/checkout', [CartController::class, 'checkout']);
         Route::post('/pesan', [OrderController::class, 'store']);
+        Route::get('/updateStatus', [CartController::class, 'updateStatus']);
         Route::post('/midtrans/callback', [OrderController::class, 'callback']);
     });
 });
