@@ -179,4 +179,20 @@ class CartController extends Controller
             ]
         ]);
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = Auth::user();
+        $cartId = $request->cartId;
+
+        $produk = Cart::where('user_id', $user->id)->where('id', $cartId)->first();
+
+        if ($produk->status == true) {
+            $produk->status = 'false';
+            $produk->save();
+        } else {
+            $produk->status = 'true';
+            $produk->save();
+        }
+    }
 }
