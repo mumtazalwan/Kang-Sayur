@@ -127,10 +127,9 @@ class TokoController extends Controller
             * cos(radians(" . $user->longitude . ") - radians(tokos.longitude)) 
             + sin(radians(tokos.latitude)) 
             * sin(radians(" . $user->latitude . "))) as distance"),
-                'tokos.nama_toko'
             )
             ->having('distance', '<=', $radius)
-            ->groupBy('id', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko', 'tokos.alamat',)
+            ->groupBy('id', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko', 'tokos.alamat', 'tokos.img_profile')
             ->orderBy('distance', 'ASC')
             ->get();
 
