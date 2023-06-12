@@ -207,7 +207,8 @@ class ProdukController extends Controller
                 'variants.harga_variant',
                 'produk.deskripsi',
                 'produk.created_at as tanggal_verivikasi',
-                'statuses.status'
+                'statuses.status',
+                'variants.stok'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
@@ -239,7 +240,8 @@ class ProdukController extends Controller
                 'variants.harga_variant',
                 'produk.deskripsi',
                 'produk.created_at as tanggal_verivikasi',
-                'statuses.status'
+                'statuses.status',
+                'variants.stok'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')

@@ -19,6 +19,7 @@ class Cart extends Model
     protected $fillable = [
         'produk_id',
         'user_id',
-        'toko_id'
+        'toko_id',
+        'variant_id'
     ];
 }
