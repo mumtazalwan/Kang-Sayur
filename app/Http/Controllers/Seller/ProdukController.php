@@ -198,10 +198,21 @@ class ProdukController extends Controller
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $data = DB::table('produk')
-            ->select('tokos.id', 'tokos.nama_toko', 'produk.nama_produk', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk',)
+            ->select(
+                'tokos.id',
+                'tokos.nama_toko',
+                'produk.nama_produk',
+                'tokos.alamat',
+                'variants.variant_img',
+                'variants.harga_variant',
+                'produk.deskripsi',
+                'produk.created_at as tanggal_verivikasi',
+                'statuses.status'
+            )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->where('statuses.status', '=', 'Accepted')
             ->get();
 
@@ -219,10 +230,21 @@ class ProdukController extends Controller
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $data = DB::table('produk')
-            ->select('tokos.id', 'tokos.nama_toko', 'produk.nama_produk', 'produk.harga_produk', 'tokos.alamat', 'produk.img_id', 'produk.deskripsi', 'produk.stok_produk', 'produk.created_at as tanggal_verivikasi', 'statuses.status')
+            ->select(
+                'tokos.id',
+                'tokos.nama_toko',
+                'produk.nama_produk',
+                'tokos.alamat',
+                'variants.variant_img',
+                'variants.harga_variant',
+                'produk.deskripsi',
+                'produk.created_at as tanggal_verivikasi',
+                'statuses.status'
+            )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->where('statuses.status', '=', 'Pending')
             ->get();
 
