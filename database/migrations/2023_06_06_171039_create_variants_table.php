@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('variant_img')->nullable();
             $table->text('variant');
+            $table->longText('variant_desc');
             $table->integer('stok');
             $table->double('harga_variant');
             $table->timestamps();

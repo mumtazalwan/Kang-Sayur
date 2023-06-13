@@ -46,7 +46,7 @@ class StatusSeeder extends Seeder
 
         Status::create([
             'produk_id' => 6,
-            'toko_id' => 1,
+            'toko_id' => 2,
             'status' => 'Accepted'
         ]);
 
@@ -58,13 +58,13 @@ class StatusSeeder extends Seeder
 
         Status::create([
             'produk_id' => 8,
-            'toko_id' => 2,
+            'toko_id' => 3,
             'status' => 'Accepted'
         ]);
 
         Status::create([
             'produk_id' => 9,
-            'toko_id' => 3,
+            'toko_id' => 4,
             'status' => 'Accepted'
         ]);
     }

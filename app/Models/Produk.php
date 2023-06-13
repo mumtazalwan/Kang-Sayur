@@ -38,10 +38,9 @@ class Produk extends Model
         'nama_produk',
         'deskripsi',
         'kategori_id',
-        'katalog_id',
-        'harga_produk',
-        'stok_produk',
-        'toko_id'
+        'toko_id',
+        'ulasan_id',
+        'is_onsale'
     ];
 
     protected $hidden = [
