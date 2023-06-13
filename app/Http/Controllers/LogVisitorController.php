@@ -91,6 +91,12 @@ class LogVisitorController extends Controller
         $data = DB::table('log_visitor')
             ->select(
                 'tokos.id',
+                'tokos.id',
+                'tokos.img_profile',
+                'tokos.nama_toko',
+                'tokos.alamat',
+                'tokos.longitude',
+                'tokos.latitude',
                 DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
                     * cos(radians(tokos.latitude)) 
                     * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 

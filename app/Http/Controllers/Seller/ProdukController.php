@@ -59,13 +59,11 @@ class ProdukController extends Controller
     {
         $user = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+        $variant = $request->variant;
 
         $request->validate([
             'nama_produk' => 'required|string',
-            'deskripsi' => 'required',
-            'kategori_id' => 'required|integer',
-            'harga_produk' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'stok_produk' => 'required|integer',
+            'kategori_id' => 'required|integer'
 
         ]);
 
@@ -73,10 +71,7 @@ class ProdukController extends Controller
 
         $produk = Produk::create([
             'nama_produk' => request('nama_produk'),
-            'deskripsi' => request('deskripsi'),
             'kategori_id' => request('kategori_id'),
-            'harga_produk' => request('harga_produk'),
-            'stok_produk' => request('stok_produk'),
             'toko_id' => $tokoId,
             'ulasan_id' => $id
         ]);
@@ -86,9 +81,19 @@ class ProdukController extends Controller
             'toko_id' => $tokoId
         ]);
 
+        foreach ($variant as $key) {
+            Variant::create([
+                'product_id' => $produk->id,
+                'variant' => $key['variant'],
+                'variant_desc' => $key['variant'],
+                'stok' => $key['stok'],
+                'harga_variant' => $key['harga_variant']
+            ]);
+        }
+
         return response()->json([
             'status_code' => '200',
-            'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang',
+            'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang oleh admin',
         ]);
     }
 
@@ -199,22 +204,19 @@ class ProdukController extends Controller
 
         $data = DB::table('produk')
             ->select(
-                'tokos.id',
-                'tokos.nama_toko',
                 'produk.nama_produk',
-                'tokos.alamat',
+                'produk.id as produk_id',
                 'variants.variant_img',
                 'variants.harga_variant',
-                'produk.deskripsi',
                 'produk.created_at as tanggal_verivikasi',
                 'statuses.status',
                 'variants.stok'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
-            ->where('statuses.status', '=', 'Accepted')
+            ->groupBy('produk.id')
+            ->where('statuses.status', 'Accepted')
             ->get();
 
         return response()->json([
@@ -232,22 +234,18 @@ class ProdukController extends Controller
 
         $data = DB::table('produk')
             ->select(
-                'tokos.id',
-                'tokos.nama_toko',
                 'produk.nama_produk',
-                'tokos.alamat',
+                'produk.id as produk_id',
                 'variants.variant_img',
                 'variants.harga_variant',
-                'produk.deskripsi',
                 'produk.created_at as tanggal_verivikasi',
                 'statuses.status',
                 'variants.stok'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
-            ->where('statuses.status', '=', 'Pending')
+            ->where('statuses.status', 'Pending')
             ->get();
 
         return response()->json([
