@@ -13,35 +13,6 @@ class Toko extends Model
 {
     use HasFactory;
 
-    // protected $appends = [
-    //     'subtotal', 'ongkir'
-    // ];
-
-    // public function getSubtotalAttribute()
-    // {
-    //     return $this->hasMany(Cart::class, 'toko_id')
-    //         ->join('produk', 'produk.id', '=', 'carts.produk_id')
-    //         ->join('variants', 'variants.product_id', '=', 'produk.id')
-    //         ->select(DB::raw('sum(variants.harga_variant) as subtotal'))
-    //         ->first()->subtotal;
-    // }
-
-    // public function getOngkirAttribute()
-    // {
-    //     $user = Auth::user();
-
-    // $distance = $this->hasMany(Cart::class, 'toko_id')
-    //     ->join('tokos', 'tokos.id', '=', 'toko_id')
-    //     ->select(DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-    // * cos(radians(tokos.latitude)) 
-    // * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-    // + sin(radians(" . $user->latitude . ")) 
-    // * sin(radians(tokos.latitude))) as distance"))
-    //     ->value('distance');
-
-    //     return $distance * 3000;
-    // }
-
     protected $fillable = [
         'nama_toko',
         'img_profile',
@@ -59,10 +30,13 @@ class Toko extends Model
         return $this
             ->hasMany(Cart::class, 'toko_id')
             ->join('variants', 'variants.id', '=', 'carts.variant_id')
+            ->join('produk', 'produk.id', '=', 'carts.produk_id')
             ->select(
                 [
+                    'produk.id as produk_id',
+                    'produk.nama_produk',
                     'user_id',
-                    'toko_id',
+                    'carts.toko_id',
                     'produk_id',
                     'variant_id',
                     'variant_img',
@@ -72,7 +46,7 @@ class Toko extends Model
                     DB::raw('COUNT(produk_id) as inCart')
                 ]
             )
-            ->groupBy('produk_id', 'variant_id');
+            ->groupBy('carts.produk_id', 'variant_id');
     }
 
     public function getProdukCheckout()

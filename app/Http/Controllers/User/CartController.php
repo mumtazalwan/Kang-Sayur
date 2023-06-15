@@ -16,13 +16,6 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
-        // $list = Cart::where('user_id', $user->id)
-        //     ->join('tokos', 'tokos.id', '=', 'toko_id')
-        //     ->groupBy('produk.id', 'tokos.img_profile', 'tokos.id', 'tokos.nama_toko', 'tokos.alamat', 'produk.img_id', 'produk.nama_produk', 'produk.harga_produk', 'produk.varian_id')
-        //     ->join('produk', 'produk.id', '=', 'produk_id')
-        //     ->select('produk.id', 'tokos.img_profile', 'tokos.id as toko_id', 'tokos.nama_toko', 'tokos.alamat', 'produk.img_id', 'produk.nama_produk', 'produk.harga_produk', 'produk.varian_id', DB::raw('COUNT(produk.id) as inCart'))
-        //     ->get();
-
         $list = Toko::with('getProductCart')
             ->whereHas('getProductCart')
             ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko'])
