@@ -42,6 +42,7 @@ class Toko extends Model
                     'variant_img',
                     'variant',
                     'stok',
+                    'status',
                     'harga_variant',
                     DB::raw('COUNT(produk_id) as inCart')
                 ]
