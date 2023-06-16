@@ -58,10 +58,11 @@ class CartController extends Controller
         $variantId = $request->variantId;
 
         $currentProduct = Cart::where('user_id', $user->id)
-            ->join('tokos', 'tokos.id', '=', 'toko_id')
-            ->groupBy('produk.id')
-            ->join('produk', 'produk.id', '=', 'produk_id')
-            ->select(DB::raw('COUNT(produk.id) as inCart'))
+            ->where('carts.toko_id', $tokoId)
+            ->where('carts.produk_id', $produkId)
+            ->where('carts.variant_id', $variantId)
+            ->groupBy('carts.produk_id')
+            ->select(DB::raw('COUNT(carts.produk_id) as inCart'))
             ->first();
 
         if ($customInpt > $currentProduct->inCart) {
@@ -168,7 +169,7 @@ class CartController extends Controller
             'rincian' => [
                 'subtotalProduk' => $subtotal,
                 'subtotalOngkir' => $ongkir,
-                'totalKeseluruhan' => ''
+                'totalKeseluruhan' => $subtotal + $ongkir
             ]
         ]);
     }
@@ -176,16 +177,21 @@ class CartController extends Controller
     public function updateStatus(Request $request)
     {
         $user = Auth::user();
+        $produkId = $request->produkId;
+        $variantId = $request->variantId;
         $cartId = $request->cartId;
 
-        $produk = Cart::where('user_id', $user->id)->where('id', $cartId)->first();
+        $produkC = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->where('variant_id', $variantId)->first()->status;
+        $produk = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->where('variant_id', $variantId)->get();
 
-        if ($produk->status == true) {
-            $produk->status = 'false';
-            $produk->save();
+        // return response()->json([
+        //     'print' => $produkC
+        // ]);
+
+        if ($produkC == "true") {
+            $produk->toQuery()->update(array("status" => "false"));
         } else {
-            $produk->status = 'true';
-            $produk->save();
+            $produk->toQuery()->update(array("status" => "true"));
         }
     }
 }
