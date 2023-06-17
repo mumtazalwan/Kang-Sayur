@@ -112,8 +112,9 @@ class CartController extends Controller
         $user = Auth::user();
 
         $produkId = $request->produkId;
+        $variantId = $request->variantId;
 
-        $produk = Cart::where('user_id', $user->id)->where('produk_id', $produkId);
+        $produk = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->where('variant_id', $variantId);
         $produk->delete();
 
         return response()->json([

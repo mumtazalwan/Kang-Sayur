@@ -56,22 +56,25 @@ class Toko extends Model
         $data = $this
             ->hasMany(Cart::class, 'toko_id')
             ->join('variants', 'variants.id', '=', 'carts.variant_id')
+            ->join('produk', 'produk.id', '=', 'carts.produk_id')
             ->select(
                 [
+                    'produk.id as produk_id',
+                    'produk.nama_produk',
                     'user_id',
-                    'toko_id',
+                    'carts.toko_id',
                     'produk_id',
                     'variant_id',
                     'variant_img',
                     'variant',
                     'stok',
+                    'status',
                     'harga_variant',
-                    'carts.status',
                     DB::raw('COUNT(produk_id) as inCart')
                 ]
             )
             ->where('status', 'true')
-            ->groupBy('produk_id', 'variant_id');
+            ->groupBy('carts.produk_id', 'variant_id');
 
         return $data;
     }
