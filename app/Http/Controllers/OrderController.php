@@ -51,6 +51,16 @@ class OrderController extends Controller
         ]);
     }
 
+    public function updateStatusPrepared(Request $request)
+    {
+        $orderId = $request->orderId;
+
+        $dataOrder = Order::findOrfail($orderId);
+
+        $dataOrder->status = 'Menunggu driver';
+        $dataOrder->save();
+    }
+
     public function menunggu_driver()
     {
         $data = Transaction::with('statusReadyDelivered')->where('transactions.status', 'Sudah dibayar')->get();
