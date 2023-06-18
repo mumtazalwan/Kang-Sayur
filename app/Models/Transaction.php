@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
 {
@@ -21,28 +22,46 @@ class Transaction extends Model
         "notes"
     ];
 
+    protected $primaryKey = "transaction_code";
+
+
     public function statusOrder()
     {
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu konfirmasi');
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
+
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu konfirmasi')->where('orders.store_id', $tokoId);
     }
 
     public function statusPrepared()
     {
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang disiapkan');
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
+
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang disiapkan')->where('orders.store_id', $tokoId);
     }
 
     public function statusReadyDelivered()
     {
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu driver');
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
+
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu driver')->where('orders.store_id', $tokoId);
     }
 
     public function statusDelivered()
     {
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang diantar');
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
+
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang diantar')->where('orders.store_id', $tokoId);
     }
 
     public function statusDone()
     {
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Selesai');
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
+
+        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Selesai')->where('orders.store_id', $tokoId);
     }
 }

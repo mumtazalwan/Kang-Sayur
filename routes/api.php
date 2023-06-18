@@ -104,6 +104,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::group(['prefix' => '/status'], function () {
         Route::group(['prefix' => '/product'], function () {
             Route::get('/pesanan', [OrderController::class, 'pesanan']);
+            Route::get('/update/konfirmasi', [OrderController::class, 'updateStatusPrepared']);
             Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
             Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
             Route::get('/diantar', [OrderController::class, 'diantar']);
