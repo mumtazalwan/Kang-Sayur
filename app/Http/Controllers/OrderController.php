@@ -28,10 +28,7 @@ class OrderController extends Controller
 
     public function pesanan()
     {
-        $data = Transaction::with('statusOrder')
-            ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
-            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
-            ->where('transactions.status', 'Belum dibayar')->get();
+        $data = Transaction::with('statusOrder')->where('transactions.status', 'Sudah dibayar')->get();
 
         return response()->json([
             'status' => '200',
@@ -53,12 +50,24 @@ class OrderController extends Controller
 
     public function updateStatusPrepared(Request $request)
     {
-        $orderId = $request->orderId;
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
+        $transactionCode = $request->transactionCode;
 
-        $dataOrder = Order::findOrfail($orderId);
+        $orderS = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->first()->status;
+        $order = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->get();
 
-        $dataOrder->status = 'Menunggu driver';
-        $dataOrder->save();
+        if ($orderS == "Menunggu konfirmasi") {
+            $order->toQuery()->update(array("status" => 'Sedang disiapkan'));
+
+            return response()->json([
+                'message' => 'Status berhasil diubah'
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Tidak menemukan transaksi'
+            ]);
+        }
     }
 
     public function menunggu_driver()
