@@ -134,6 +134,12 @@ class OrderController extends Controller
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
+        $grossAmount = DB::table('orders')
+            ->join('variants', 'variants.id', 'orders.variant_id')
+            ->where('transaction_code', $code)
+            ->select(DB::raw('sum(variants.harga_variant) as gross_amount'))
+            ->value('gross_amount');
+
         $params = array(
             'transaction_details' => array(
                 'order_id' => $code,
@@ -162,6 +168,10 @@ class OrderController extends Controller
 
         return response()->json([
             'status' => 'succes',
+            'data'  => [
+                'snap_token' => $snapToken,
+                'clinet_key' => config('midtrans.client_key')
+            ]
         ]);
     }
 
