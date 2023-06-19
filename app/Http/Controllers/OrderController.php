@@ -136,7 +136,7 @@ class OrderController extends Controller
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => $dataUser->id,
+                'order_id' => $code,
                 'gross_amount' => 20000,
             ),
             'customer_details' => array(
