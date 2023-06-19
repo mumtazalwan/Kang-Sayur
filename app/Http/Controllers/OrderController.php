@@ -140,18 +140,23 @@ class OrderController extends Controller
             ->select(DB::raw('sum(variants.harga_variant) as gross_amount'))
             ->value('gross_amount');
 
+        $qty = DB::table('orders')
+            ->where('transaction_code', $code)
+            ->select(DB::raw('count(orders.id) as qty'))
+            ->value('qty');
+
         $params = array(
             'transaction_details' => array(
                 'order_id' => $code,
-                'gross_amount' => 20000,
+                'gross_amount' => $grossAmount,
             ),
             'customer_details' => array(
                 'first_name' => $dataUser->name,
                 'last_name' => '',
                 'address' => $dataUser->address,
                 'phone' => $dataUser->phone_number,
-                'qty' => 2,
-                'total_price' => 20000
+                'qty' => $qty,
+                'total_price' => $grossAmount
             ),
         );
 
