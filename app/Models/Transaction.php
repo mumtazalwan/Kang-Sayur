@@ -30,7 +30,10 @@ class Transaction extends Model
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
 
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu konfirmasi')->where('orders.store_id', $tokoId);
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('orders.status', 'Menunggu konfirmasi')
+            ->where('orders.store_id', $tokoId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id');
     }
 
     public function statusPrepared()
