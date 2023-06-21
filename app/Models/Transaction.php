@@ -33,7 +33,9 @@ class Transaction extends Model
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('orders.status', 'Menunggu konfirmasi')
             ->where('orders.store_id', $tokoId)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id');
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->groupBy('variants.id')
+            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     public function statusPrepared()
@@ -41,7 +43,10 @@ class Transaction extends Model
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
 
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang disiapkan')->where('orders.store_id', $tokoId);
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('orders.status', 'Sedang disiapkan')
+            ->where('orders.store_id', $tokoId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id');
     }
 
     public function statusReadyDelivered()
@@ -49,7 +54,10 @@ class Transaction extends Model
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
 
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Menunggu driver')->where('orders.store_id', $tokoId);
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('orders.status', 'Menunggu driver')
+            ->where('orders.store_id', $tokoId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id');
     }
 
     public function statusDelivered()
@@ -57,7 +65,10 @@ class Transaction extends Model
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
 
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Sedang diantar')->where('orders.store_id', $tokoId);
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('orders.status', 'Sedang diantar')
+            ->where('orders.store_id', $tokoId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id');
     }
 
     public function statusDone()
@@ -65,6 +76,9 @@ class Transaction extends Model
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value($dataUser->id);
 
-        return $this->hasMany(Order::class, 'transaction_code')->where('orders.status', 'Selesai')->where('orders.store_id', $tokoId);
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('orders.status', 'Selesai')
+            ->where('orders.store_id', $tokoId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id');
     }
 }
