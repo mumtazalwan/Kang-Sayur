@@ -32,6 +32,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/midtrans/callback', [OrderController::class, 'callback']);
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/user/register', [AuthenticationController::class, 'registerAsUser']);
     Route::post('/seller/register', [AuthenticationController::class, 'registerAsSeller']);
@@ -83,7 +85,6 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/checkout', [CartController::class, 'checkout']);
         Route::post('/pesan', [OrderController::class, 'store']);
         Route::get('/updateStatus', [CartController::class, 'updateStatus']);
-        Route::post('/midtrans/callback', [OrderController::class, 'callback']);
     });
 });
 
@@ -104,7 +105,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::group(['prefix' => '/status'], function () {
         Route::group(['prefix' => '/product'], function () {
             Route::get('/pesanan', [OrderController::class, 'pesanan']);
-            Route::get('/update/konfirmasi', [OrderController::class, 'updateStatusPrepared']);
+            Route::put('/update/konfirmasi', [OrderController::class, 'updateStatusPrepared']);
             Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
             Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
             Route::get('/diantar', [OrderController::class, 'diantar']);
