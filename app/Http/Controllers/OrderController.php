@@ -28,7 +28,10 @@ class OrderController extends Controller
 
     public function pesanan()
     {
-        $data = Transaction::with('statusOrder')->where('transactions.status', 'Sudah dibayar')->get();
+        $data = Transaction::with('statusOrder')
+            ->whereHas('statusOrder')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
 
         return response()->json([
             'status' => '200',
@@ -39,7 +42,10 @@ class OrderController extends Controller
 
     public function disiapkan()
     {
-        $data = Transaction::with('statusPrepared')->where('transactions.status', 'Sudah dibayar')->get();
+        $data = Transaction::with('statusPrepared')
+            ->whereHas('statusPrepared')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
 
         return response()->json([
             'status' => '200',
@@ -72,7 +78,10 @@ class OrderController extends Controller
 
     public function menunggu_driver()
     {
-        $data = Transaction::with('statusReadyDelivered')->where('transactions.status', 'Sudah dibayar')->get();
+        $data = Transaction::with('statusReadyDelivered')
+            ->whereHas('statusReadyDelivered')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
 
         return response()->json([
             'status' => '200',
@@ -83,7 +92,10 @@ class OrderController extends Controller
 
     public function diantar()
     {
-        $data = Transaction::with('statusDelivered')->where('transactions.status', 'Sudah dibayar')->get();
+        $data = Transaction::with('statusDelivered')
+            ->whereHas('statusDelivered')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
 
         return response()->json([
             'status' => '200',
@@ -94,7 +106,10 @@ class OrderController extends Controller
 
     public function selesai()
     {
-        $data = Transaction::with('statusDone')->where('transactions.status', 'Sudah dibayar')->get();
+        $data = Transaction::with('statusDone')
+            ->whereHas('statusDone')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
 
         return response()->json([
             'status' => '200',
