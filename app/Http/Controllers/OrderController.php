@@ -40,6 +40,28 @@ class OrderController extends Controller
         ]);
     }
 
+    public function updateStatusPrepared(Request $request)
+    {
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
+        $transactionCode = $request->transactionCode;
+
+        $orderS = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->first()->status;
+        $order = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->get();
+
+        if ($orderS == "Menunggu konfirmasi") {
+            $order->toQuery()->update(array("status" => 'Sedang disiapkan'));
+
+            return response()->json([
+                'message' => 'Status berhasil diubah'
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Tidak menemukan transaksi'
+            ]);
+        }
+    }
+
     public function disiapkan()
     {
         $data = Transaction::with('statusPrepared')
@@ -54,7 +76,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function updateStatusPrepared(Request $request)
+    public function updateStatusReadyToPicked(Request $request)
     {
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
@@ -63,8 +85,8 @@ class OrderController extends Controller
         $orderS = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->first()->status;
         $order = Order::where('store_id', $tokoId)->where('transaction_code', $transactionCode)->get();
 
-        if ($orderS == "Menunggu konfirmasi") {
-            $order->toQuery()->update(array("status" => 'Sedang disiapkan'));
+        if ($orderS == "Sedang disiapkan") {
+            $order->toQuery()->update(array("status" => 'Menunggu driver'));
 
             return response()->json([
                 'message' => 'Status berhasil diubah'
