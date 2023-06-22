@@ -107,6 +107,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
             Route::get('/pesanan', [OrderController::class, 'pesanan']);
             Route::put('/update/konfirmasi', [OrderController::class, 'updateStatusPrepared']);
             Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
+            Route::put('/update/siap-diantar', [OrderController::class, 'updateStatusReadyToPicked']);
             Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
             Route::get('/diantar', [OrderController::class, 'diantar']);
             Route::get('/selesai', [OrderController::class, 'selesai']);
