@@ -27,10 +27,13 @@ class Toko extends Model
 
     public function getProductCart()
     {
+        $dataUser = Auth::user();
+
         return $this
             ->hasMany(Cart::class, 'toko_id')
             ->join('variants', 'variants.id', '=', 'carts.variant_id')
             ->join('produk', 'produk.id', '=', 'carts.produk_id')
+            ->where('carts.user_id', $dataUser->id)
             ->select(
                 [
                     'produk.id as produk_id',
@@ -52,11 +55,13 @@ class Toko extends Model
 
     public function getProdukCheckout()
     {
+        $dataUser = Auth::user();
 
         $data = $this
             ->hasMany(Cart::class, 'toko_id')
             ->join('variants', 'variants.id', '=', 'carts.variant_id')
             ->join('produk', 'produk.id', '=', 'carts.produk_id')
+            ->where('carts.user_id', $dataUser->id)
             ->select(
                 [
                     'produk.id as produk_id',
