@@ -37,7 +37,12 @@ class ProdukController extends Controller
     {
         $data = Produk::where('nama_produk', 'LIKE', '%' . $keyword . '%')
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-            ->where('statuses.status', '=', 'Accepted')->get();
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->groupBy('produk.id')
+            ->select('produk.id', 'tokos.nama_toko', 'produk.nama_produk', 'variants.variant')
+            ->get();
 
         if (count($data)) {
             return response()->json([
@@ -49,7 +54,7 @@ class ProdukController extends Controller
             return response()->json([
                 'status' => '200',
                 'message' => 'List produk',
-                'data' => 'Data tidak ditemukan'
+                'data' => []
             ]);
         }
     }
@@ -126,6 +131,7 @@ class ProdukController extends Controller
 
         $data = Produk::with(['variant', 'review'])->where('produk.id', $produkId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->first();
 

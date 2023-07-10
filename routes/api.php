@@ -11,7 +11,9 @@ use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\LogVisitorController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductAdvertisingController;
 use App\Http\Controllers\SaleController;
+use App\Models\ProductAdvertising;
 use App\Models\User;
 use Illuminate\Routing\RouteGroup;
 use Spatie\Permission\Models\Role;
@@ -55,6 +57,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/sering/user/kunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
 
     // explore
+    Route::get('/display-iklan', [ProductAdvertisingController::class, 'display_iklan']);
     Route::get('/produk/kategori', [ProdukController::class, 'nearestProdukByCategoryId']);
     Route::get('/kategori', [ProdukController::class, 'categories']);
 
@@ -112,6 +115,10 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
             Route::get('/diantar', [OrderController::class, 'diantar']);
             Route::get('/selesai', [OrderController::class, 'selesai']);
         });
+    });
+
+    Route::group(['prefix' => '/iklan'], function () {
+        Route::post('/add', [ProductAdvertisingController::class, 'add']);
     });
 });
 
