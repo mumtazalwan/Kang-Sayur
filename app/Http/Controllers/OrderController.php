@@ -17,15 +17,13 @@ class OrderController extends Controller
     // pesanan user yang belum di konfirmasi
     public function pesananUser()
     {
-
         $data = Transaction::with('statusOrderUser')
             ->whereHas('statusOrderUser')
-            ->where('transactions.status', 'Sudah dibayar')
             ->get();
 
         return response()->json([
             'status' => '200',
-            'message' => 'List pesanan',
+            'message' => 'List pesanan user',
             'data' => $data
         ]);
     }
@@ -35,12 +33,11 @@ class OrderController extends Controller
     {
         $data = Transaction::with('statusPreparedUser')
             ->whereHas('statusPreparedUser')
-            ->where('transactions.status', 'Sudah dibayar')
             ->get();
 
         return response()->json([
             'status' => '200',
-            'message' => 'List barang yang harus disipkan',
+            'message' => 'List barang yang sedang disiapkan',
             'data' => $data
         ]);
     }
@@ -50,7 +47,6 @@ class OrderController extends Controller
     {
         $data = Transaction::with('statusDeliveredUser')
             ->whereHas('statusDeliveredUser')
-            ->where('transactions.status', 'Sudah dibayar')
             ->get();
 
         return response()->json([
@@ -65,7 +61,7 @@ class OrderController extends Controller
     {
         $data = Transaction::with('statusDoneUser')
             ->whereHas('statusDoneUser')
-            ->where('transactions.status', 'Sudah dibayar')
+            ->groupBy('transactions.transaction_code')
             ->get();
 
         return response()->json([
@@ -75,6 +71,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function detailStatus(Request $request)
+    {
+        $transactionCode = $request->transactionCode;
+        $userId = Auth::user()->id;
+
+        $data = DB::table('orders')
+            ->where('orders.transaction_code', $transactionCode)
+            ->where('orders.user_id', $userId)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->groupBy('variants.id')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'detail status order',
+            'data' => $data
+        ]);
+    }
 
     /*Seller*/
 
