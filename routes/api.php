@@ -92,13 +92,10 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
     // order
     Route::group(['prefix' => '/status'], function () {
-        Route::group(['prefix' => '/product'], function () {
-            Route::get('/pesanan', [OrderController::class, 'pesanan']);
-            Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
-            Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
-            Route::get('/diantar', [OrderController::class, 'diantar']);
-            Route::get('/selesai', [OrderController::class, 'selesai']);
-        });
+        Route::get('/pesanan', [OrderController::class, 'pesananUser']);
+        Route::get('/disiapkan', [OrderController::class, 'disiapkanSeller']);
+        Route::get('/diantar', [OrderController::class, 'sedangDiantar']);
+        Route::get('/selesai', [OrderController::class, 'barangSampai']);
     });
 });
 

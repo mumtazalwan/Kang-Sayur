@@ -12,17 +12,71 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    /*User*/
+
+    // pesanan user yang belum di konfirmasi
+    public function pesananUser()
     {
-        //
+
+        $data = Transaction::with('statusOrderUser')
+            ->whereHas('statusOrderUser')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List pesanan',
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // pesanan yang sedang disiapkan seller
+    public function disiapkanSeller()
+    {
+        $data = Transaction::with('statusPreparedUser')
+            ->whereHas('statusPreparedUser')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List barang yang harus disipkan',
+            'data' => $data
+        ]);
+    }
+
+    // status saat pesanan sudah diantar driver
+    public function sedangDiantar()
+    {
+        $data = Transaction::with('statusDeliveredUser')
+            ->whereHas('statusDeliveredUser')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List barang yang sedang diantar driver',
+            'data' => $data
+        ]);
+    }
+
+    // setatus saat pesanan sudah sampai
+    public function barangSampai()
+    {
+        $data = Transaction::with('statusDoneUser')
+            ->whereHas('statusDoneUser')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List pesanan selesai',
+            'data' => $data
+        ]);
+    }
+
+
+    /*Seller*/
 
     // status order yang perlu dikonfirmasi oleh seller
     public function pesanan()
