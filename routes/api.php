@@ -89,6 +89,17 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::post('/pesan', [OrderController::class, 'store']);
         Route::get('/updateStatus', [CartController::class, 'updateStatus']);
     });
+
+    // order
+    Route::group(['prefix' => '/status'], function () {
+        Route::group(['prefix' => '/product'], function () {
+            Route::get('/pesanan', [OrderController::class, 'pesanan']);
+            Route::get('/disiapkan', [OrderController::class, 'disiapkan']);
+            Route::get('/menunggu-driver', [OrderController::class, 'menunggu_driver']);
+            Route::get('/diantar', [OrderController::class, 'diantar']);
+            Route::get('/selesai', [OrderController::class, 'selesai']);
+        });
+    });
 });
 
 // seller

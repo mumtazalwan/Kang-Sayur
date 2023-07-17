@@ -24,8 +24,7 @@ class OrderController extends Controller
      * Show the form for creating a new resource.
      */
 
-    // status order yang perlu dikonfirmasi
-
+    // status order yang perlu dikonfirmasi oleh seller
     public function pesanan()
     {
         $data = Transaction::with('statusOrder')
@@ -40,6 +39,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // update status oleh seller menjadi disiapkan
     public function updateStatusPrepared(Request $request)
     {
         $dataUser = Auth::user();
@@ -62,6 +62,7 @@ class OrderController extends Controller
         }
     }
 
+    // status order yang perlu diubah oleh seller menjadi siap diantar
     public function disiapkan()
     {
         $data = Transaction::with('statusPrepared')
@@ -76,6 +77,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // update status oleh seller menjadi siap diantar
     public function updateStatusReadyToPicked(Request $request)
     {
         $dataUser = Auth::user();
@@ -98,6 +100,7 @@ class OrderController extends Controller
         }
     }
 
+    // status order saat menunggu driver 
     public function menunggu_driver()
     {
         $data = Transaction::with('statusReadyDelivered')
@@ -112,6 +115,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // status saat pesanan sudah diantar driver
     public function diantar()
     {
         $data = Transaction::with('statusDelivered')
@@ -126,6 +130,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // setatus saat pesanan sudah sampai
     public function selesai()
     {
         $data = Transaction::with('statusDone')
@@ -217,7 +222,7 @@ class OrderController extends Controller
         ]);
     }
 
-
+    //callback midtrans
     public function callback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
