@@ -49,18 +49,6 @@ class Transaction extends Model
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
-    public function statusReadyDeliveredUser()
-    {
-        $idUser = Auth::user();
-
-        return $this->hasMany(Order::class, 'transaction_code')
-            ->where('orders.status', 'Menunggu driver')
-            ->where('orders.user_id', $idUser->id)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
-    }
-
     public function statusDeliveredUser()
     {
         $idUser = Auth::user();
@@ -84,6 +72,7 @@ class Transaction extends Model
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
+
     // seller
     public function statusOrder()
     {
