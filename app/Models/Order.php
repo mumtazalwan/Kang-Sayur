@@ -67,7 +67,8 @@ class Order extends Model
             ->where('orders.status', 'Selesai')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id', 'orders.store_id', 'orders.transaction_code')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->groupBy('orders.store_id', 'orders.transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 }
