@@ -17,8 +17,9 @@ class OrderController extends Controller
     // pesanan user yang belum di konfirmasi
     public function pesananUser()
     {
-        $data = Transaction::with('statusOrderUser')
+        $data = Order::with('statusOrderUser')
             ->whereHas('statusOrderUser')
+            ->groupBy('orders.store_id')
             ->get();
 
         return response()->json([
@@ -31,8 +32,9 @@ class OrderController extends Controller
     // pesanan yang sedang disiapkan seller
     public function disiapkanSeller()
     {
-        $data = Transaction::with('statusPreparedUser')
+        $data = Order::with('statusPreparedUser')
             ->whereHas('statusPreparedUser')
+            ->groupBy('orders.store_id')
             ->get();
 
         return response()->json([
@@ -45,8 +47,9 @@ class OrderController extends Controller
     // status saat pesanan sudah diantar driver
     public function sedangDiantar()
     {
-        $data = Transaction::with('statusDeliveredUser')
+        $data = Order::with('statusDeliveredUser')
             ->whereHas('statusDeliveredUser')
+            ->groupBy('orders.store_id')
             ->get();
 
         return response()->json([
@@ -59,9 +62,9 @@ class OrderController extends Controller
     // setatus saat pesanan sudah sampai
     public function barangSampai()
     {
-        $data = Transaction::with('statusDoneUser')
+        $data = Order::with('statusDoneUser')
             ->whereHas('statusDoneUser')
-            ->groupBy('transactions.transaction_code')
+            ->groupBy('orders.store_id')
             ->get();
 
         return response()->json([
