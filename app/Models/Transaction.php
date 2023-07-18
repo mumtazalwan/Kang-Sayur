@@ -25,53 +25,53 @@ class Transaction extends Model
     protected $primaryKey = "transaction_code";
 
     // user
-    public function statusOrderUser()
-    {
-        $idUser = Auth::user();
+    // public function statusOrderUser()
+    // {
+    //     $idUser = Auth::user();
 
-        return $this->hasMany(Order::class, 'transaction_code')
-            ->where('orders.status', 'Menunggu konfirmasi')
-            ->where('orders.user_id', $idUser->id)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
-    }
+    //     return $this->hasMany(Order::class, 'transaction_code', 'store_id')
+    //         ->where('orders.status', 'Menunggu konfirmasi')
+    //         ->where('orders.user_id', $idUser->id)
+    //         ->join('variants', 'variants.id', '=', 'orders.variant_id')
+    //         ->groupBy('variants.id')
+    //         ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    // }
 
-    public function statusPreparedUser()
-    {
-        $idUser = Auth::user();
+    // public function statusPreparedUser()
+    // {
+    //     $idUser = Auth::user();
 
-        return $this->hasMany(Order::class, 'transaction_code')
-            ->where('orders.status', 'Sedang disiapkan')
-            ->where('orders.user_id', $idUser->id)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
-    }
+    //     return $this->hasMany(Order::class, 'transaction_code')
+    //         ->where('orders.status', 'Sedang disiapkan')
+    //         ->where('orders.user_id', $idUser->id)
+    //         ->join('variants', 'variants.id', '=', 'orders.variant_id')
+    //         ->groupBy('variants.id')
+    //         ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    // }
 
-    public function statusDeliveredUser()
-    {
-        $idUser = Auth::user();
+    // public function statusDeliveredUser()
+    // {
+    //     $idUser = Auth::user();
 
-        return $this->hasMany(Order::class, 'transaction_code')
-            ->where('orders.status', 'Sedang diantar')
-            ->where('orders.user_id', $idUser->id)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
-    }
+    //     return $this->hasMany(Order::class, 'transaction_code')
+    //         ->where('orders.status', 'Sedang diantar')
+    //         ->where('orders.user_id', $idUser->id)
+    //         ->join('variants', 'variants.id', '=', 'orders.variant_id')
+    //         ->groupBy('variants.id')
+    //         ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    // }
 
-    public function statusDoneUser()
-    {
-        $idUser = Auth::user();
+    // public function statusDoneUser()
+    // {
+    //     $idUser = Auth::user();
 
-        return $this->hasMany(Order::class, 'transaction_code')
-            ->where('orders.status', 'Selesai')
-            ->where('orders.user_id', $idUser->id)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
-    }
+    //     return $this->hasMany(Order::class, 'transaction_code')
+    //         ->where('orders.status', 'Selesai')
+    //         ->where('orders.user_id', $idUser->id)
+    //         ->join('variants', 'variants.id', '=', 'orders.variant_id')
+    //         ->groupBy('variants.id', 'orders.store_id')
+    //         ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    // }
 
     // seller
     public function statusOrder()
