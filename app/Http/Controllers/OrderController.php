@@ -17,10 +17,30 @@ class OrderController extends Controller
     // pesanan user yang belum di konfirmasi
     public function pesananUser()
     {
-        $data = Order::with('statusOrderUser')
-            ->whereHas('statusOrderUser')
-            ->groupBy('orders.store_id')
+        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->get();
+
+        $data = [];
+
+        // Iterate over the transactions and access the related orders
+        foreach ($transactions as $transaction) {
+            $relatedOrders = $transaction->statusOrderUser;
+
+            // Add the transaction and its related orders to the data array
+            if ($relatedOrders->isNotEmpty()) {
+                $data[] = [
+                    'icon' => 'status/toko',
+                    'nama_toko' => $transaction->nama_toko,
+                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'kode_transaksi' => $transaction->transaction_code,
+                    'toko_id' => $transaction->store_id,
+                    'barang_pesanan' => $relatedOrders,
+                ];
+            }
+        }
 
         return response()->json([
             'status' => '200',
@@ -32,10 +52,30 @@ class OrderController extends Controller
     // pesanan yang sedang disiapkan seller
     public function disiapkanSeller()
     {
-        $data = Order::with('statusPreparedUser')
-            ->whereHas('statusPreparedUser')
-            ->groupBy('orders.store_id')
+        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->get();
+
+        $data = [];
+
+        // Iterate over the transactions and access the related orders
+        foreach ($transactions as $transaction) {
+            $relatedOrders = $transaction->statusPreparedUser;
+
+            // Add the transaction and its related orders to the data array
+            if ($relatedOrders->isNotEmpty()) {
+                $data[] = [
+                    'icon' => 'status/toko',
+                    'nama_toko' => $transaction->nama_toko,
+                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'kode_transaksi' => $transaction->transaction_code,
+                    'toko_id' => $transaction->store_id,
+                    'barang_pesanan' => $relatedOrders,
+                ];
+            }
+        }
 
         return response()->json([
             'status' => '200',
@@ -47,10 +87,30 @@ class OrderController extends Controller
     // status saat pesanan sudah diantar driver
     public function sedangDiantar()
     {
-        $data = Order::with('statusDeliveredUser')
-            ->whereHas('statusDeliveredUser')
-            ->groupBy('orders.store_id')
+        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->get();
+
+        $data = [];
+
+        // Iterate over the transactions and access the related orders
+        foreach ($transactions as $transaction) {
+            $relatedOrders = $transaction->statusDeliveredUser;
+
+            // Add the transaction and its related orders to the data array
+            if ($relatedOrders->isNotEmpty()) {
+                $data[] = [
+                    'icon' => 'status/toko',
+                    'nama_toko' => $transaction->nama_toko,
+                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'kode_transaksi' => $transaction->transaction_code,
+                    'toko_id' => $transaction->store_id,
+                    'barang_pesanan' => $relatedOrders,
+                ];
+            }
+        }
 
         return response()->json([
             'status' => '200',
@@ -62,10 +122,31 @@ class OrderController extends Controller
     // setatus saat pesanan sudah sampai
     public function barangSampai()
     {
-        $data = Order::with('statusDoneUser')
-            ->whereHas('statusDoneUser')
-            ->groupBy('orders.store_id')
+        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('transactions.status', 'Sudah dibayar')
+            ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->get();
+
+        $data = [];
+
+        // Iterate over the transactions and access the related orders
+        foreach ($transactions as $transaction) {
+            $relatedOrders = $transaction->statusDoneUser;
+
+            // Add the transaction and its related orders to the data array
+            if ($relatedOrders->isNotEmpty()) {
+                $data[] = [
+                    'icon' => 'status/toko',
+                    'nama_toko' => $transaction->nama_toko,
+                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'kode_transaksi' => $transaction->transaction_code,
+                    'toko_id' => $transaction->store_id,
+                    'barang_pesanan' => $relatedOrders,
+                ];
+            }
+        }
+
 
         return response()->json([
             'status' => '200',
@@ -74,6 +155,8 @@ class OrderController extends Controller
         ]);
     }
 
+
+    // detail status
     public function detailStatus(Request $request)
     {
         $transactionCode = $request->transactionCode;
