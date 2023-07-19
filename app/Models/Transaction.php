@@ -35,6 +35,7 @@ class Transaction extends Model
             ->where('orders.status', 'Menunggu konfirmasi')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
@@ -49,6 +50,7 @@ class Transaction extends Model
             ->where('orders.status', 'Sedang disiapkan')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
@@ -63,6 +65,7 @@ class Transaction extends Model
             ->where('orders.status', 'Sedang diantar')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
@@ -77,6 +80,7 @@ class Transaction extends Model
             ->where('orders.status', 'Selesai')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
