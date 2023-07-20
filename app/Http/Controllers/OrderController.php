@@ -55,6 +55,8 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
+            } else {
+                $data = [];
             }
         }
 
@@ -102,6 +104,8 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
+            } else {
+                $data = [];
             }
         }
 
@@ -149,6 +153,8 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
+            } else {
+                $data = [];
             }
         }
 
@@ -197,6 +203,8 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
+            } else {
+                $data[] = [];
             }
         }
 
