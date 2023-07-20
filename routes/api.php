@@ -96,7 +96,6 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/disiapkan', [OrderController::class, 'disiapkanSeller']);
         Route::get('/diantar', [OrderController::class, 'sedangDiantar']);
         Route::get('/selesai', [OrderController::class, 'barangSampai']);
-        Route::get('/detail/pesanan', [OrderController::class, 'detailStatus']);
     });
 });
 

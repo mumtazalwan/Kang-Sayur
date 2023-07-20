@@ -208,27 +208,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-    // detail status
-    public function detailStatus(Request $request)
-    {
-        $transactionCode = $request->transactionCode;
-        $userId = Auth::user()->id;
-
-        $data = DB::table('orders')
-            ->where('orders.transaction_code', $transactionCode)
-            ->where('orders.user_id', $userId)
-            ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
-            ->get();
-
-        return response()->json([
-            'status' => '200',
-            'message' => 'detail status order',
-            'data' => $data
-        ]);
-    }
-
     /*Seller*/
 
     // status order yang perlu dikonfirmasi oleh seller
