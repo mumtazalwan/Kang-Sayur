@@ -11,6 +11,28 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductAdvertisingController extends Controller
 {
+
+    public function kategori()
+    {
+        $dataUser = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
+
+        $kategori = DB::table('produk')
+            ->select('kategori.id', 'kategori.nama_kategori')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+            ->groupBy('kategori.id', 'kategori.nama_kategori')
+            ->where('produk.toko_id', $tokoId)
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'list kategori toko-mu',
+            'kategori' => $kategori
+        ]);
+    }
+
+
+
     public function add(Request $request)
     {
         $dataUser = Auth::user();

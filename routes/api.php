@@ -1,23 +1,19 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 // controller
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\User\UserController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\LogVisitorController;
 use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
-use App\Http\Controllers\LogVisitorController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ProductAdvertisingController;
-use App\Http\Controllers\SaleController;
-use App\Models\ProductAdvertising;
-use App\Models\User;
-use Illuminate\Routing\RouteGroup;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +93,9 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/diantar', [OrderController::class, 'sedangDiantar']);
         Route::get('/selesai', [OrderController::class, 'barangSampai']);
     });
+
+    //ulasan 
+    Route::post('/ulasan', [ReviewController::class, 'review']);
 });
 
 // seller
@@ -126,6 +125,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::group(['prefix' => '/iklan'], function () {
+        Route::get('/kategori-toko', [ProductAdvertisingController::class, 'kategori']);
         Route::post('/add', [ProductAdvertisingController::class, 'add']);
     });
 });
