@@ -13,7 +13,10 @@ class Review extends Model
         'id',
         'id_user',
         'product_id',
-        'toko_id'
+        'toko_id',
+        'comment',
+        'rating',
+        'img_product'
     ];
 
     protected $hidden = [

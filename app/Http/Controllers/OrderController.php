@@ -40,6 +40,7 @@ class OrderController extends Controller
                 $data[] = [
                     'icon' => 'status/toko',
                     'nama_toko' => $transaction->nama_toko,
+                    'profil_toko' => $transaction->img_profile,
                     'tanggal' => $transaction->created_at->format('d, M Y'),
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
@@ -89,6 +90,7 @@ class OrderController extends Controller
                 $data[] = [
                     'icon' => 'status/toko',
                     'nama_toko' => $transaction->nama_toko,
+                    'profil_toko' => $transaction->img_profile,
                     'tanggal' => $transaction->created_at->format('d, M Y'),
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
@@ -138,6 +140,7 @@ class OrderController extends Controller
                 $data[] = [
                     'icon' => 'status/toko',
                     'nama_toko' => $transaction->nama_toko,
+                    'profil_toko' => $transaction->img_profile,
                     'tanggal' => $transaction->created_at->format('d, M Y'),
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
@@ -188,6 +191,7 @@ class OrderController extends Controller
                 $data[] = [
                     'icon' => 'status/toko',
                     'nama_toko' => $transaction->nama_toko,
+                    'profil_toko' => $transaction->img_profile,
                     'tanggal' => $transaction->created_at->format('d, M Y'),
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
