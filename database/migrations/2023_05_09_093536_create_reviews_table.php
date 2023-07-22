@@ -19,6 +19,8 @@ return new class extends Migration
             $table->longText('comment')->nullable();
             $table->integer('product_id');
             $table->integer('toko_id');
+            $table->integer('variant_id');
+            $table->integer('transaction_code');
             $table->timestamps();
         });
     }

@@ -23,6 +23,8 @@ class ReviewController extends Controller
             'img_product' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'product_id' => 'required',
             'toko_id' => 'required',
+            'variant_id' => 'required',
+            'transaction_code' => 'required'
         ]);
 
         if ($request->img_product) {
@@ -38,7 +40,9 @@ class ReviewController extends Controller
                 'img_product' => '/storage' . $path,
                 'comment' => request('comment'),
                 'product_id' => request('product_id'),
-                'toko_id' => request('toko_id')
+                'toko_id' => request('toko_id'),
+                'variant_id' => request('variant_id'),
+                'transaction_code' => request('transaction_code'),
             ]);
         } else {
             Review::create([
@@ -46,7 +50,9 @@ class ReviewController extends Controller
                 'rating' => request('rating'),
                 'comment' => request('comment'),
                 'product_id' => request('product_id'),
-                'toko_id' => request('toko_id')
+                'toko_id' => request('toko_id'),
+                'variant_id' => request('variant_id'),
+                'transaction_code' => request('transaction_code'),
             ]);
         }
 
