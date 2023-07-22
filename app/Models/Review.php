@@ -16,7 +16,9 @@ class Review extends Model
         'toko_id',
         'comment',
         'rating',
-        'img_product'
+        'img_product',
+        'variant_id',
+        'transaction_code'
     ];
 
     protected $hidden = [
