@@ -13,6 +13,7 @@ class Variant extends Model
         'product_id',
         'variant',
         'variant_desc',
+        'variant_img',
         'stok',
         'toko_id',
         'harga_variant'

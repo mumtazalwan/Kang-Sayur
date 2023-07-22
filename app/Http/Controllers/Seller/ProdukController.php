@@ -15,6 +15,7 @@ use App\Models\LogVisitor;
 use App\Models\Status;
 use App\Models\Toko;
 use App\Models\Variant;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -68,8 +69,8 @@ class ProdukController extends Controller
 
         $request->validate([
             'nama_produk' => 'required|string',
-            'kategori_id' => 'required|integer'
-
+            'kategori_id' => 'required|integer',
+            'variant_img' => 'file|image|mimes:png,jpg,jpeg|max:3048'
         ]);
 
         $id = mt_rand(1000000, 9999999);
@@ -87,11 +88,20 @@ class ProdukController extends Controller
         ]);
 
         foreach ($variant as $key) {
-            Variant::create([
+            $variant_img = $key['images'];
+
+            // store photo
+            $timestamp = time();
+            $photoName = $timestamp . $variant_img->getClientOriginalName();
+            $path = '/user_profile/' . $photoName;
+            Storage::disk('public')->put($path, file_get_contents($variant_img));
+
+            $data = Variant::create([
                 'product_id' => $produk->id,
                 'variant' => $key['variant'],
                 'variant_desc' => $key['variant'],
                 'stok' => $key['stok'],
+                'variant_img' => '/storage' . $path,
                 'harga_variant' => $key['harga_variant']
             ]);
         }
@@ -99,6 +109,7 @@ class ProdukController extends Controller
         return response()->json([
             'status_code' => '200',
             'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang oleh admin',
+            'data' => $data
         ]);
     }
 
