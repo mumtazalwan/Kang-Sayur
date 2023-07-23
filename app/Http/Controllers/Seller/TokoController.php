@@ -398,4 +398,155 @@ class TokoController extends Controller
 
         ]);
     }
+
+    //Admin
+
+    public function search_toko($keyword)
+    {
+        $data = Toko::where('nama_toko', 'LIKE', '%' . $keyword . '%')
+            ->leftJoin('users', 'users.id', '=', 'tokos.seller_id')
+            ->select(
+                'tokos.id',
+                'tokos.id',
+                'tokos.img_profile',
+                'tokos.nama_toko',
+                'users.name as nama_pemilik',
+                'tokos.alamat',
+                'tokos.nama_toko'
+            )
+            ->get();
+
+        if (count($data)) {
+            return response()->json([
+                'status' => '200',
+                'message' => 'List toko',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                'status' => '200',
+                'message' => 'List toko',
+                'data' => []
+            ]);
+        }
+    }
+
+    public function all()
+    {
+        $data = Toko::leftJoin('log_visitor', 'log_visitor.toko_id', '=', 'tokos.id')
+            ->leftJoin('users', 'users.id', '=', 'tokos.seller_id')
+            ->select(
+                'tokos.id',
+                'tokos.id',
+                'tokos.img_profile',
+                'tokos.nama_toko',
+                'users.name as nama_pemilik',
+                'tokos.alamat',
+                'tokos.nama_toko',
+                DB::raw('COUNT(log_visitor.toko_id) as visited'),
+            )
+            ->groupBy('id', 'img_profile', 'tokos.longitude', 'tokos.latitude', 'tokos.nama_toko', 'toko_id')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'succes',
+            'data' => $data
+        ]);
+    }
+
+    public function detail_toko_admin(Request $request)
+    {
+        $tokoId = $request->tokoId;
+        $kategoriId = $request->kategoriId;
+
+        $data = Toko::where('tokos.id', '=', $tokoId)
+            ->leftJoin('users', 'users.id', '=', 'tokos.seller_id')
+            ->select(
+                'tokos.*',
+                'users.name as nama_seller',
+                'users.address as alamat_seller',
+                'users.photo as photo_seller',
+                'users.email as email_seller',
+                'users.phone_number',
+                'users.latitude as seller_latitude',
+                'users.longitude as seller_longitude',
+            )->first();
+
+        $kategori = DB::table('produk')
+            ->select('kategori.id', 'kategori.nama_kategori')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+            ->groupBy('kategori.id', 'kategori.nama_kategori')
+            ->where('produk.toko_id', $tokoId)
+            ->get();
+
+        switch ($kategoriId) {
+            case '1':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 1)
+                    ->get();
+                break;
+            case '2':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 2)
+                    ->get();
+                break;
+            case '3':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 3)
+                    ->get();
+                break;
+            case '4':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 4)
+                    ->get();
+                break;
+            case '5':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 5)
+                    ->get();
+                break;
+            case '6':
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->where('produk.kategori_id', 6)
+                    ->get();
+                break;
+
+            default:
+                $produk = Produk::where('produk.toko_id', $tokoId)->get();
+                break;
+        }
+
+
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'detail toko',
+            'data' => [
+                'seller_info' => [
+                    'nama_seller' => $data->nama_seller,
+                    'photo_profile' => $data->photo_seller,
+                    'email' =>  $data->email_seller,
+                ],
+                'toko_info' => [
+                    'deksripsi_toko' => $data->deskripsi,
+                    'alamat_toko' => $data->alamat,
+                    'jam_operasional' => [
+                        'open' => $data->open,
+                        'close' => $data->close
+                    ],
+                    'nomor_telepon' => $data->email_seller,
+                    'status' => 'Online',
+                    'email' => $data->email_seller,
+                    'tanggal_bergabung' => $data->created_at->format('d, M Y'),
+                    'titik_koordinat' => [
+                        'longitude' => $data->longitude,
+                        'latitude' => $data->latitude
+                    ]
+                ],
+                'kategori' => $kategori,
+                'produk' => $produk
+            ]
+        ]);
+    }
 }
