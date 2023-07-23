@@ -16,6 +16,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 1571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -26,6 +27,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 1671005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -36,6 +38,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 2571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -46,6 +49,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 3571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -56,6 +60,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 4571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -66,6 +71,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 5571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
@@ -76,6 +82,7 @@ class TransactionSeeder extends Seeder
         Transaction::create([
             'transaction_code' => 6571005688725,
             'user_id' => 1,
+            'status' => 'Sudah dibayar',
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',

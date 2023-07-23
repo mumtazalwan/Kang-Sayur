@@ -59,7 +59,6 @@ class ReviewController extends Controller
         return response()->json([
             'status' => '200',
             'message' => 'berhasil memberikan penilaian',
-            'path' => $path
         ]);
     }
 }

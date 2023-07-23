@@ -82,7 +82,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -94,7 +94,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -106,7 +106,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -118,7 +118,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 15,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -130,7 +130,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 3,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -144,7 +144,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-02 00:00:00'
             ]
         );
@@ -156,7 +156,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-02 00:00:00'
             ]
         );
@@ -168,7 +168,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-02 00:00:00'
             ]
         );
@@ -180,7 +180,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 16,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-02 00:00:00'
             ]
         );
@@ -192,7 +192,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 4,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-02 00:00:00'
             ]
         );
@@ -206,7 +206,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-03 00:00:00'
             ]
         );
@@ -218,7 +218,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-03 00:00:00'
             ]
         );
@@ -230,7 +230,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-03 00:00:00'
             ]
         );
@@ -242,7 +242,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 16,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-03 00:00:00'
             ]
         );
@@ -254,7 +254,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 4,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-03 00:00:00'
             ]
         );
@@ -267,7 +267,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 1,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
@@ -279,7 +279,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
@@ -291,7 +291,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 2,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
@@ -303,7 +303,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 15,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
@@ -315,7 +315,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 4,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-06-04 00:00:00'
             ]
         );
@@ -329,7 +329,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 15,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-03-04 00:00:00'
             ]
         );
@@ -341,7 +341,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 4,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Selesai',
                 'created_at' => '2023-03-04 00:00:00'
             ]
         );
@@ -355,7 +355,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 15,
                 'store_id' => 2,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Menunggu konfirmasi',
                 'created_at' => '2023-01-04 00:00:00'
             ]
         );
@@ -367,7 +367,7 @@ class OrderSeeder extends Seeder
                 'variant_id' => 16,
                 'store_id' => 1,
                 'user_id' => 1,
-                'status' => 'selesai',
+                'status' => 'Menunggu konfirmasi',
                 'created_at' => '2023-01-04 00:00:00'
             ]
         );
