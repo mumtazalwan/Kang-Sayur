@@ -131,7 +131,13 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 });
 
 // admin
-Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function () {
+Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin'], function () {
+
+    Route::group(['prefix' => '/toko'], function () {
+        Route::get('/search/{keyword}', [TokoController::class, 'search_toko']);
+        Route::get('/list', [TokoController::class, 'all']);
+        Route::get('/detail', [TokoController::class, 'detail_toko_admin']);
+    });
 });
 
 // driver
