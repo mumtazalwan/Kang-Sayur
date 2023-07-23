@@ -22,20 +22,27 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->select('orders.*', 'tokos.*', 'users.name as nama_user', 'users.address as alamat_user', 'users.phone_number', 'users.latitude as user_latitude', 'users.longitude as user_longitude', DB::raw("6371 * acos(cos(radians('users.latitude')) 
+            ->select(
+                'orders.*',
+                'tokos.*',
+                'users.name as nama_user',
+                'users.address as alamat_user',
+                'users.phone_number',
+                'users.latitude as user_latitude',
+                'users.longitude as user_longitude',
+                DB::raw("6371 * acos(cos(radians('users.latitude')) 
             * cos(radians('tokos.latitude')) 
             * cos(radians('tokos.longitude') - radians('users.longitude')) 
             + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir"))
+            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+            )
             ->get();
 
         $data = [];
 
-        // Iterate over the transactions and access the related orders
         foreach ($transactions as $transaction) {
             $relatedOrders = $transaction->statusOrderUser;
 
-            // Add the transaction and its related orders to the data array
             if ($relatedOrders->isNotEmpty()) {
                 $data[] = [
                     'icon' => 'status/toko',
@@ -57,14 +64,12 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
-            } else {
-                $data = [];
             }
         }
 
         return response()->json([
             'status' => '200',
-            'message' => 'List pesanan user',
+            'message' => 'List pesanan',
             'data' => $data
         ]);
     }
@@ -77,16 +82,27 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->select('orders.*', 'tokos.*', 'users.name as nama_user', 'users.address as alamat_user', 'users.phone_number', 'users.latitude as user_latitude', 'users.longitude as user_longitude', DB::raw("6371 * acos(cos(radians('users.latitude')) 
+            ->select(
+                'orders.*',
+                'tokos.*',
+                'users.name as nama_user',
+                'users.address as alamat_user',
+                'users.phone_number',
+                'users.latitude as user_latitude',
+                'users.longitude as user_longitude',
+                DB::raw("6371 * acos(cos(radians('users.latitude')) 
             * cos(radians('tokos.latitude')) 
             * cos(radians('tokos.longitude') - radians('users.longitude')) 
             + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir"))
+            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+            )
             ->get();
+
+        $data = [];
+
         foreach ($transactions as $transaction) {
             $relatedOrders = $transaction->statusPreparedUser;
 
-            // Add the transaction and its related orders to the data array
             if ($relatedOrders->isNotEmpty()) {
                 $data[] = [
                     'icon' => 'status/toko',
@@ -108,8 +124,6 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
-            } else {
-                $data = [];
             }
         }
 
@@ -128,16 +142,27 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->select('orders.*', 'tokos.*', 'users.name as nama_user', 'users.address as alamat_user', 'users.phone_number', 'users.latitude as user_latitude', 'users.longitude as user_longitude', DB::raw("6371 * acos(cos(radians('users.latitude')) 
+            ->select(
+                'orders.*',
+                'tokos.*',
+                'users.name as nama_user',
+                'users.address as alamat_user',
+                'users.phone_number',
+                'users.latitude as user_latitude',
+                'users.longitude as user_longitude',
+                DB::raw("6371 * acos(cos(radians('users.latitude')) 
             * cos(radians('tokos.latitude')) 
             * cos(radians('tokos.longitude') - radians('users.longitude')) 
             + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir"))
+            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+            )
             ->get();
+
+        $data = [];
+
         foreach ($transactions as $transaction) {
             $relatedOrders = $transaction->statusDeliveredUser;
 
-            // Add the transaction and its related orders to the data array
             if ($relatedOrders->isNotEmpty()) {
                 $data[] = [
                     'icon' => 'status/toko',
@@ -159,8 +184,6 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
-            } else {
-                $data = [];
             }
         }
 
@@ -174,22 +197,32 @@ class OrderController extends Controller
     // setatus saat pesanan sudah sampai
     public function barangSampai()
     {
-        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+        $transactions = Transaction::join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->select('orders.*', 'tokos.*', 'users.name as nama_user', 'users.address as alamat_user', 'users.phone_number', 'users.latitude as user_latitude', 'users.longitude as user_longitude', DB::raw("6371 * acos(cos(radians('users.latitude')) 
+            ->select(
+                'orders.*',
+                'tokos.*',
+                'users.name as nama_user',
+                'users.address as alamat_user',
+                'users.phone_number',
+                'users.latitude as user_latitude',
+                'users.longitude as user_longitude',
+                DB::raw("6371 * acos(cos(radians('users.latitude')) 
             * cos(radians('tokos.latitude')) 
             * cos(radians('tokos.longitude') - radians('users.longitude')) 
             + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir"))
+            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+            )
             ->get();
-        // Iterate over the transactions and access the related orders
+
+        $data = [];
+
         foreach ($transactions as $transaction) {
             $relatedOrders = $transaction->statusDoneUser;
 
-            // Add the transaction and its related orders to the data array
             if ($relatedOrders->isNotEmpty()) {
                 $data[] = [
                     'icon' => 'status/toko',
@@ -199,7 +232,7 @@ class OrderController extends Controller
                     'tanggal' => $transaction->created_at->format('d, M Y'),
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
-                    'alamat pengiriman' => [
+                    'alamat_pengiriman' => [
                         'nama_pemesan' => $transaction->nama_user,
                         'nomor_telfon' => $transaction->phone_number,
                         'alamat' => $transaction->alamat_user
@@ -211,11 +244,8 @@ class OrderController extends Controller
                     ],
                     'total' => $relatedOrders->sum('harga_variant')
                 ];
-            } else {
-                $data = [];
             }
         }
-
 
         return response()->json([
             'status' => '200',
