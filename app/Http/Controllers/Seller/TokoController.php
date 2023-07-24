@@ -68,7 +68,10 @@ class TokoController extends Controller
             ->where('produk.toko_id', $tokoId)
             ->get();
 
+        $produk = Produk::where('produk.toko_id', $tokoId)->get();
+
         $detail->category = $kategori;
+        $detail->produk = $produk;
 
         LogVisitor::create([
             'toko_id' => $tokoId,
