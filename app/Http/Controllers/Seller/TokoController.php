@@ -458,7 +458,6 @@ class TokoController extends Controller
     public function detail_toko_admin(Request $request)
     {
         $tokoId = $request->tokoId;
-        $kategoriId = $request->kategoriId;
 
         $data = Toko::where('tokos.id', '=', $tokoId)
             ->leftJoin('users', 'users.id', '=', 'tokos.seller_id')
@@ -479,6 +478,41 @@ class TokoController extends Controller
             ->groupBy('kategori.id', 'kategori.nama_kategori')
             ->where('produk.toko_id', $tokoId)
             ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'detail toko',
+            'data' => [
+                'seller_info' => [
+                    'nama_seller' => $data->nama_seller,
+                    'photo_profile' => $data->photo_seller,
+                    'email' =>  $data->email_seller,
+                ],
+                'toko_info' => [
+                    'deksripsi_toko' => $data->deskripsi,
+                    'alamat_toko' => $data->alamat,
+                    'jam_operasional' => [
+                        'open' => $data->open,
+                        'close' => $data->close
+                    ],
+                    'nomor_telepon' => $data->email_seller,
+                    'status' => 'Online',
+                    'email' => $data->email_seller,
+                    'tanggal_bergabung' => $data->created_at->format('d, M Y'),
+                    'titik_koordinat' => [
+                        'longitude' => $data->longitude,
+                        'latitude' => $data->latitude
+                    ]
+                ],
+                'kategori' => $kategori,
+            ]
+        ]);
+    }
+
+    public function list_produk_toko(Request $request)
+    {
+        $tokoId = $request->tokoId;
+        $kategoriId = $request->kategoriId;
 
         switch ($kategoriId) {
             case '1':
@@ -517,36 +551,10 @@ class TokoController extends Controller
                 break;
         }
 
-
-
         return response()->json([
             'status' => '200',
-            'message' => 'detail toko',
-            'data' => [
-                'seller_info' => [
-                    'nama_seller' => $data->nama_seller,
-                    'photo_profile' => $data->photo_seller,
-                    'email' =>  $data->email_seller,
-                ],
-                'toko_info' => [
-                    'deksripsi_toko' => $data->deskripsi,
-                    'alamat_toko' => $data->alamat,
-                    'jam_operasional' => [
-                        'open' => $data->open,
-                        'close' => $data->close
-                    ],
-                    'nomor_telepon' => $data->email_seller,
-                    'status' => 'Online',
-                    'email' => $data->email_seller,
-                    'tanggal_bergabung' => $data->created_at->format('d, M Y'),
-                    'titik_koordinat' => [
-                        'longitude' => $data->longitude,
-                        'latitude' => $data->latitude
-                    ]
-                ],
-                'kategori' => $kategori,
-                'produk' => $produk
-            ]
+            'message' => 'List produk toko',
+            'produk' => $produk
         ]);
     }
 }

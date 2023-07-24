@@ -137,6 +137,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
         Route::get('/search/{keyword}', [TokoController::class, 'search_toko']);
         Route::get('/list', [TokoController::class, 'all']);
         Route::get('/detail', [TokoController::class, 'detail_toko_admin']);
+        Route::get('/produk', [TokoController::class, 'list_produk_toko']);
     });
 });
 
