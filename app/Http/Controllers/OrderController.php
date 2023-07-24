@@ -30,11 +30,11 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians('users.latitude')) 
-            * cos(radians('tokos.latitude')) 
-            * cos(radians('tokos.longitude') - radians('users.longitude')) 
-            + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+                DB::raw("6371 * acos(cos(radians(users.latitude)) 
+            * cos(radians(tokos.latitude)) 
+            * cos(radians(tokos.longitude) - radians(users.longitude)) 
+            + sin(radians(users.latitude)) 
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
 
@@ -62,7 +62,7 @@ class OrderController extends Controller
                         'total_harga' => $relatedOrders->sum('harga_variant'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant')
+                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
                 ];
             }
         }
@@ -90,11 +90,11 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians('users.latitude')) 
-            * cos(radians('tokos.latitude')) 
-            * cos(radians('tokos.longitude') - radians('users.longitude')) 
-            + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+                DB::raw("6371 * acos(cos(radians(users.latitude)) 
+            * cos(radians(tokos.latitude)) 
+            * cos(radians(tokos.longitude) - radians(users.longitude)) 
+            + sin(radians(users.latitude)) 
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
 
@@ -122,7 +122,7 @@ class OrderController extends Controller
                         'total_harga' => $relatedOrders->sum('harga_variant'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant')
+                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
                 ];
             }
         }
@@ -150,11 +150,11 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians('users.latitude')) 
-            * cos(radians('tokos.latitude')) 
-            * cos(radians('tokos.longitude') - radians('users.longitude')) 
-            + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+                DB::raw("6371 * acos(cos(radians(users.latitude)) 
+            * cos(radians(tokos.latitude)) 
+            * cos(radians(tokos.longitude) - radians(users.longitude)) 
+            + sin(radians(users.latitude)) 
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
 
@@ -182,7 +182,7 @@ class OrderController extends Controller
                         'total_harga' => $relatedOrders->sum('harga_variant'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant')
+                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
                 ];
             }
         }
@@ -210,11 +210,11 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians('users.latitude')) 
-            * cos(radians('tokos.latitude')) 
-            * cos(radians('tokos.longitude') - radians('users.longitude')) 
-            + sin(radians('users.latitude')) 
-            * sin(radians('tokos.latitude'))) * 3000 as ongkir")
+                DB::raw("6371 * acos(cos(radians(users.latitude)) 
+            * cos(radians(tokos.latitude)) 
+            * cos(radians(tokos.longitude) - radians(users.longitude)) 
+            + sin(radians(users.latitude)) 
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
 
@@ -242,7 +242,7 @@ class OrderController extends Controller
                         'total_harga' => $relatedOrders->sum('harga_variant'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant')
+                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
                 ];
             }
         }
