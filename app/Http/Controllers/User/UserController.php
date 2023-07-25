@@ -24,6 +24,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function adminProfile()
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "admin personal information",
+            'data' => $user,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
