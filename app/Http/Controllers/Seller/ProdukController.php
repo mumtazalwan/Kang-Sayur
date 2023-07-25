@@ -91,19 +91,21 @@ class ProdukController extends Controller
             $variant_img = $key['images'];
 
             // store photo
-            $timestamp = time();
-            $photoName = $timestamp . $variant_img->getClientOriginalName();
-            $path = '/user_profile/' . $photoName;
-            Storage::disk('public')->put($path, file_get_contents($variant_img));
+            if ($variant_img) {
+                $timestamp = time();
+                $photoName = $timestamp . $variant_img->getClientOriginalName();
+                $path = '/user_profile/' . $photoName;
+                Storage::disk('public')->put($path, file_get_contents($variant_img));
 
-            $data = Variant::create([
-                'product_id' => $produk->id,
-                'variant' => $key['variant'],
-                'variant_desc' => $key['variant'],
-                'stok' => $key['stok'],
-                'variant_img' => '/storage' . $path,
-                'harga_variant' => $key['harga_variant']
-            ]);
+                $data = Variant::create([
+                    'product_id' => $produk->id,
+                    'variant' => $key['variant'],
+                    'variant_desc' => $key['variant'],
+                    'stok' => $key['stok'],
+                    'variant_img' => '/storage' . $path,
+                    'harga_variant' => $key['harga_variant']
+                ]);
+            }
         }
 
         return response()->json([
