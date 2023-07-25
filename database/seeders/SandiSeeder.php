@@ -27,7 +27,7 @@ class SandiSeeder extends Seeder
 
         Sandi::create([
             'id' => 3,
-            'password' => '$2y$10$XljUun4ceDiQXDSSbhxBke9yt8SaYmPq4fKO62.mGW7X/30AmnSh6',
+            'password' => '$2y$10$jhmJ7TAAlYVd7qKWKxBwkO8sGGFWg1SPweLM5Qg7Nzew8y4cGuka6',
             'new_password' => '',
         ]);
 

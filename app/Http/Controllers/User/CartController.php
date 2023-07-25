@@ -195,4 +195,28 @@ class CartController extends Controller
             $produk->toQuery()->update(array("status" => "true"));
         }
     }
+
+    public function selected()
+    {
+        $user = Auth::user();
+        $subtotal = Cart::where('user_id', $user->id)
+            ->where('status', 'true')
+            ->join('variants', 'variants.id', '=', 'carts.variant_id')
+            ->select(DB::raw('SUM(variants.harga_variant) as subtotal'))
+            ->first();
+
+        if ($subtotal) {
+            return response()->json([
+                'status' => '200',
+                'message' => 'subtotal cart yang dipilih',
+                'subtotal' => $subtotal->subtotal
+            ]);
+        } else {
+            return response()->json([
+                'status' => '200',
+                'message' => 'subtotal cart yang dipilih',
+                'subtotal' => 0
+            ]);
+        }
+    }
 }

@@ -150,4 +150,21 @@ class Transaction extends Model
             ->groupBy('variants.id')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
+
+    // Driver
+
+    public function statusSiapDiantar()
+    {
+        $idUser = Auth::user();
+
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('store_id', $this->store_id)
+
+            ->where('orders.status', 'Selesai')
+            // ->where('orders.user_id', $idUser->id)
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->groupBy('variants.id')
+            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    }
 }
