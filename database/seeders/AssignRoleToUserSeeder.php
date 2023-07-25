@@ -18,13 +18,17 @@ class AssignRoleToUserSeeder extends Seeder
     {
         $findUser = User::findOrFail(1);
         $findUser2 = User::findOrFail(2);
-        $findUser3 = User::findOrFail(3); 
-                  
+        $findUser3 = User::findOrFail(3);
+        $findUser4 = User::findOrFail(3);
+
         $role = Role::findOrFail(1);
         $role2 = Role::findOrFail(2);
-        
+        $role3 = Role::findOrFail(3);
+        $role4 = Role::findOrFail(4);
+
         $findUser->assignRole([$role]);
         $findUser2->assignRole([$role2]);
-        $findUser3->assignRole([$role]);
+        $findUser3->assignRole([$role3]);
+        $findUser4->assignRole([$role4]);
     }
 }

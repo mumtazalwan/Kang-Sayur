@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Alwan',
-            'photo' => '/storage/user_profile/1684847191asa.jpg',
+            'photo' => '/storage/user_profile/alwan.jpg',
             'email' => 'alwan123@gmail.com',
             'sandi_id' => 1,
             'jenis_kelamin' => 1,
@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Akbar',
+            'photo' => '/storage/user_profile/akbar.jpg',
             'email' => 'akbar123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
@@ -34,6 +35,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Niebel',
+            'photo' => '/storage/user_profile/niebel.jpg',
             'email' => 'niebel123@gmail.com',
             'sandi_id' => 3,
             'jenis_kelamin' => 1,
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Joko',
+            'photo' => '/storage/user_profile/1684847191asa.jpg',
             'email' => 'joko123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
@@ -50,6 +53,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Nunik',
+            'photo' => '/storage/user_profile/1684847191asa.jpg',
             'email' => 'nunik123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,

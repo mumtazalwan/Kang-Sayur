@@ -14,6 +14,7 @@ use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ProductAdvertisingController;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/checkout', [CartController::class, 'checkout']);
         Route::post('/pesan', [OrderController::class, 'store']);
         Route::get('/updateStatus', [CartController::class, 'updateStatus']);
+        Route::get('/total/selected', [CartController::class, 'selected']);
     });
 
     // order
@@ -145,4 +147,8 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 
 // driver
 Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driver'], function () {
+
+    Route::group(['prefix' => '/order'], function () {
+        Route::get('/list', [OrderController::class, 'readyToPickedUp']);
+    });
 });

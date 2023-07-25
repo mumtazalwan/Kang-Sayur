@@ -440,7 +440,6 @@ class TokoController extends Controller
             ->leftJoin('users', 'users.id', '=', 'tokos.seller_id')
             ->select(
                 'tokos.id',
-                'tokos.id',
                 'tokos.img_profile',
                 'tokos.nama_toko',
                 'users.name as nama_pemilik',

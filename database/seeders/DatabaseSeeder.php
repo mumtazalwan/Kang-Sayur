@@ -37,7 +37,8 @@ class DatabaseSeeder extends Seeder
             CartSeeder::class,
             OrderSeeder::class,
             TransactionSeeder::class,
-            VariantSeeder::class
+            VariantSeeder::class,
+            KendaraanSeeder::class
         ]);
     }
 }
