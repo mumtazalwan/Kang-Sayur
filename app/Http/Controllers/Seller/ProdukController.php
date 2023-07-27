@@ -42,7 +42,7 @@ class ProdukController extends Controller
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->groupBy('produk.id')
-            ->select('produk.id', 'tokos.nama_toko', 'produk.nama_produk', 'variants.variant')
+            ->select('produk.id', 'tokos.nama_toko', 'produk.nama_produk', 'variants.variant', 'variants.variant_img as image', 'variants.harga_variant as harga')
             ->get();
 
         if (count($data)) {
@@ -92,19 +92,21 @@ class ProdukController extends Controller
 
             // store photo
             if ($variant_img) {
-                $timestamp = time();
-                $photoName = $timestamp . $variant_img->getClientOriginalName();
-                $path = '/user_profile/' . $photoName;
-                Storage::disk('public')->put($path, file_get_contents($variant_img));
+                foreach ($variant_img as $variant_imgs) {
+                    $timestamp = time();
+                    $photoName = $timestamp . $variant_imgs->getClientOriginalName();
+                    $path = '/user_profile/' . $photoName;
+                    Storage::disk('public')->put($path, file_get_contents($variant_imgs));
 
-                $data = Variant::create([
-                    'product_id' => $produk->id,
-                    'variant' => $key['variant'],
-                    'variant_desc' => $key['variant'],
-                    'stok' => $key['stok'],
-                    'variant_img' => '/storage' . $path,
-                    'harga_variant' => $key['harga_variant']
-                ]);
+                    $data = Variant::create([
+                        'product_id' => $produk->id,
+                        'variant' => $key['variant'],
+                        'variant_desc' => $key['variant'],
+                        'stok' => $key['stok'],
+                        'variant_img' => '/storage' . $path,
+                        'harga_variant' => $key['harga_variant']
+                    ]);
+                }
             }
         }
 
@@ -142,11 +144,18 @@ class ProdukController extends Controller
     {
         $produkId = $request->produkId;
 
-        $data = Produk::with(['variant', 'review'])->where('produk.id', $produkId)
+        $data = Produk::where('produk.id', $produkId)
+            ->with(['variant', 'review'])
+            ->join('tokos', 'tokos.id', '=', 'toko_id')
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
-            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->first();
+
+        $appendImg = Variant::where('variants.product_id', $produkId)->value('variant_img');
+        $appendHarga = Variant::where('variants.product_id', $produkId)->value('harga_variant');
+
+        $data->image = $appendImg;
+        $data->harga = $appendHarga;
 
         LogVisitor::create([
             'product_id' => $produkId,
@@ -180,15 +189,15 @@ class ProdukController extends Controller
         $kategoriId = $request->kategoriId;
         $user = Auth::user();
 
-        $data =  DB::table('produk')
+        $data = DB::table('produk')
             ->select(
                 'produk.id',
                 'produk.nama_produk',
                 'tokos.alamat',
-                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-                * cos(radians(tokos.latitude)) 
-                * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-                + sin(radians(" . $user->latitude . ")) 
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                * cos(radians(tokos.latitude))
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                + sin(radians(" . $user->latitude . "))
                 * sin(radians(tokos.latitude))) AS distance"),
                 'variants.variant_img',
                 'variants.harga_variant',
