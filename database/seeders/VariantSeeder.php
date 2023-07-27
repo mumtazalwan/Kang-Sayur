@@ -36,6 +36,7 @@ class VariantSeeder extends Seeder
         Variant::create([
             'product_id' => 2,
             'variant' => '500gr',
+            'variant_img' => '/storage/user_profile/seladamuda500g.jpg',
             'variant_desc' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
             'harga_variant' => 5000,
             'stok' => 10
@@ -44,6 +45,7 @@ class VariantSeeder extends Seeder
         Variant::create([
             'product_id' => 2,
             'variant' => '800gr',
+            'variant_img' => '/storage/user_profile/seladamuda800g.jpg',
             'variant_desc' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
             'harga_variant' => 8000,
             'stok' => 10
@@ -68,7 +70,7 @@ class VariantSeeder extends Seeder
             'stok' => 10
         ]);
 
-        // sawi muda 
+        // sawi muda
         Variant::create([
             'product_id' => 4,
             'variant' => '500gr',
