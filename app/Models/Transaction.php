@@ -95,7 +95,7 @@ class Transaction extends Model
             ->where('orders.status', 'Menunggu konfirmasi')
             ->where('orders.store_id', $tokoId)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
+            ->groupBy('variants.id', 'transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
@@ -108,7 +108,7 @@ class Transaction extends Model
             ->where('orders.status', 'Sedang disiapkan')
             ->where('orders.store_id', $tokoId)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
+            ->groupBy('variants.id', 'transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
@@ -121,7 +121,7 @@ class Transaction extends Model
             ->where('orders.status', 'Menunggu driver')
             ->where('orders.store_id', $tokoId)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
+            ->groupBy('variants.id', 'transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
@@ -134,7 +134,7 @@ class Transaction extends Model
             ->where('orders.status', 'Sedang diantar')
             ->where('orders.store_id', $tokoId)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
+            ->groupBy('variants.id', 'transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
@@ -147,7 +147,7 @@ class Transaction extends Model
             ->where('orders.status', 'Selesai')
             ->where('orders.store_id', $tokoId)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
-            ->groupBy('variants.id')
+            ->groupBy('variants.id', 'transaction_code')
             ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
