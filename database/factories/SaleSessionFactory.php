@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\SaleSession;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SaleSession>
+ * @extends Factory<SaleSession>
  */
 class SaleSessionFactory extends Factory
 {

@@ -9,6 +9,8 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class OrderController extends Controller
 {
@@ -30,10 +32,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude)) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(users.longitude)) 
-            + sin(radians(users.latitude)) 
+                DB::raw("6371 * acos(cos(radians(users.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(users.longitude))
+            + sin(radians(users.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -90,10 +92,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude)) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(users.longitude)) 
-            + sin(radians(users.latitude)) 
+                DB::raw("6371 * acos(cos(radians(users.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(users.longitude))
+            + sin(radians(users.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -150,10 +152,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude)) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(users.longitude)) 
-            + sin(radians(users.latitude)) 
+                DB::raw("6371 * acos(cos(radians(users.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(users.longitude))
+            + sin(radians(users.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -210,10 +212,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude)) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(users.longitude)) 
-            + sin(radians(users.latitude)) 
+                DB::raw("6371 * acos(cos(radians(users.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(users.longitude))
+            + sin(radians(users.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -332,7 +334,7 @@ class OrderController extends Controller
         }
     }
 
-    // status order saat menunggu driver 
+    // status order saat menunggu driver
     public function menunggu_driver()
     {
         $data = Transaction::with('statusReadyDelivered')
@@ -400,13 +402,13 @@ class OrderController extends Controller
         }
 
         // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        Config::$serverKey = config('midtrans.server_key');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
+        Config::$isProduction = false;
         // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
+        Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
+        Config::$is3ds = true;
 
         $grossAmount = DB::table('orders')
             ->join('variants', 'variants.id', 'orders.variant_id')
@@ -434,7 +436,7 @@ class OrderController extends Controller
             ),
         );
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        $snapToken = Snap::getSnapToken($params);
 
         Transaction::create([
             'transaction_code' => $code,
@@ -491,10 +493,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude)) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(users.longitude)) 
-            + sin(radians(users.latitude)) 
+                DB::raw("6371 * acos(cos(radians(users.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(users.longitude))
+            + sin(radians(users.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();

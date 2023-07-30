@@ -2,17 +2,13 @@
 
 namespace App\Events;
 
-use App\Models\Order;
-use App\Models\Toko;
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderTracking implements ShouldBroadcast
 {
@@ -36,25 +32,45 @@ class OrderTracking implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return PrivateChannel
+     * @return array<int, Channel>
      */
-    public function broadcastOn(): PrivateChannel
+    public function broadcastOn(): array
     {
-        $userId = Auth::user();
-//        $userOrder = Order::where('transaction_code', $transaction_code->id);
-        return new PrivateChannel('delivery.' . $userId);
+        return [
+            new Channel('delivery.' . $this->transaction_code),
+        ];
     }
 
     public function broadcastWith()
     {
-        return [
-            'lat' => $this->lat,
-            'long' => $this->long
-        ];
-    }
+        $userCoordinate = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->where('orders.transaction_code', $this->transaction_code)->first();
 
-//    public function broadcastAs()
-//    {
-//        return "updateLoc";
-//    }
+        $distance = DB::table('orders')
+            ->select(
+                DB::raw("6371 * acos(cos(radians(" . $userCoordinate->latitude . "))
+            * cos(radians(" . $this->lat . "))
+            * cos(radians(" . $this->long . ") - radians(" . $userCoordinate->longitude . "))
+            + sin(radians(" . $userCoordinate->latitude . "))
+            * sin(radians(" . $this->lat . "))) as distance"))->value('distance');
+
+        if ($distance < 0.05) {
+            return [
+                'lat' => $this->lat,
+                'long' => $this->long,
+                'distance' => $distance,
+                'delivered' => true
+            ];
+        } else {
+            return [
+                'lat' => $this->lat,
+                'long' => $this->long,
+                'distance' => $distance,
+                'delivered' => false
+            ];
+        }
+
+
+    }
 }

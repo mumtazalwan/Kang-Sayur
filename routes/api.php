@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Delivery;
 use Illuminate\Http\Request;
 
 // controller
@@ -96,7 +97,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/selesai', [OrderController::class, 'barangSampai']);
     });
 
-    //ulasan 
+    //ulasan
     Route::post('/ulasan', [ReviewController::class, 'review']);
 });
 
@@ -150,5 +151,8 @@ Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driv
 
     Route::group(['prefix' => '/order'], function () {
         Route::get('/list', [OrderController::class, 'readyToPickedUp']);
+        Route::put('/antar', [Delivery::class, 'takeOrder']);
+        Route::get('/updateLoc', [Delivery::class, 'updateLoc']);
+        Route::put('/update/status', [Delivery::class, 'finishOrder']);
     });
 });
