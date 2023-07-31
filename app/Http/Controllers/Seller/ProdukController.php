@@ -144,6 +144,8 @@ class ProdukController extends Controller
     {
         $produkId = $request->produkId;
 
+        $tokoId = Produk::where('id', $produkId)->value('toko_id');
+
         $data = Produk::where('produk.id', $produkId)
             ->with(['variant', 'review'])
             ->join('tokos', 'tokos.id', '=', 'toko_id')
@@ -161,6 +163,9 @@ class ProdukController extends Controller
             'product_id' => $produkId,
             'user_id' => Auth::user()->id,
         ]);
+
+        $produksStore = Produk::where('toko_id', $tokoId)->get();
+        $data->toko_ini = $produksStore;
 
         return response()->json([
             'status_code' => '200',
