@@ -73,4 +73,9 @@ class OrderTracking implements ShouldBroadcast
 
 
     }
+
+    public function broadcastAs()
+    {
+        return "updateLoc";
+    }
 }
