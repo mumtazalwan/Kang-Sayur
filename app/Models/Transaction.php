@@ -160,8 +160,7 @@ class Transaction extends Model
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
 
-            ->where('orders.status', 'Selesai')
-            // ->where('orders.user_id', $idUser->id)
+            ->where('orders.status', 'Menunggu driver')
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
