@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Toko;
@@ -177,6 +178,8 @@ class OrderController extends Controller
                     'alamat pengiriman' => [
                         'nama_pemesan' => $transaction->nama_user,
                         'nomor_telfon' => $transaction->phone_number,
+                        'user_lat' => $transaction->user_latitude,
+                        'user_long' => $transaction->user_longitude,
                         'alamat' => $transaction->alamat_user
                     ],
                     'barang_pesanan' => $relatedOrders,
@@ -447,9 +450,15 @@ class OrderController extends Controller
             'client_key' => config('midtrans.client_key')
         ]);
 
+        $deleteCart = Cart::where('status', 'true')
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
+        $deleteCart->toQuery()->delete();
+
         return response()->json([
             'status' => 'succes',
-            'data'  => [
+            'data' => [
                 'snap_token' => $snapToken,
                 'clinet_key' => config('midtrans.client_key')
             ]
@@ -512,6 +521,8 @@ class OrderController extends Controller
                     'nama_pemesan' => $transaction->nama_user,
                     'nomor_telfon' => $transaction->phone_number,
                     'alamat' => $transaction->alamat_user,
+                    'user_lat' => $transaction->user_latitude,
+                    'user_long' => $transaction->user_longitude,
                     'user_id' => $transaction->user_id,
                     'dipesan' => $transaction->created_at->format('d, M Y'),
                     'barang_pesanan' => $relatedOrders,

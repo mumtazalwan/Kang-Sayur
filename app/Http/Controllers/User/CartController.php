@@ -18,7 +18,7 @@ class CartController extends Controller
 
         $list = Toko::with('getProductCart')
             ->whereHas('getProductCart')
-            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko'])
+            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko', 'tokos.alamat as alamat_toko'])
             ->get();
 
         return response()->json([
@@ -132,10 +132,10 @@ class CartController extends Controller
             ->join('carts', 'carts.variant_id', 'variants.id')
             ->whereHas('getProdukCheckout')
             ->where('carts.status', 'true')
-            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko', DB::raw('sum(variants.harga_variant) as total'), DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            + sin(radians(" . $user->latitude . ")) 
+            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko', DB::raw('sum(variants.harga_variant) as total'), DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")])
             ->groupBy(['tokos.id', 'carts.status'])
             ->get();
@@ -155,10 +155,10 @@ class CartController extends Controller
             ->join('variants', 'variants.product_id', 'produk.id')
             ->join('carts', 'carts.variant_id', 'variants.id')
             ->where('carts.status', 'true')
-            ->select([DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            + sin(radians(" . $user->latitude . ")) 
+            ->select([DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")])
             ->groupBy(['tokos.id', 'carts.status'])
             ->get();
