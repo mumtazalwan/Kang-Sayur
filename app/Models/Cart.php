@@ -20,6 +20,7 @@ class Cart extends Model
         'produk_id',
         'user_id',
         'toko_id',
-        'variant_id'
+        'variant_id',
+        'status'
     ];
 }

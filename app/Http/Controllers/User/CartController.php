@@ -66,14 +66,26 @@ class CartController extends Controller
             ->first();
 
         if ($customInpt > $currentProduct->inCart) {
-
-            for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
-                Cart::create([
-                    'user_id' => $user->id,
-                    'produk_id' => $produkId,
-                    'variant_id' => $variantId,
-                    'toko_id' => $tokoId
-                ]);
+            if (!($currentProduct->status != true)) {
+                for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
+                    Cart::create([
+                        'user_id' => $user->id,
+                        'produk_id' => $produkId,
+                        'variant_id' => $variantId,
+                        'toko_id' => $tokoId,
+                        'status' => 'true',
+                    ]);
+                }
+            } else {
+                for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
+                    Cart::create([
+                        'user_id' => $user->id,
+                        'produk_id' => $produkId,
+                        'variant_id' => $variantId,
+                        'toko_id' => $tokoId,
+                        'status' => 'true',
+                    ]);
+                }
             }
 
             return response()->json([
