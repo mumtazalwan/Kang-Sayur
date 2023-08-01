@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'sandi_id' => 1,
             'jenis_kelamin' => 1,
             'tanggal_lahir' => '2006-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
             'longitude' => 110.842843,
             'latitude' => -6.753808
         ]);
@@ -30,7 +31,10 @@ class UserSeeder extends Seeder
             'email' => 'akbar123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
-            'tanggal_lahir' => '2006-03-10'
+            'tanggal_lahir' => '2006-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808
         ]);
 
         User::create([
@@ -39,7 +43,10 @@ class UserSeeder extends Seeder
             'email' => 'niebel123@gmail.com',
             'sandi_id' => 3,
             'jenis_kelamin' => 1,
-            'tanggal_lahir' => '2005-03-10'
+            'tanggal_lahir' => '2005-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808
         ]);
 
         User::create([
@@ -48,7 +55,10 @@ class UserSeeder extends Seeder
             'email' => 'joko123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
-            'tanggal_lahir' => '2006-03-10'
+            'tanggal_lahir' => '2006-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808
         ]);
 
         User::create([
@@ -57,7 +67,10 @@ class UserSeeder extends Seeder
             'email' => 'nunik123@gmail.com',
             'sandi_id' => 2,
             'jenis_kelamin' => 1,
-            'tanggal_lahir' => '2006-03-10'
+            'tanggal_lahir' => '2006-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808
         ]);
     }
 }

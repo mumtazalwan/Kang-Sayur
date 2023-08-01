@@ -276,14 +276,6 @@ class OrderController extends Controller
             ->whereHas('statusOrder')
             ->where('transactions.status', 'Sudah dibayar')
             ->orderBy('transactions.created_at', "DESC")
-//            ->select(['transactions.id as id',
-//                'transactions.transaction_code as transaction_code',
-//                'transactions.user_id as user_id',
-//                'transactions.payment_method as payment_method',
-//                'transactions.transaction_token as transaction_token',
-//                'transactions.client_key as client_key',
-//                'transactions.notes as notes',
-//                'transactions.status as status',])
             ->get();
 
         return response()->json([
@@ -415,6 +407,8 @@ class OrderController extends Controller
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->first();
         $code = fake()->unique()->numberBetween(100, 999);
 
+        $total_keseluruhan = $request->total_keseluruhan;
+
         foreach ($checkout as $key) {
             Order::create([
                 'transaction_code' => $code,
@@ -434,11 +428,14 @@ class OrderController extends Controller
         // Set 3DS transaction for credit card to true
         Config::$is3ds = true;
 
-        $grossAmount = DB::table('orders')
-            ->join('variants', 'variants.id', 'orders.variant_id')
-            ->where('transaction_code', $code)
-            ->select(DB::raw('sum(variants.harga_variant) as gross_amount'))
-            ->value('gross_amount');
+//        $grossAmount = DB::table('orders')
+//            ->join('variants', 'variants.id', 'orders.variant_id')
+//            ->join('carts', 'carts.variant_id', '=', 'variants.id')
+//            ->where('carts.status', 'true')
+//            ->where('carts.user_id', $dataUser->id)
+//            ->where('transaction_code', $code)
+//            ->select(DB::raw('sum(variants.harga_variant) as gross_amount'))
+//            ->value('gross_amount');
 
         $qty = DB::table('orders')
             ->where('transaction_code', $code)
@@ -448,7 +445,7 @@ class OrderController extends Controller
         $params = array(
             'transaction_details' => array(
                 'order_id' => $code,
-                'gross_amount' => $grossAmount,
+                'gross_amount' => $total_keseluruhan,
             ),
             'customer_details' => array(
                 'first_name' => $dataUser->name,
@@ -456,7 +453,7 @@ class OrderController extends Controller
                 'address' => $dataUser->address,
                 'phone' => $dataUser->phone_number,
                 'qty' => $qty,
-                'total_price' => $grossAmount
+                'total_price' => $total_keseluruhan
             ),
         );
 
