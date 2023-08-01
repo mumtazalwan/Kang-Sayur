@@ -25,6 +25,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
+            ->orderBy('transactions.created_at',  "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -85,6 +86,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
+            ->orderBy('transactions.created_at',  "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -145,6 +147,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
+            ->orderBy('transactions.created_at',  "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -207,6 +210,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
+            ->orderBy('transactions.created_at',  "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -267,6 +271,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusOrder')
             ->whereHas('statusOrder')
             ->where('transactions.status', 'Sudah dibayar')
+            ->orderBy('transactions.created_at',  "DESC")
             ->get();
 
         return response()->json([
@@ -305,6 +310,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusPrepared')
             ->whereHas('statusPrepared')
             ->where('transactions.status', 'Sudah dibayar')
+            ->orderBy('transactions.created_at',  "DESC")
             ->get();
 
         return response()->json([
@@ -343,6 +349,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusReadyDelivered')
             ->whereHas('statusReadyDelivered')
             ->where('transactions.status', 'Sudah dibayar')
+            ->orderBy('transactions.created_at',  "DESC")
             ->get();
 
         return response()->json([
@@ -358,6 +365,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusDelivered')
             ->whereHas('statusDelivered')
             ->where('transactions.status', 'Sudah dibayar')
+            ->orderBy('transactions.created_at',  "DESC")
             ->get();
 
         return response()->json([
@@ -373,6 +381,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusDone')
             ->whereHas('statusDone')
             ->where('transactions.status', 'Sudah dibayar')
+            ->orderBy('transactions.created_at',  "DESC")
             ->get();
 
         return response()->json([
@@ -483,7 +492,6 @@ class OrderController extends Controller
     }
 
     // driver
-
     public function readyToPickedUp()
     {
         $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
@@ -492,6 +500,7 @@ class OrderController extends Controller
             ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
+            ->orderBy('transactions.created_at',  "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',

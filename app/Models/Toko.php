@@ -50,7 +50,8 @@ class Toko extends Model
                     DB::raw('COUNT(produk_id) as inCart')
                 ]
             )
-            ->groupBy('carts.produk_id', 'variant_id');
+            ->groupBy('carts.produk_id', 'variant_id')
+            ->orderBy('carts.created_at',  "DESC");
     }
 
     public function getProdukCheckout()
@@ -79,7 +80,8 @@ class Toko extends Model
                 ]
             )
             ->where('status', 'true')
-            ->groupBy('carts.produk_id', 'variant_id');
+            ->groupBy('carts.produk_id', 'variant_id')
+            ->orderBy('carts.created_at',  "DESC");
 
         return $data;
     }
