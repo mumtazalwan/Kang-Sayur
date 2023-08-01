@@ -143,7 +143,7 @@ class ProdukController extends Controller
     public function detail_produk(Request $request)
     {
         $produkId = $request->produkId;
-
+        $user = Auth::user();
         $tokoId = Produk::where('id', $produkId)->value('toko_id');
 
         $data = Produk::where('produk.id', $produkId)
@@ -164,7 +164,18 @@ class ProdukController extends Controller
             'user_id' => Auth::user()->id,
         ]);
 
-        $produksStore = Produk::where('toko_id', $tokoId)->get();
+        $produksStore = Produk::join('tokos', 'tokos.id', '=', 'toko_id')
+            ->where('produk.toko_id', $tokoId)
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->whereNotIn('produk.id', [$produkId])
+            ->select('produk.*', 'tokos.*', DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
+            * sin(radians(tokos.latitude))) as distance"))
+            ->get();
+
         $data->toko_ini = $produksStore;
 
         return response()->json([
