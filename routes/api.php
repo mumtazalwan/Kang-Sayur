@@ -138,6 +138,8 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 
     Route::get('/profile', [UserController::class, 'adminProfile']);
 
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard']);
+
     Route::group(['prefix' => '/toko'], function () {
         Route::get('/search/{keyword}', [TokoController::class, 'search_toko']);
         Route::get('/list', [TokoController::class, 'all']);
