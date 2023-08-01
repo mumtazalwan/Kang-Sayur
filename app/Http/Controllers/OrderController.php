@@ -25,7 +25,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -34,6 +34,7 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
+                'orders.created_at as order_date',
                 DB::raw("6371 * acos(cos(radians(users.latitude))
             * cos(radians(tokos.latitude))
             * cos(radians(tokos.longitude) - radians(users.longitude))
@@ -53,7 +54,7 @@ class OrderController extends Controller
                     'nama_toko' => $transaction->nama_toko,
                     'profil_toko' => $transaction->img_profile,
                     'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'tanggal' => $transaction->order_date,
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
@@ -86,7 +87,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -95,6 +96,7 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
+                'orders.created_at as order_date',
                 DB::raw("6371 * acos(cos(radians(users.latitude))
             * cos(radians(tokos.latitude))
             * cos(radians(tokos.longitude) - radians(users.longitude))
@@ -114,7 +116,7 @@ class OrderController extends Controller
                     'nama_toko' => $transaction->nama_toko,
                     'profil_toko' => $transaction->img_profile,
                     'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'tanggal' => $transaction->order_date,
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
@@ -147,7 +149,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -156,6 +158,7 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
+                'orders.created_at as order_date',
                 DB::raw("6371 * acos(cos(radians(users.latitude))
             * cos(radians(tokos.latitude))
             * cos(radians(tokos.longitude) - radians(users.longitude))
@@ -175,7 +178,7 @@ class OrderController extends Controller
                     'nama_toko' => $transaction->nama_toko,
                     'profil_toko' => $transaction->img_profile,
                     'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'tanggal' => $transaction->order_date,
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
@@ -210,7 +213,7 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
@@ -219,6 +222,7 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
+                'orders.created_at as order_date',
                 DB::raw("6371 * acos(cos(radians(users.latitude))
             * cos(radians(tokos.latitude))
             * cos(radians(tokos.longitude) - radians(users.longitude))
@@ -238,7 +242,7 @@ class OrderController extends Controller
                     'nama_toko' => $transaction->nama_toko,
                     'profil_toko' => $transaction->img_profile,
                     'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->created_at->format('d, M Y'),
+                    'tanggal' => $transaction->order_date,
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat_pengiriman' => [
@@ -271,7 +275,15 @@ class OrderController extends Controller
         $data = Transaction::with('statusOrder')
             ->whereHas('statusOrder')
             ->where('transactions.status', 'Sudah dibayar')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
+//            ->select(['transactions.id as id',
+//                'transactions.transaction_code as transaction_code',
+//                'transactions.user_id as user_id',
+//                'transactions.payment_method as payment_method',
+//                'transactions.transaction_token as transaction_token',
+//                'transactions.client_key as client_key',
+//                'transactions.notes as notes',
+//                'transactions.status as status',])
             ->get();
 
         return response()->json([
@@ -310,7 +322,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusPrepared')
             ->whereHas('statusPrepared')
             ->where('transactions.status', 'Sudah dibayar')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->get();
 
         return response()->json([
@@ -349,7 +361,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusReadyDelivered')
             ->whereHas('statusReadyDelivered')
             ->where('transactions.status', 'Sudah dibayar')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->get();
 
         return response()->json([
@@ -365,7 +377,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusDelivered')
             ->whereHas('statusDelivered')
             ->where('transactions.status', 'Sudah dibayar')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->get();
 
         return response()->json([
@@ -381,7 +393,7 @@ class OrderController extends Controller
         $data = Transaction::with('statusDone')
             ->whereHas('statusDone')
             ->where('transactions.status', 'Sudah dibayar')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->get();
 
         return response()->json([
@@ -500,7 +512,7 @@ class OrderController extends Controller
             ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at',  "DESC")
+            ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
