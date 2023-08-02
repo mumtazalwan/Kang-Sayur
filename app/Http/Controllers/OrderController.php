@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Toko;
 use App\Models\Transaction;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -496,6 +497,20 @@ class OrderController extends Controller
 
                 $dataTransaction->toQuery()->update(array("status" => 'Sudah dibayar'));
                 $dataOrder->toQuery()->update(array("status" => 'Menunggu konfirmasi'));
+
+                // delete stock after payment
+//                $dataDelete = Variant::join('orders', 'orders.variant_id', '=', 'variants.id')
+//                    ->where('orders.transaction_code', $request->order_id)
+//                    ->select('variants.id',
+//                        DB::raw('(SELECT COUNT(variant_id) FROM orders WHERE variant_id = variants.id) as variant_count'))
+//                    ->get();
+//
+//                foreach ($dataDelete as $delete) {
+//                    $result = $delete->stok - 1;
+//                    DB::table('variants')
+//                        ->where('id', $delete->id)
+//                        ->update(['stok' => 1]);
+//                }
             }
         }
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Delivery;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,6 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
-
     // produk
     Route::get('/produk/all', [ProdukController::class, 'index']);
 
@@ -131,14 +131,15 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
         Route::get('/kategori-toko', [ProductAdvertisingController::class, 'kategori']);
         Route::post('/add', [ProductAdvertisingController::class, 'add']);
     });
+
+    Route::post('/register/driver', [AuthenticationController::class, 'registerAsDriver']);
 });
 
 // admin
 Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin'], function () {
-
     Route::get('/profile', [UserController::class, 'adminProfile']);
 
-    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
     Route::group(['prefix' => '/toko'], function () {
         Route::get('/search/{keyword}', [TokoController::class, 'search_toko']);
@@ -150,6 +151,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 
 // driver
 Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driver'], function () {
+    Route::get('/profile', [\App\Http\Controllers\Driver\DriverController::class, 'driverInfo']);
 
     Route::group(['prefix' => '/order'], function () {
         Route::get('/list', [OrderController::class, 'readyToPickedUp']);

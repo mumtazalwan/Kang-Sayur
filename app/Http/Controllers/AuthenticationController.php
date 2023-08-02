@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kendaraan;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Sandi;
 use App\Models\Toko;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
@@ -207,14 +210,26 @@ class AuthenticationController extends Controller
     public function registerAsDriver(Request $request)
     {
         $request->validate([
+            // user
             'name' => 'required|string',
+            'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'phone_number' => 'required|numeric|digits:11',
             'email' => 'required|email',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
+
+            // kendaraan
+            'noTelfon_cadangan' => 'required|numeric|digits:11',
+            'jenis_kendaraan' => 'required',
+            'nomor_polisi' => 'required',
+            'nomor_rangka' => 'required',
+            'photo_ktp' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'photo_kk' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'photo_kendaraan' => 'file|image|mimes:png,jpg,jpeg|max:3048',
         ]);
 
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
         $alrTaken = User::where('email', $request->email)->first();
-
-        $sandiId = mt_rand(1000000000, 9999999999);
 
         if ($alrTaken) {
             return response()->json([
@@ -222,26 +237,97 @@ class AuthenticationController extends Controller
             ]);
         } else {
 
+            // create sandi
+            $sandiId = mt_rand(1000000, 9999999);
             $sandi = Sandi::create([
                 'id' => $sandiId,
                 'password' => Hash::make(request('password'))
             ]);
 
-            $user = User::create([
-                'name' => request('name'),
-                'email' => request('email'),
-                'sandi_id' => $sandiId
-            ]);
+            if ($request->photo) {
+                // store photo
+                $timestamp = time();
+                $photoName = $timestamp . $request->photo->getClientOriginalName();
+                $path = '/user_profile/' . $photoName;
+                Storage::disk('public')->put($path, file_get_contents($request->photo));
 
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'photo' => '/storage' . $path,
+                    'phone_number' => request('phone_number'),
+                    'email' => request('email'),
+                    'sandi_id' => $sandiId
+                ]);
+
+                // store photo ktp
+                $timestamp = time();
+                $photoNameKtp = $timestamp . $request->photo_ktp->getClientOriginalName();
+                $pathKtp = '/user_profile/' . $photoNameKtp;
+                Storage::disk('public')->put($pathKtp, file_get_contents($request->photo_ktp));
+
+                // store photo kk
+                $timestamp = time();
+                $photoNameKk = $timestamp . $request->photo_kk->getClientOriginalName();
+                $pathKk = '/user_profile/' . $photoNameKk;
+                Storage::disk('public')->put($pathKk, file_get_contents($request->photo_kk));
+
+                // store photo kendaraan
+                $timestamp = time();
+                $photoNameKendaraan = $timestamp . $request->photo_kendaraan->getClientOriginalName();
+                $pathKendaraan = '/user_profile/' . $photoNameKendaraan;
+                Storage::disk('public')->put($pathKendaraan, file_get_contents($request->photo_kendaraan));
+
+                $kendaraan = Kendaraan::create([
+                    'driver_id' => $user->id,
+                    'toko_id' => $tokoId,
+                    'noTelfon_cadangan' => request('noTelfon_cadangan'),
+                    'jenis_kendaraan' => request('jenis_kendaraan'),
+                    'nomor_polisi' => request('nomor_polisi'),
+                    'nomor_rangka' => request('nomor_rangka'),
+                    'photo_ktp' => '/storage' . $pathKtp,
+                    'photo_kk' => '/storage' . $pathKk,
+                    'photo_kendaraan' => '/storage' . $pathKendaraan,
+                ]);
+            } else {
+                // create user
+                $user = User::create([
+                    'name' => request('name'),
+                    'phone_number' => request('phone_number'),
+                    'email' => request('email'),
+                    'latitude' => request('latitude'),
+                    'longitude' => request('longitude'),
+                    'sandi_id' => $sandiId
+                ]);
+
+                $kendaraan = Kendaraan::create([
+                    'driver_id' => $user->id,
+                    'toko_id' => $tokoId,
+                    'noTelfon_cadangan' => request('noTelfon_cadangan'),
+                    'jenis_kendaraan' => request('jenis_kendaraan'),
+                    'nomor_polisi' => request('nomor_polisi'),
+                    'nomor_rangka' => request('nomor_rangka'),
+                    'photo_ktp' => request('photo_ktp'),
+                    'photo_kk' => request('photo_kk'),
+                    'photo_kendaraan' => request('photo_kendaraan')
+                ]);
+            }
+
+            // generate token
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            // assign role to user id
             $findUser = User::findOrFail($user->id);
             $role = Role::findOrFail(3);
 
             $findUser->assignRole([$role]);
 
             return response()->json([
-                'data' => $user, 'acces_token' => $token, 'sandi' => $sandi, 'token_type' => 'Bearer'
+                'status' => 200,
+                'data_user' => $user,
+                'data_kendaraan' => $kendaraan,
+                'acces_token' => $token,
+                'sandi' => $sandi
             ]);
         }
     }
