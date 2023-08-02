@@ -159,4 +159,8 @@ Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driv
         Route::get('/updateLoc', [Delivery::class, 'updateLoc']);
         Route::put('/update/status', [Delivery::class, 'finishOrder']);
     });
+
+    Route::group(['prefix' => '/riwayat'], function () {
+        Route::get('/selesai/diantar', [Delivery::class, 'delivered']);
+    });
 });

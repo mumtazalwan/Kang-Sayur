@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-
-use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
@@ -161,6 +160,20 @@ class Transaction extends Model
             ->where('store_id', $this->store_id)
 
             ->where('orders.status', 'Menunggu driver')
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->groupBy('variants.id')
+            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+    }
+
+    public function statusSelesai()
+    {
+        $idUser = Auth::user();
+
+        return $this->hasMany(Order::class, 'transaction_code')
+            ->where('store_id', $this->store_id)
+
+            ->where('orders.status', 'Selesai')
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
