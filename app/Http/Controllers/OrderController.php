@@ -416,7 +416,7 @@ class OrderController extends Controller
                 'product_id' => $key['product_id'],
                 'variant_id' => $key['variant_id'],
                 'store_id' => $key['store_id'],
-                'notes' => !isset($key['notes']) ? null : $key['notes'],
+                'notes' => !isset($key['notes']) ? "" : $key['notes'],
                 'user_id' => $dataUser->id,
             ]);
         }
@@ -478,11 +478,11 @@ class OrderController extends Controller
             ]
         ]);
 
-        $deleteCart = Cart::where('status', 'true')
-            ->where('user_id', Auth::user()->id)
-            ->get();
-
-        $deleteCart->toQuery()->delete();
+//        $deleteCart = Cart::where('status', 'true')
+//            ->where('user_id', Auth::user()->id)
+//            ->get();
+//
+//        $deleteCart->toQuery()->delete();
 
 
     }
