@@ -416,8 +416,8 @@ class OrderController extends Controller
                 'product_id' => $key['product_id'],
                 'variant_id' => $key['variant_id'],
                 'store_id' => $key['store_id'],
+                'notes' => !isset($key['notes']) ? null : $key['notes'],
                 'user_id' => $dataUser->id,
-                'notes' => $key['notes'],
             ]);
         }
 
@@ -470,12 +470,6 @@ class OrderController extends Controller
             'client_key' => config('midtrans.client_key')
         ]);
 
-        $deleteCart = Cart::where('status', 'true')
-            ->where('user_id', Auth::user()->id)
-            ->get();
-
-        $deleteCart->toQuery()->delete();
-
         return response()->json([
             'status' => 'succes',
             'data' => [
@@ -483,6 +477,14 @@ class OrderController extends Controller
                 'clinet_key' => config('midtrans.client_key')
             ]
         ]);
+
+        $deleteCart = Cart::where('status', 'true')
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
+        $deleteCart->toQuery()->delete();
+
+
     }
 
     //callback midtrans
