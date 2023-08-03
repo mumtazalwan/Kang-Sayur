@@ -48,13 +48,13 @@ class TokoController extends Controller
             'status_code' => '200',
             'message' => 'List Toko',
             'data' => $data,
-            // 'data' => $data->setHidden(['deskripsi', 'alamat', 'location', 'open', 'close', 'catalogue_id', 'created_at', 'updated_at', 'seller_id']),
         ]);
     }
 
     public function detail_toko(Request $request)
     {
         $tokoId = $request->tokoId;
+        $user = Auth::user();
 
         $detail = DB::table('tokos')
             ->select('tokos.*')
@@ -68,7 +68,20 @@ class TokoController extends Controller
             ->where('produk.toko_id', $tokoId)
             ->get();
 
-        $produk = Produk::where('produk.toko_id', $tokoId)->get();
+        $produk = Produk::where('produk.toko_id', $tokoId)
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->select(['produk.id',
+                'variants.variant_img',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
+            * sin(radians(tokos.latitude))) AS distance"),
+                'produk.nama_produk',
+                'tokos.nama_toko',
+                'variants.harga_variant'])
+            ->get();
 
         $detail->category = $kategori;
         $detail->produk = $produk;
@@ -125,10 +138,10 @@ class TokoController extends Controller
                 'tokos.alamat',
                 'tokos.longitude',
                 'tokos.latitude',
-                DB::raw("6371 * acos(cos(radians(tokos.latitude)) 
-            * cos(radians(" . $user->latitude . ")) 
-            * cos(radians(" . $user->longitude . ") - radians(tokos.longitude)) 
-            + sin(radians(tokos.latitude)) 
+                DB::raw("6371 * acos(cos(radians(tokos.latitude))
+            * cos(radians(" . $user->latitude . "))
+            * cos(radians(" . $user->longitude . ") - radians(tokos.longitude))
+            + sin(radians(tokos.latitude))
             * sin(radians(" . $user->latitude . "))) as distance"),
             )
             ->having('distance', '<=', $radius)
@@ -196,7 +209,7 @@ class TokoController extends Controller
         }
 
         switch ($custom) {
-                // bulan ini
+            // bulan ini
             case '1':
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
@@ -209,7 +222,7 @@ class TokoController extends Controller
                     ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
-                // 3 bulan terakhir
+            // 3 bulan terakhir
             case '2':
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
@@ -223,7 +236,7 @@ class TokoController extends Controller
                     ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
-                // 6 bulan terakhir
+            // 6 bulan terakhir
             case '3':
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
@@ -237,7 +250,7 @@ class TokoController extends Controller
                     ->select(DB::raw('SUM(variants.harga_variant) as total'))->value('total');
                 break;
 
-                // 1 tahun terakhir
+            // 1 tahun terakhir
             case '4':
                 $pemasukan_custom = DB::table('orders')
                     ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
@@ -301,7 +314,7 @@ class TokoController extends Controller
             $six_month_back = 1;
         }
         switch ($custom) {
-                // 3 bulan terakhir
+            // 3 bulan terakhir
             case '1':
                 $order_count = DB::table('orders')
                     ->select(
@@ -321,7 +334,7 @@ class TokoController extends Controller
                     ->get();
                 break;
 
-                // 6 bulan terakhir
+            // 6 bulan terakhir
             case '2':
                 $order_count = DB::table('orders')
                     ->select(
@@ -341,7 +354,7 @@ class TokoController extends Controller
                     ->get();
                 break;
 
-                // 1 tahun terakhir
+            // 1 tahun terakhir
             case '3':
                 $order_count = DB::table('orders')
                     ->select(
@@ -488,7 +501,7 @@ class TokoController extends Controller
                 'seller_info' => [
                     'nama_seller' => $data->nama_seller,
                     'photo_profile' => $data->photo_seller,
-                    'email' =>  $data->email_seller,
+                    'email' => $data->email_seller,
                 ],
                 'toko_info' => [
                     'deksripsi_toko' => $data->deskripsi,

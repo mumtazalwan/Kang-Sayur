@@ -24,10 +24,10 @@ class LogVisitorController extends Controller
                 ->select(
                     'produk.id',
                     'variants.variant_img',
-                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-                * cos(radians(tokos.latitude)) 
-                * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-                + sin(radians(" . $user->latitude . ")) 
+                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                * cos(radians(tokos.latitude))
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                + sin(radians(" . $user->latitude . "))
                 * sin(radians(tokos.latitude))) AS distance"),
                     'produk.nama_produk',
                     'tokos.nama_toko',
@@ -57,10 +57,10 @@ class LogVisitorController extends Controller
                 ->select(
                     'produk.id',
                     'variants.variant_img',
-                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-                    * cos(radians(tokos.latitude)) 
-                    * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-                    + sin(radians(" . $user->latitude . ")) 
+                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                    * cos(radians(tokos.latitude))
+                    * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                    + sin(radians(" . $user->latitude . "))
                     * sin(radians(tokos.latitude))) AS distance"),
                     'produk.nama_produk',
                     'tokos.nama_toko',
@@ -97,10 +97,10 @@ class LogVisitorController extends Controller
                 'tokos.alamat',
                 'tokos.longitude',
                 'tokos.latitude',
-                DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-                    * cos(radians(tokos.latitude)) 
-                    * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-                    + sin(radians(" . $user->latitude . ")) 
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                    * cos(radians(tokos.latitude))
+                    * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                    + sin(radians(" . $user->latitude . "))
                     * sin(radians(tokos.latitude))) AS distance"),
                 'tokos.nama_toko',
                 DB::raw('COUNT(toko_id) as visited'),
@@ -130,10 +130,10 @@ class LogVisitorController extends Controller
                 ->select(
                     'produk.id',
                     'variants.variant_img',
-                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            + sin(radians(" . $user->latitude . ")) 
+                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
             * sin(radians(tokos.latitude))) AS distance"),
                     'produk.nama_produk',
                     'tokos.nama_toko',
@@ -146,7 +146,6 @@ class LogVisitorController extends Controller
                 ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
                 ->where('statuses.status', '=', 'Accepted')
                 ->groupBy('produk.id')
-                // ->groupBy('nama_produk', 'id',  'tokos.longitude', 'variants.variant_img', 'variants.harga_variant', 'tokos.latitude',  'tokos.nama_toko')
                 ->orderBy('visited', 'DESC')
                 ->where('produk.kategori_id', $kategoriId)
                 ->get();
@@ -163,10 +162,10 @@ class LogVisitorController extends Controller
                 ->select(
                     'produk.id',
                     'variants.variant_img',
-                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . ")) 
-            * cos(radians(tokos.latitude)) 
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . ")) 
-            + sin(radians(" . $user->latitude . ")) 
+                    DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+            + sin(radians(" . $user->latitude . "))
             * sin(radians(tokos.latitude))) as distance"),
                     'produk.nama_produk',
                     'tokos.nama_toko',
@@ -180,7 +179,6 @@ class LogVisitorController extends Controller
                 ->where('statuses.status', '=', 'Accepted')
                 ->where('user_id', '=', $user->id)
                 ->groupBy('produk.id')
-                // ->groupBy('nama_produk', 'id', 'variants.variant_img', 'tokos.longitude', 'variants.harga_variant', 'tokos.latitude',  'tokos.nama_toko')
                 ->orderBy('visited', 'DESC')
                 ->get();
 

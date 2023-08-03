@@ -406,7 +406,7 @@ class OrderController extends Controller
         $checkout = $request->checkout;
         $dataUser = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->first();
-        $code = fake()->unique()->numberBetween(100, 999);
+        $code = fake()->unique()->numberBetween(1, 999);
 
         $total_keseluruhan = $request->total_keseluruhan;
 

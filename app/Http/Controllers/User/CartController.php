@@ -178,6 +178,13 @@ class CartController extends Controller
         $ongkir = $distance->sum('ongkir');
 
         return response()->json([
+            'status_code' => '200',
+            'messgae' => 'Data checkout',
+            'info_pengiriman' => [
+                'nama' => $user->name,
+                'nomot_telepon' => $user->phone_number,
+                'alamat' => $user->address
+            ],
             'data' => $data,
             'rincian' => [
                 'subtotalProduk' => $subtotal,
@@ -192,14 +199,9 @@ class CartController extends Controller
         $user = Auth::user();
         $produkId = $request->produkId;
         $variantId = $request->variantId;
-        $cartId = $request->cartId;
 
         $produkC = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->where('variant_id', $variantId)->first()->status;
         $produk = Cart::where('user_id', $user->id)->where('produk_id', $produkId)->where('variant_id', $variantId)->get();
-
-        // return response()->json([
-        //     'print' => $produkC
-        // ]);
 
         if ($produkC == "true") {
             $produk->toQuery()->update(array("status" => "false"));
