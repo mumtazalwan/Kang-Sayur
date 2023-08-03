@@ -2,16 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ReviewController extends Controller
 {
-    public function index()
+    public function menunggu_diulas(Request $request)
     {
-        //
+        $dataUser = Auth::user();
+//        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
+//        $transactionCode = $request->transactionCode;
+
+        $orderS = Order::where('user_id', $dataUser->id)
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->where('status_diulas', 'menunggu diulas')
+            ->groupBy('orders.transaction_code', 'variants.id')
+            ->orderBy('orders.created_at', 'ASC')
+            ->select([
+                'orders.id as order_id',
+                'produk.id as produk_id',
+                'produk.nama_produk as nama_produk',
+                'variants.id as variant_id',
+                'variants.variant_img as gambar',
+                'variants.variant as jenis_variant',
+                'orders.store_id as toko_id',
+                'tokos.nama_toko',
+                'orders.transaction_code as transaction_code'
+
+            ])
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'list produk yang belum direview',
+            'data' => $orderS
+        ]);
     }
 
     public function review(Request $request)
@@ -55,6 +86,15 @@ class ReviewController extends Controller
                 'transaction_code' => request('transaction_code'),
             ]);
         }
+
+        DB::table('orders')
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->where('store_id', request('toko_id'))
+            ->where('transaction_code', request('transaction_code'))
+            ->where('variants.id', request('variant_id'))
+            ->where('orders.user_id', $idUser)
+            ->where('orders.status', 'Selesai')
+            ->update(["status_diulas" => 'sudah diulas']);
 
         return response()->json([
             'status' => '200',
