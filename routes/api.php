@@ -100,6 +100,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     //ulasan
     Route::get('/menunggu-diulas', [ReviewController::class, 'menunggu_diulas']);
     Route::post('/ulasan', [ReviewController::class, 'review']);
+    Route::get('/riwayat-ulasan', [ReviewController::class, 'riwayat']);
 });
 
 // seller

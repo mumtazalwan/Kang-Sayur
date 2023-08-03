@@ -14,8 +14,6 @@ class ReviewController extends Controller
     public function menunggu_diulas(Request $request)
     {
         $dataUser = Auth::user();
-//        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $dataUser->id)->value('id');
-//        $transactionCode = $request->transactionCode;
 
         $orderS = Order::where('user_id', $dataUser->id)
             ->join('produk', 'produk.id', '=', 'orders.product_id')
@@ -99,6 +97,36 @@ class ReviewController extends Controller
         return response()->json([
             'status' => '200',
             'message' => 'berhasil memberikan penilaian',
+        ]);
+    }
+
+    public function riwayat()
+    {
+        $dataUser = Auth::user();
+
+        $data = Review::where('id_user', $dataUser->id)
+            ->join('produk', 'produk.id', '=', 'reviews.product_id')
+            ->join('variants', 'variants.id', '=', 'reviews.variant_id')
+            ->join('tokos', 'tokos.id', '=', 'reviews.toko_id')
+            ->select([
+                'produk.id as produk_id',
+                'produk.nama_produk as nama_produk',
+                'variants.id as variant_id',
+                'variants.variant_img as gambar',
+                'variants.variant as jenis_variant',
+                'tokos.nama_toko',
+                'reviews.rating',
+                'reviews.comment',
+                'reviews.img_product as gambar_review',
+                'reviews.created_at as tanggal_review'
+
+            ])
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'history review',
+            'data' => $data
         ]);
     }
 }
