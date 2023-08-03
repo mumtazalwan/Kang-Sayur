@@ -17,8 +17,7 @@ class Transaction extends Model
         "user_id",
         "payment_method",
         'transaction_token',
-        'client_key',
-        "notes"
+        'client_key'
     ];
 
     protected $primaryKey = "transaction_code";

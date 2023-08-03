@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('payment_method');
             $table->string('transaction_token');
             $table->string('client_key');
-            $table->text('notes')->nullable();
             $table->enum('status', ['Belum dibayar', 'Sudah dibayar'])->default('Belum dibayar');
             $table->timestamps();
         });
