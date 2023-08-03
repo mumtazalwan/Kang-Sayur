@@ -20,7 +20,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-06-01 00:00:00'
         ]);
 
@@ -31,7 +30,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-06-01 00:00:00'
         ]);
 
@@ -42,7 +40,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-06-02 00:00:00'
         ]);
 
@@ -53,7 +50,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-06-03 00:00:00'
         ]);
 
@@ -64,7 +60,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-06-04 00:00:00'
         ]);
 
@@ -75,7 +70,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-03-04 00:00:00'
         ]);
 
@@ -86,7 +80,6 @@ class TransactionSeeder extends Seeder
             'payment_method' => "BRIVA",
             'transaction_token' => '',
             'client_key' => 'SB-Mid-client-h63xQCl1Rfv_0XW0',
-            'notes' => "tolong lubangi sedikit kantung plastiknya ya min",
             'created_at' => '2023-01-04 00:00:00'
         ]);
     }

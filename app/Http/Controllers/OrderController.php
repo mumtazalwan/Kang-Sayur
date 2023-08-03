@@ -416,7 +416,8 @@ class OrderController extends Controller
                 'product_id' => $key['product_id'],
                 'variant_id' => $key['variant_id'],
                 'store_id' => $key['store_id'],
-                'user_id' => $dataUser->id
+                'user_id' => $dataUser->id,
+                'notes' => $key['notes'],
             ]);
         }
 

@@ -16,6 +16,7 @@ class Order extends Model
         'product_id',
         'variant_id',
         'status',
+        'notes',
         'store_id',
         'user_id',
         'created_at'
