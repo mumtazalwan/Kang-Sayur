@@ -65,10 +65,10 @@ class OrderController extends Controller
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('harga_variant'),
+                        'total_harga' => $relatedOrders->sum('pembelian'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
+                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
                 ];
             }
         }

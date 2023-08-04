@@ -35,7 +35,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id')
-            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('*', DB::raw("count(variants.id) as jumlah_pembelian"), DB::raw("SUM(variants.harga_variant) as pembelian"));
     }
 
     public function statusPreparedUser()
