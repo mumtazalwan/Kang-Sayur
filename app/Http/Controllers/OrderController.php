@@ -127,10 +127,10 @@ class OrderController extends Controller
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('harga_variant'),
+                        'total_harga' => $relatedOrders->sum('pembelian'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
+                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
                 ];
             }
         }
@@ -185,16 +185,14 @@ class OrderController extends Controller
                     'alamat pengiriman' => [
                         'nama_pemesan' => $transaction->nama_user,
                         'nomor_telfon' => $transaction->phone_number,
-                        'user_lat' => $transaction->user_latitude,
-                        'user_long' => $transaction->user_longitude,
                         'alamat' => $transaction->alamat_user
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('harga_variant'),
+                        'total_harga' => $relatedOrders->sum('pembelian'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
+                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
                 ];
             }
         }
@@ -246,17 +244,17 @@ class OrderController extends Controller
                     'tanggal' => $transaction->order_date,
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
-                    'alamat_pengiriman' => [
+                    'alamat pengiriman' => [
                         'nama_pemesan' => $transaction->nama_user,
                         'nomor_telfon' => $transaction->phone_number,
                         'alamat' => $transaction->alamat_user
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('harga_variant'),
+                        'total_harga' => $relatedOrders->sum('pembelian'),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
+                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
                 ];
             }
         }
