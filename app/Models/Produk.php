@@ -14,27 +14,6 @@ class Produk extends Model
 
     public $table = 'produk';
 
-//    protected $appends = ['image', 'harga'];
-//
-//    public function getImageAttribute()
-//    {
-////        return DB::table('variants')
-////            ->join('produk', 'produk.id', '=', 'variants.product_id')
-////            ->select('variants.variant_img as image')
-////            ->where('variants.product_id', '')
-////            ->orderBy('variants.id', 'ASC')
-////            ->value('img');
-//    }
-//
-//    public function getHargaAttribute()
-//    {
-//        return $variant_harga = DB::table('variants')
-//            ->join('produk', 'produk.id', '=', 'variants.product_id')
-//            ->select('variants.harga_variant as harga')
-//            ->orderBy('variants.id', 'ASC')
-//            ->value('harga');
-//    }
-
     protected $fillable = [
         'nama_produk',
         'deskripsi',

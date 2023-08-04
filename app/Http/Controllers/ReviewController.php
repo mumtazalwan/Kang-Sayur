@@ -120,7 +120,6 @@ class ReviewController extends Controller
                 'reviews.comment',
                 'reviews.img_product as gambar_review',
                 'reviews.created_at as tanggal_review'
-
             ])
             ->get();
 
@@ -128,6 +127,97 @@ class ReviewController extends Controller
             'status' => '200',
             'message' => 'history review',
             'data' => $data
+        ]);
+    }
+
+    public function csreview()
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = Review::where('reviews.toko_id', $tokoId)
+            ->join('orders', 'orders.transaction_code', '=', 'reviews.transaction_code')
+            ->join('produk', 'produk.id', '=', 'reviews.product_id')
+            ->join('variants', 'variants.id', '=', 'reviews.variant_id')
+            ->join('users', 'users.id', '=', 'reviews.id_user')
+            ->where('reviews.direply', 'false')
+            ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
+            ->select('produk.id as produk_id',
+                'users.name as nama_customer',
+                'produk.nama_produk', 'variants.id as variant_id',
+                'variants.variant_img as gambar_variant',
+                'variants.variant as jenis_variant',
+                'reviews.direply as status_dijawab',
+                'reviews.comment as review_user',
+                'orders.created_at as tanggal_pembelian',
+                'reviews.created_at as tanggal_review',
+                'reviews.transaction_code as kode_transaksi')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'kelola review',
+            'data' => $data
+        ]);
+    }
+
+    public function allreview()
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $data = Review::where('reviews.toko_id', $tokoId)
+            ->join('produk', 'produk.id', '=', 'reviews.product_id')
+            ->join('variants', 'variants.id', '=', 'reviews.variant_id')
+            ->join('users', 'users.id', '=', 'reviews.id_user')
+            ->join('orders', 'orders.transaction_code', '=', 'reviews.transaction_code')
+            ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
+            ->select('produk.id as produk_id',
+                'users.name as nama_customer',
+                'produk.nama_produk', 'variants.id as variant_id',
+                'variants.variant_img as gambar_variant',
+                'variants.variant as jenis_variant',
+                'reviews.reply',
+                'reviews.direply as status_dijawab',
+                'orders.created_at as tanggal_pembelian',
+                'reviews.created_at as tanggal_review',
+                'reviews.transaction_code as kode_ransaksi')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'kelola review',
+            'data' => $data
+        ]);
+    }
+
+    public function reply(Request $request)
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $request->validate([
+            'id_user' => 'required',
+            'product_id' => 'required',
+            'variant_id' => 'required',
+            'transaction_code' => 'required',
+            'reply' => 'required'
+        ]);
+
+        Review::where('id_user', request('id_user'))
+            ->where('product_id', request('product_id'))
+            ->where('toko_id', $tokoId)
+            ->where('variant_id', request('variant_id'))
+            ->where('transaction_code', request('transaction_code'))
+            ->update([
+                'reply' => request('reply'),
+                'direply' => true
+            ]);
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'reply berhasil dikrim',
+            'reply' => request('reply')
         ]);
     }
 }

@@ -18,7 +18,9 @@ class Review extends Model
         'rating',
         'img_product',
         'variant_id',
-        'transaction_code'
+        'transaction_code',
+        'reply',
+        'direply'
     ];
 
     protected $hidden = [
