@@ -31,6 +31,8 @@ class ReviewController extends Controller
                 'variants.variant as jenis_variant',
                 'orders.store_id as toko_id',
                 'tokos.nama_toko',
+                'tokos.img_profile',
+                'tokos.alamat',
                 'orders.transaction_code as transaction_code'
 
             ])
