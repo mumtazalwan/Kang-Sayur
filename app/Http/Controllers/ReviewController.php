@@ -27,14 +27,13 @@ class ReviewController extends Controller
                 'produk.id as produk_id',
                 'produk.nama_produk as nama_produk',
                 'variants.id as variant_id',
-                'variants.variant_img as gambar',
+                'variants.variant_img as gambar_produk',
                 'variants.variant as jenis_variant',
                 'orders.store_id as toko_id',
                 'tokos.nama_toko',
-                'tokos.img_profile',
+                'tokos.img_profile as gambar_toko',
                 'tokos.alamat',
                 'orders.transaction_code as transaction_code'
-
             ])
             ->get();
 
