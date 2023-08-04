@@ -135,6 +135,12 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::post('/register/driver', [AuthenticationController::class, 'registerAsDriver']);
+
+    Route::group(['prefix' => '/review'], function () {
+        Route::get('/belum-dibalas', [ReviewController::class, 'csreview']);
+        Route::get('/all', [ReviewController::class, 'allreview']);
+        Route::put('/reply', [ReviewController::class, 'reply']);
+    });
 });
 
 // admin
