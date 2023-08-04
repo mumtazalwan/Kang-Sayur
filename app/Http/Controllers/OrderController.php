@@ -186,7 +186,7 @@ class OrderController extends Controller
                         'nama_pemesan' => $transaction->nama_user,
                         'nomor_telfon' => $transaction->phone_number,
                         'user_lat' => $transaction->user_latitude,
-                        'user_long' => $transaction->user_long,
+                        'user_long' => $transaction->user_longitude,
                         'alamat' => $transaction->alamat_user
                     ],
                     'barang_pesanan' => $relatedOrders,
