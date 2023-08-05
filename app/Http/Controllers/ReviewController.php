@@ -144,6 +144,7 @@ class ReviewController extends Controller
             ->where('reviews.direply', 'false')
             ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
             ->select('produk.id as produk_id',
+                'users.id as user_id',
                 'users.name as nama_customer',
                 'produk.nama_produk', 'variants.id as variant_id',
                 'variants.variant_img as gambar_variant',
