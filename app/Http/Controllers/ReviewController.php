@@ -170,6 +170,7 @@ class ReviewController extends Controller
             ->join('produk', 'produk.id', '=', 'reviews.product_id')
             ->join('variants', 'variants.id', '=', 'reviews.variant_id')
             ->join('users', 'users.id', '=', 'reviews.id_user')
+            ->where('reviews.direply', 'true')
             ->join('orders', 'orders.transaction_code', '=', 'reviews.transaction_code')
             ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
             ->select('produk.id as produk_id',
