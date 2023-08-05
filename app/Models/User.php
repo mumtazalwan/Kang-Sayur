@@ -13,6 +13,7 @@ use App\Models\Sandi;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
     public $timestamps = false;
     // protected $appends = ['link_foto'];
 
@@ -37,6 +38,7 @@ class User extends Authenticatable
         'password',
         'sandi_id',
         'phone_number',
+        'tanggal_lahir',
         'address',
         'longitude',
         'latitude'
