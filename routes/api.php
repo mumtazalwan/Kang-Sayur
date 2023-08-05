@@ -137,6 +137,11 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
         Route::post('/add', [ProductAdvertisingController::class, 'add']);
     });
 
+
+    Route::group(['prefix' => '/driver'], function () {
+        Route::get('/list', [TokoController::class, 'list_driver']);
+    });
+
     Route::post('/register/driver', [AuthenticationController::class, 'registerAsDriver']);
 
     Route::group(['prefix' => '/review'], function () {

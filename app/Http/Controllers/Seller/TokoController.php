@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kendaraan;
 use App\Models\LogVisitor;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 use App\Models\Toko;
@@ -13,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 class TokoController extends Controller
 {
@@ -83,8 +86,13 @@ class TokoController extends Controller
                 'variants.harga_variant'])
             ->get();
 
+        $rating = Review::where('toko_id', $tokoId)
+            ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
+            ->first()->rating;
+
         $detail->category = $kategori;
         $detail->produk = $produk;
+        $detail->rating = $rating;
 
         LogVisitor::create([
             'toko_id' => $tokoId,
@@ -570,6 +578,22 @@ class TokoController extends Controller
             'status' => '200',
             'message' => 'List produk toko',
             'produk' => $produk
+        ]);
+    }
+
+    public function list_driver()
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $drivers = Kendaraan::where('toko_id', $tokoId)
+            ->join('users', 'users.id', '=', 'kendaraans.driver_id')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'List produk toko',
+            'produk' => $drivers
         ]);
     }
 }
