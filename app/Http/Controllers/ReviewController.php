@@ -143,10 +143,12 @@ class ReviewController extends Controller
             ->join('tokos', 'tokos.id', '=', 'reviews.toko_id')
             ->where('reviews.direply', 'false')
             ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
+            ->orderBy('reviews.created_at', 'DESC')
             ->select('produk.id as produk_id',
                 'users.id as user_id',
                 'users.name as nama_customer',
-                'produk.nama_produk', 'variants.id as variant_id',
+                'produk.nama_produk',
+                'variants.id as variant_id',
                 'variants.variant_img as gambar_variant',
                 'variants.variant as jenis_variant',
                 'reviews.direply as status_dijawab',
@@ -179,12 +181,17 @@ class ReviewController extends Controller
             ->where('reviews.direply', 'true')
             ->join('orders', 'orders.transaction_code', '=', 'reviews.transaction_code')
             ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
+            ->orderBy('reviews.created_at', 'DESC')
             ->select('produk.id as produk_id',
                 'users.name as nama_customer',
-                'produk.nama_produk', 'variants.id as variant_id',
+                'users.photo as gambar_user',
+                'reviews.rating',
+                'produk.nama_produk',
+                'variants.id as variant_id',
                 'variants.variant_img as gambar_variant',
                 'variants.variant as jenis_variant',
                 'reviews.reply',
+                'reviews.comment as review_user',
                 'reviews.direply as status_dijawab',
                 'orders.created_at as tanggal_pembelian',
                 'reviews.created_at as tanggal_review',
@@ -194,7 +201,7 @@ class ReviewController extends Controller
         return response()->json([
             'status' => '200',
             'message' => 'kelola review',
-            'data' => $data
+            'data' => $data->orderBy('reviews.created_at', 'DESC')
         ]);
     }
 

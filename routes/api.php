@@ -45,6 +45,9 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
+    // update
+    Route::post('/update-profile', [UserController::class, 'updateUser']);
+
     // produk
     Route::get('/produk/all', [ProdukController::class, 'index']);
 
