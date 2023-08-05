@@ -140,6 +140,7 @@ class ReviewController extends Controller
             ->join('produk', 'produk.id', '=', 'reviews.product_id')
             ->join('variants', 'variants.id', '=', 'reviews.variant_id')
             ->join('users', 'users.id', '=', 'reviews.id_user')
+            ->join('tokos', 'tokos.id', '=', 'reviews.toko_id')
             ->where('reviews.direply', 'false')
             ->groupBy('orders.transaction_code', 'reviews.id_user', 'reviews.variant_id')
             ->select('produk.id as produk_id',
@@ -151,7 +152,11 @@ class ReviewController extends Controller
                 'reviews.comment as review_user',
                 'orders.created_at as tanggal_pembelian',
                 'reviews.created_at as tanggal_review',
-                'reviews.transaction_code as kode_transaksi')
+                'reviews.transaction_code as kode_transaksi',
+                'tokos.nama_toko',
+                'tokos.img_profile as gambar_toko',
+                'tokos.alamat as alamat_toko'
+            )
             ->get();
 
         return response()->json([
