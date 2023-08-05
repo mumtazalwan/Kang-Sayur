@@ -293,4 +293,37 @@ class ProdukController extends Controller
             'data' => $data,
         ]);
     }
+
+    // admin verifikasi list
+    public function verifikasi_list()
+    {
+        $data = Produk::with('variant')
+            ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', 'Pending')
+            ->get();
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => 'List verifikasi',
+            'data' => $data,
+        ]);
+    }
+
+    // admin ubah status verifikasi
+    public function verifikasi(Request $request)
+    {
+        $produkId = $request->produkId;
+
+        $data = Status::where('statuses.produk_id', $produkId)
+            ->update([
+                'status' => 'Accepted'
+            ]);
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => "berhasil di verifikasi",
+            'data' => $data,
+        ]);
+
+    }
 }

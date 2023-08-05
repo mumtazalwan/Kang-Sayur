@@ -163,6 +163,11 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
         Route::get('/detail', [TokoController::class, 'detail_toko_admin']);
         Route::get('/produk', [TokoController::class, 'list_produk_toko']);
     });
+
+    Route::group(['prefix' => '/produk'], function () {
+        Route::post('/verifikasi', [ProdukController::class, 'verifikasi']);
+        Route::get('/verifikasi/list', [ProdukController::class, 'verifikasi_list']);
+    });
 });
 
 // driver
