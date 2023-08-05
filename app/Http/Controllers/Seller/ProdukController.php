@@ -89,31 +89,25 @@ class ProdukController extends Controller
 
         foreach ($variant as $key) {
             $variant_img = $key['images'];
+            $timestamp = time();
+            $photoName = $timestamp . $variant_img->getClientOriginalName();
+            $path = '/user_profile/' . $photoName;
+            Storage::disk('public')->put($path, file_get_contents($variant_img));
 
-            // store photo
-            if ($variant_img) {
-                foreach ($variant_img as $variant_imgs) {
-                    $timestamp = time();
-                    $photoName = $timestamp . $variant_imgs->getClientOriginalName();
-                    $path = '/user_profile/' . $photoName;
-                    Storage::disk('public')->put($path, file_get_contents($variant_imgs));
-
-                    $data = Variant::create([
-                        'product_id' => $produk->id,
-                        'variant' => $key['variant'],
-                        'variant_desc' => $key['variant'],
-                        'stok' => $key['stok'],
-                        'variant_img' => '/storage' . $path,
-                        'harga_variant' => $key['harga_variant']
-                    ]);
-                }
-            }
+            $data = Variant::create([
+                'product_id' => $produk->id,
+                'variant_img' => '/storage' . $path,
+                'variant' => $key['variant'],
+                'variant_desc' => $key['variant_desc'],
+                'stok' => $key['stok'],
+                'harga_variant' => $key['harga_variant']
+            ]);
         }
 
         return response()->json([
             'status_code' => '200',
             'message' => 'Data berhasil ditambahkan, mohon menunggu antrean verifikasi barang oleh admin',
-            'data' => $data
+            'data' => $data ?? [],
         ]);
     }
 
