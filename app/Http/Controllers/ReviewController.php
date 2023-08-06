@@ -201,7 +201,7 @@ class ReviewController extends Controller
         return response()->json([
             'status' => '200',
             'message' => 'kelola review',
-            'data' => $data->orderBy('reviews.created_at', 'DESC')
+            'data' => $data
         ]);
     }
 
