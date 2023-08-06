@@ -21,6 +21,8 @@ class TokoSeeder extends Seeder
             'alamat' => 'Jl Jawa XV Bl A/2 Kawasan Industri Cakung,Rorotanu',
             'latitude' => -6.753804,
             'longitude' => 110.843100,
+            'provinsi' => 'Jawa Barat',
+            'kota' => 'Bogor',
             'open' => '07:00:00',
             'close' => '15:00:00',
         ]);
@@ -33,6 +35,8 @@ class TokoSeeder extends Seeder
             'alamat' => 'Jl Jawa XV Bl A/2 Kawasan Industri Cakung,Rorotanu',
             'latitude' => -6.747032,
             'longitude' => 110.837825,
+            'provinsi' => 'Jawa Tengah',
+            'kota' => 'Semarang',
             'open' => '07:00:00',
             'close' => '15:00:00',
         ]);
@@ -57,6 +61,8 @@ class TokoSeeder extends Seeder
             'alamat' => '4V7M+5FF, Sidorejo, Wotan, Kec. Sukolilo, Kabupaten Pati, Jawa Tengah 59172',
             'latitude' => -6.887077,
             'longitude' => 110.883697,
+            'provinsi' => 'Jawa Tengah',
+            'kota' => 'Tegal',
             'open' => '00:00:01',
             'close' => '24:00:00',
         ]);

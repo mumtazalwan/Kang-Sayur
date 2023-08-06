@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Address;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -38,7 +39,8 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             TransactionSeeder::class,
             VariantSeeder::class,
-            KendaraanSeeder::class
+            KendaraanSeeder::class,
+            AddressSeeder::class
         ]);
     }
 }

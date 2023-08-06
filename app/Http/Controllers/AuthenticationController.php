@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -22,6 +23,7 @@ class AuthenticationController extends Controller
             'name' => 'required|string',
             'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'email' => 'required|email',
+            'address' => 'required',
             'longitude' => 'required|between:-180,180',
             'latitude' => 'required|between:-90,90',
             'password' => 'required|string|min:8'
@@ -54,6 +56,7 @@ class AuthenticationController extends Controller
                     'name' => request('name'),
                     'photo' => '/storage' . $path,
                     'email' => request('email'),
+                    'address' => request('address'),
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude'),
                     'sandi_id' => $sandiId
@@ -63,11 +66,22 @@ class AuthenticationController extends Controller
                 $user = User::create([
                     'name' => request('name'),
                     'email' => request('email'),
+                    'address' => request('address'),
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude'),
                     'sandi_id' => $sandiId
                 ]);
             }
+
+            Address::create([
+                'user_id' => $user->id,
+                'nama_penerima' => $user->name,
+                'nomor_hp' => $user->phone_number,
+                'alamat_lengkap' => $user->address,
+                'longitude' => $user->longitude,
+                'latitude' => $user->latitude,
+                'prioritas_alamat' => "Utama",
+            ]);
 
             // generate token
             $token = $user->createToken('auth_token')->plainTextToken;

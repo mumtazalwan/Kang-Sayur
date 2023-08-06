@@ -40,6 +40,11 @@ class Produk extends Model
     public function review()
     {
         return $this->hasMany(Review::class, 'product_id')
-            ->join('users', 'users.id', '=', 'reviews.id_user');
+            ->join('users', 'users.id', '=', 'reviews.id_user')
+            ->select([
+                'reviews.*',
+                'users.name as name_user',
+                'users.photo as gambar_user'
+            ]);
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->integer('store_id');
             $table->integer('user_id');
             $table->text('notes')->nullable();
+            $table->bigInteger('alamat_id');
             $table->enum('status_diulas', ['menunggu diulas', 'sudah diulas'])->default('menunggu diulas');
             $table->enum('status', ['Menunggu pembayaran', 'Menunggu konfirmasi', 'Sedang disiapkan', 'Menunggu driver', 'Sedang diantar', 'Selesai'])->default('Menunggu pembayaran');
             $table->timestamps();

@@ -17,6 +17,7 @@ class Order extends Model
         'variant_id',
         'status',
         'notes',
+        'alamat_id',
         'status_diulas',
         'store_id',
         'user_id',
