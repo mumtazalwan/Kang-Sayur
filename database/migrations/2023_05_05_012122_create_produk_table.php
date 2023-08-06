@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->double('rating')->nullable();
             $table->integer('kategori_id');
             $table->integer('toko_id');
-            $table->integer('ulasan_id')->default("");
-            $table->integer('is_onsale')->default("");
+            $table->integer('ulasan_id');
+            $table->integer('is_onsale')->default(0);
             $table->timestamps();
         });
     }
