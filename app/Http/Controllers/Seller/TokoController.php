@@ -540,32 +540,44 @@ class TokoController extends Controller
         switch ($kategoriId) {
             case '1':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 1)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
             case '2':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 2)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
             case '3':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 3)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
             case '4':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 4)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
             case '5':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 5)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
             case '6':
                 $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
                     ->where('produk.kategori_id', 6)
+                    ->groupBy('produk.id')
                     ->get();
                 break;
 
