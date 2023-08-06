@@ -582,7 +582,10 @@ class TokoController extends Controller
                 break;
 
             default:
-                $produk = Produk::where('produk.toko_id', $tokoId)->get();
+                $produk = Produk::where('produk.toko_id', $tokoId)
+                    ->join('variants', 'variants.product_id', '=', 'produk.id')
+                    ->groupBy('produk.id')
+                    ->get();
                 break;
         }
 
