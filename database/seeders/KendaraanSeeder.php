@@ -14,7 +14,7 @@ class KendaraanSeeder extends Seeder
     public function run(): void
     {
         Kendaraan::create([
-            'driver_id' => 4,
+            'driver_id' => 3,
             'toko_id' => 2,
             'noTelfon_cadangan' => 81298199012,
             'jenis_kendaraan' => 'Kendaraan bermotor (Roda 2)',
