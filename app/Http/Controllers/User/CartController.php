@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Toko;
 use Illuminate\Http\Request;
@@ -138,16 +139,19 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
+        $alamat = Address::where('user_id', 1)
+            ->where('id', 3)->first();
+
         $data = Toko::with('getProdukCheckout')
             ->join('produk', 'produk.toko_id', 'tokos.id')
             ->join('variants', 'variants.product_id', 'produk.id')
             ->join('carts', 'carts.variant_id', 'variants.id')
             ->whereHas('getProdukCheckout')
             ->where('carts.status', 'true')
-            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko', DB::raw('sum(variants.harga_variant) as total'), DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            ->select(['tokos.id', 'tokos.img_profile', 'tokos.nama_toko', DB::raw('sum(variants.harga_variant) as total'), DB::raw("6371 * acos(cos(radians(" . $alamat->latitude . "))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
-            + sin(radians(" . $user->latitude . "))
+            * cos(radians(tokos.longitude) - radians(" . $alamat->longitude . "))
+            + sin(radians(" . $alamat->latitude . "))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")])
             ->groupBy(['tokos.id', 'carts.status'])
             ->get();
@@ -167,10 +171,10 @@ class CartController extends Controller
             ->join('variants', 'variants.product_id', 'produk.id')
             ->join('carts', 'carts.variant_id', 'variants.id')
             ->where('carts.status', 'true')
-            ->select([DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            ->select([DB::raw("6371 * acos(cos(radians(" . $alamat->latitude . "))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
-            + sin(radians(" . $user->latitude . "))
+            * cos(radians(tokos.longitude) - radians(" . $alamat->longitude . "))
+            + sin(radians(" . $alamat->latitude . "))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")])
             ->groupBy(['tokos.id', 'carts.status'])
             ->get();
@@ -181,7 +185,8 @@ class CartController extends Controller
             'status_code' => '200',
             'messgae' => 'Data checkout',
             'info_pengiriman' => [
-                'nama' => $user->name,
+                'alamat_id' => $alamat->id,
+                'nama' => $alamat->nama_penerima,
                 'nomot_telepon' => $user->phone_number,
                 'alamat' => $user->address
             ],
@@ -190,6 +195,81 @@ class CartController extends Controller
                 'subtotalProduk' => $subtotal,
                 'subtotalOngkir' => $ongkir,
                 'totalKeseluruhan' => $subtotal + $ongkir
+            ]
+        ]);
+    }
+
+    public function instantbuy(Request $request)
+    {
+        $user = Auth::user();
+
+        $alamatId = $request->alamatId;
+        $tokoId = $request->tokoId;
+        $produkId = $request->produkId;
+        $variantId = $request->variantid;
+        $jumlahBeli = $request->jumlahBeli;
+
+        if ($alamatId) {
+            $alamat = Address::where('user_id', 1)
+                ->where('id', 3)->first();
+        } else {
+            $alamat = Address::where('user_id', $user->id)
+                ->where('prioritas_alamat', "Utama")->first();
+        }
+
+
+        $data = Toko::join('produk', 'produk.toko_id', 'tokos.id')
+            ->join('variants', 'variants.product_id', 'produk.id')
+            ->where('tokos.id', $tokoId)
+            ->where('produk.id', $produkId)
+            ->where('variants.id', $variantId)
+            ->select(['tokos.id as toko_id',
+                'tokos.img_profile',
+                'tokos.nama_toko',
+                'tokos.kota',
+                'produk.id as produk_id',
+                'produk.nama_produk',
+                'variants.id as variant_id',
+                'variants.variant',
+                'variants.harga_variant',
+                'variants.variant_img as gambar_produk'])
+            ->get();
+
+        $ongkir = Toko::join('produk', 'produk.toko_id', 'tokos.id')
+            ->join('variants', 'variants.product_id', 'produk.id')
+            ->where('tokos.id', $tokoId)
+            ->where('produk.id', $produkId)
+            ->where('variants.id', $variantId)
+            ->select(DB::raw("6371 * acos(cos(radians(" . $alamat->latitude . "))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(" . $alamat->longitude . "))
+            + sin(radians(" . $alamat->latitude . "))
+            * sin(radians(tokos.latitude))) * 3000 as ongkir"))
+            ->value('ongkir');
+
+        $subtotal = Toko::join('produk', 'produk.toko_id', 'tokos.id')
+            ->join('variants', 'variants.product_id', 'produk.id')
+            ->where('tokos.id', $tokoId)
+            ->where('produk.id', $produkId)
+            ->where('variants.id', $variantId)
+            ->select(DB::raw('sum(variants.harga_variant) as total'))
+            ->value('total');
+
+        $data->jumlah_beli = $jumlahBeli;
+        return response()->json([
+            'status_code' => '200',
+            'messgae' => 'Data checkout',
+            'info_pengiriman' => [
+                'alamat_id' => $alamat->id,
+                'nama' => $alamat->nama_penerima,
+                'nomot_telepon' => $user->phone_number,
+                'alamat' => $user->address
+            ],
+            'data' => $data,
+            'rincian' => [
+                'subtotalProduk' => $subtotal * $jumlahBeli,
+                'subtotalOngkir' => $ongkir,
+                'totalKeseluruhan' => ($subtotal * $jumlahBeli) + $ongkir
             ]
         ]);
     }

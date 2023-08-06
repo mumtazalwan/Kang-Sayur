@@ -417,6 +417,7 @@ class OrderController extends Controller
                 'variant_id' => $key['variant_id'],
                 'store_id' => $key['store_id'],
                 'notes' => !isset($key['notes']) ? "" : $key['notes'],
+                'alamat_id' => $key['alamat_id'],
                 'user_id' => $dataUser->id,
             ]);
         }

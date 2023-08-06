@@ -21,6 +21,8 @@ class Toko extends Model
         'alamat',
         'longitude',
         'latitude',
+        'provinsi',
+        'kota',
         'open',
         'close'
     ];

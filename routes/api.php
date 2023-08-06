@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Delivery;
+use App\Http\Controllers\Driver\DriverController;
 use Illuminate\Http\Request;
 
 // controller
@@ -65,6 +66,12 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     // profile
     Route::get('/profile', [UserController::class, 'index']);
 
+    // address
+    Route::group(['prefix' => '/alamat'], function () {
+        Route::get('/list', [UserController::class, 'list_alamat']);
+        Route::post('/tambah', [UserController::class, 'tambah_alamat']);
+    });
+
     Route::group(['prefix' => '/toko'], function () {
         Route::get('/all', [TokoController::class, 'index']);
         Route::get('/detail', [TokoController::class, 'detail_toko']);
@@ -87,6 +94,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/delete', [CartController::class, 'deleteAll']);
         Route::get('/custom', [CartController::class, 'custom']);
         Route::get('/checkout', [CartController::class, 'checkout']);
+        Route::post('/instantbuy', [CartController::class, 'instantbuy']);
         Route::post('/pesan', [OrderController::class, 'store']);
         Route::get('/updateStatus', [CartController::class, 'updateStatus']);
         Route::get('/total/selected', [CartController::class, 'selected']);
@@ -172,7 +180,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 
 // driver
 Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driver'], function () {
-    Route::get('/profile', [\App\Http\Controllers\Driver\DriverController::class, 'driverInfo']);
+    Route::get('/profile', [DriverController::class, 'driverInfo']);
 
     Route::group(['prefix' => '/order'], function () {
         Route::get('/list', [OrderController::class, 'readyToPickedUp']);
