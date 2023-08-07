@@ -78,16 +78,17 @@ class UserController extends Controller
                     'longitude' => request('longitude')
                 ]);
 
-            Address::where('addresses.user_id', $user->id)
-                ->update([
-                    'user_id' => $user->id,
-                    'nama_penerima' => request('name'),
-                    'nomor_hp' => request('phone_number'),
-                    'alamat_lengkap' => request('address'),
-                    'latitude' => request('latitude'),
-                    'longitude' => request('longitude'),
-                    'prioritas_alamat' => "Utama",
-                ]);
+//            Address::where('addresses.user_id', $user->id)
+//                ->where('addresses.prioritas_alamat', 'Utama')
+//                ->update([
+//                    'user_id' => $user->id,
+//                    'nama_penerima' => request('name'),
+//                    'nomor_hp' => request('phone_number'),
+//                    'alamat_lengkap' => request('address'),
+//                    'latitude' => request('latitude'),
+//                    'longitude' => request('longitude'),
+//                    'prioritas_alamat' => "Utama",
+//                ]);
         } else {
 
             User::where('users.id', $user->id)
@@ -104,16 +105,17 @@ class UserController extends Controller
                     'longitude' => request('longitude')
                 ]);
 
-            Address::where('addresses.user_id', $user->id)
-                ->update([
-                    'user_id' => $user->id,
-                    'nama_penerima' => request('name'),
-                    'nomor_hp' => request('phone_number'),
-                    'alamat_lengkap' => request('address'),
-                    'latitude' => request('latitude'),
-                    'longitude' => request('longitude'),
-                    'prioritas_alamat' => "Utama",
-                ]);
+//            Address::where('addresses.user_id', $user->id)
+//                ->where('addresses.prioritas_alamat', 'Utama')
+//                ->update([
+//                    'user_id' => $user->id,
+//                    'nama_penerima' => request('name'),
+//                    'nomor_hp' => request('phone_number'),
+//                    'alamat_lengkap' => request('address'),
+//                    'latitude' => request('latitude'),
+//                    'longitude' => request('longitude'),
+//                    'prioritas_alamat' => "Utama",
+//                ]);
         }
 
         return response()->json([
@@ -153,7 +155,7 @@ class UserController extends Controller
                 'user_id' => Auth::user()->id,
                 'nama_penerima' => request('name'),
                 'nomor_hp' => request('phone_number'),
-                'alamat_lengkap' => request('name'),
+                'alamat_lengkap' => request('address'),
                 'longitude' => request('longitude'),
                 'latitude' => request('latitude'),
                 'label_alamat' => $label,
@@ -165,7 +167,7 @@ class UserController extends Controller
                 'user_id' => Auth::user()->id,
                 'nama_penerima' => request('name'),
                 'nomor_hp' => request('phone_number'),
-                'alamat_lengkap' => request('name'),
+                'alamat_lengkap' => request('address'),
                 'longitude' => request('longitude'),
                 'latitude' => request('latitude'),
                 'label_alamat' => $label,
