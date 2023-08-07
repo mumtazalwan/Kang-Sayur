@@ -25,9 +25,11 @@ class OrderController extends Controller
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
+                'addresses.*',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -36,10 +38,10 @@ class OrderController extends Controller
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
                 'orders.created_at as order_date',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+                DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -59,9 +61,9 @@ class OrderController extends Controller
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_user,
-                        'nomor_telfon' => $transaction->phone_number,
-                        'alamat' => $transaction->alamat_user
+                        'nama_pemesan' => $transaction->nama_penerima,
+                        'nomor_telfon' => $transaction->nomor_hp,
+                        'alamat' => $transaction->alamat_lengkap
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
@@ -87,9 +89,11 @@ class OrderController extends Controller
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
+                'addresses.*',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -98,10 +102,10 @@ class OrderController extends Controller
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
                 'orders.created_at as order_date',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+                DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -121,9 +125,9 @@ class OrderController extends Controller
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_user,
-                        'nomor_telfon' => $transaction->phone_number,
-                        'alamat' => $transaction->alamat_user
+                        'nama_pemesan' => $transaction->nama_penerima,
+                        'nomor_telfon' => $transaction->nomor_hp,
+                        'alamat' => $transaction->alamat_lengkap
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
@@ -149,9 +153,11 @@ class OrderController extends Controller
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
+                'addresses.*',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -160,10 +166,10 @@ class OrderController extends Controller
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
                 'orders.created_at as order_date',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+                DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -183,11 +189,11 @@ class OrderController extends Controller
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_user,
-                        'nomor_telfon' => $transaction->phone_number,
-                        'user_lat' => $transaction->user_latitude,
-                        'user_long' => $transaction->user_longitude,
-                        'alamat' => $transaction->alamat_user
+                        'nama_pemesan' => $transaction->nama_penerima,
+                        'nomor_telfon' => $transaction->nomor_hp,
+                        'user_lat' => $transaction->latitude,
+                        'user_long' => $transaction->longitude,
+                        'alamat' => $transaction->alamat_lengkap
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
@@ -213,9 +219,11 @@ class OrderController extends Controller
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
+                'addresses.*',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -224,10 +232,10 @@ class OrderController extends Controller
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
                 'orders.created_at as order_date',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+                DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -247,9 +255,9 @@ class OrderController extends Controller
                     'kode_transaksi' => $transaction->transaction_code,
                     'toko_id' => $transaction->store_id,
                     'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_user,
-                        'nomor_telfon' => $transaction->phone_number,
-                        'alamat' => $transaction->alamat_user
+                        'nama_pemesan' => $transaction->nama_penerima,
+                        'nomor_telfon' => $transaction->nomor_hp,
+                        'alamat' => $transaction->alamat_lengkap
                     ],
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
