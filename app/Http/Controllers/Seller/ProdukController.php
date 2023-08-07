@@ -211,8 +211,7 @@ class ProdukController extends Controller
                 + sin(radians(" . $user->latitude . "))
                 * sin(radians(tokos.latitude))) AS distance"),
                 'variants.variant_img',
-                'variants.harga_variant',
-            )
+                'variants.harga_variant')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->groupBy('produk.id')
@@ -249,7 +248,8 @@ class ProdukController extends Controller
                 'variants.harga_variant',
                 'produk.created_at as tanggal_verivikasi',
                 'statuses.status',
-                'variants.stok'
+                'variants.stok',
+                'variants.variant'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
@@ -279,7 +279,9 @@ class ProdukController extends Controller
                 'variants.harga_variant',
                 'produk.created_at as tanggal_verivikasi',
                 'statuses.status',
-                'variants.stok'
+                'variants.stok',
+                'variants.variant',
+                'variants.variant_desc'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')

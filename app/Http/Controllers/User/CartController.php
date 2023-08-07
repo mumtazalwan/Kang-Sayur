@@ -135,12 +135,18 @@ class CartController extends Controller
         ]);
     }
 
-    public function checkout()
+    public function checkout(Request $request)
     {
+        $alamatId = $request->alamatId;
         $user = Auth::user();
 
-        $alamat = Address::where('user_id', 1)
-            ->where('id', 3)->first();
+        if ($alamatId) {
+            $alamat = Address::where('user_id', 1)
+                ->where('id', 3)->first();
+        } else {
+            $alamat = Address::where('user_id', $user->id)
+                ->where('prioritas_alamat', "Utama")->first();
+        }
 
         $data = Toko::with('getProdukCheckout')
             ->join('produk', 'produk.toko_id', 'tokos.id')
