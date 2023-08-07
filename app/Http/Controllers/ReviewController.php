@@ -198,6 +198,17 @@ class ReviewController extends Controller
                 'reviews.transaction_code as kode_ransaksi')
             ->get();
 
+        $rating = Review::where('toko_id', $tokoId)
+            ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
+            ->first()->rating;
+
+        if ($rating == null) {
+            $rating = 5;
+        }
+
+        $data->rating = $rating;
+        $data->tingkat_kepuasan = $rating * 20;
+
         return response()->json([
             'status' => '200',
             'message' => 'kelola review',
