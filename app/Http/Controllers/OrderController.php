@@ -533,9 +533,11 @@ class OrderController extends Controller
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
+                'addresses.*',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -545,10 +547,10 @@ class OrderController extends Controller
                 'users.phone_number',
                 'users.latitude as user_latitude',
                 'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+                DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
             )
             ->get();
@@ -564,8 +566,8 @@ class OrderController extends Controller
                     'nama_pemesan' => $transaction->nama_user,
                     'nomor_telfon' => $transaction->phone_number,
                     'alamat' => $transaction->alamat_user,
-                    'user_lat' => $transaction->user_latitude,
-                    'user_long' => $transaction->user_longitude,
+                    'user_lat' => $transaction->latitude,
+                    'user_long' => $transaction->longitude,
                     'user_id' => $transaction->user_id,
                     'dipesan' => $transaction->created_at->format('d, M Y'),
                     'barang_pesanan' => $relatedOrders,
@@ -580,7 +582,7 @@ class OrderController extends Controller
 
         return response()->json([
             'status' => '200',
-            'message' => 'List barang yang sedang diantar driver',
+            'message' => 'List antrean order untuk diantar',
             'data' => $data
         ]);
     }
