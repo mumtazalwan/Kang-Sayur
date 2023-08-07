@@ -103,6 +103,17 @@ class UserController extends Controller
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude')
                 ]);
+
+            Address::where('addresses.user_id', $user->id)
+                ->update([
+                    'user_id' => $user->id,
+                    'nama_penerima' => request('name'),
+                    'nomor_hp' => request('phone_number'),
+                    'alamat_lengkap' => request('address'),
+                    'latitude' => request('latitude'),
+                    'longitude' => request('longitude'),
+                    'prioritas_alamat' => "Utama",
+                ]);
         }
 
         return response()->json([
