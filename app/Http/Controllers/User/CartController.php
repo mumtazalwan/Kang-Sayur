@@ -141,8 +141,8 @@ class CartController extends Controller
         $user = Auth::user();
 
         if ($alamatId) {
-            $alamat = Address::where('user_id', 1)
-                ->where('id', 3)->first();
+            $alamat = Address::where('user_id', $user->id)
+                ->where('id', $alamatId)->first();
         } else {
             $alamat = Address::where('user_id', $user->id)
                 ->where('prioritas_alamat', "Utama")->first();
@@ -216,13 +216,12 @@ class CartController extends Controller
         $jumlahBeli = $request->jumlahBeli;
 
         if ($alamatId) {
-            $alamat = Address::where('user_id', 1)
-                ->where('id', 3)->first();
+            $alamat = Address::where('user_id', $user->id)
+                ->where('id', $alamatId)->first();
         } else {
             $alamat = Address::where('user_id', $user->id)
                 ->where('prioritas_alamat', "Utama")->first();
         }
-
 
         $data = Toko::join('produk', 'produk.toko_id', 'tokos.id')
             ->join('variants', 'variants.product_id', 'produk.id')
