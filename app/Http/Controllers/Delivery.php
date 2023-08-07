@@ -86,13 +86,16 @@ class Delivery extends Controller
         $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
             ->join('users', 'users.id', '=', 'orders.user_id')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
             ->where('transactions.status', 'Sudah dibayar')
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
                 'orders.*',
                 'tokos.*',
+                'kategori.nama_kategori',
                 'users.name as nama_user',
                 'users.id as user_id',
                 'users.address as alamat_user',
@@ -126,6 +129,7 @@ class Delivery extends Controller
                     'toko_long' => $transaction->longitude,
                     'user_id' => $transaction->user_id,
                     'dipesan' => $transaction->created_at->format('d, M Y'),
+                    'kategori' => $transaction->nama_kategori,
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
                         'total_harga' => $relatedOrders->sum('harga_variant'),
