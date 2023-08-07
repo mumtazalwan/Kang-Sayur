@@ -571,7 +571,7 @@ class OrderController extends Controller
                     'nama_pemesan' => $transaction->nama_user,
                     'nomor_telfon' => $transaction->phone_number,
                     'alamat' => $transaction->alamat_user,
-                    'user_lat' => $transaction->address_long,
+                    'user_lat' => $transaction->address_lat,
                     'user_long' => $transaction->address_long,
                     'user_id' => $transaction->user_id,
                     'dipesan' => $transaction->created_at->format('d, M Y'),
