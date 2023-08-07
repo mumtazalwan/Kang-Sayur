@@ -90,9 +90,14 @@ class TokoController extends Controller
             ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
             ->first()->rating;
 
+        if ($rating == null) {
+            $rating = 5;
+        }
+
         $detail->category = $kategori;
         $detail->produk = $produk;
         $detail->rating = $rating;
+        $detail->tingkat_kepuasan = $rating * 20;
 
         LogVisitor::create([
             'toko_id' => $tokoId,
