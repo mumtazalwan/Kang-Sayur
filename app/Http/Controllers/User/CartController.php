@@ -193,8 +193,8 @@ class CartController extends Controller
             'info_pengiriman' => [
                 'alamat_id' => $alamat->id,
                 'nama' => $alamat->nama_penerima,
-                'nomot_telepon' => $user->phone_number,
-                'alamat' => $user->address
+                'nomot_telepon' => $alamat->nomor_hp,
+                'alamat' => $alamat->alamat_lengkap
             ],
             'data' => $data,
             'rincian' => [
