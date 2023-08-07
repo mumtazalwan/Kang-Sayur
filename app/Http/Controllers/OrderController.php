@@ -157,7 +157,11 @@ class OrderController extends Controller
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
-                'addresses.*',
+                'addresses.nama_pemesan',
+                'addresses.nomor_hp',
+                'addresses.alamat_lengkap',
+                'addresses.latitude as address_lat',
+                'addresses.longitude as address_long',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -537,7 +541,8 @@ class OrderController extends Controller
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
-                'addresses.*',
+                'addresses.latitude as address_lat',
+                'addresses.longitude as address_long',
                 'orders.*',
                 'tokos.*',
                 'users.name as nama_user',
@@ -566,8 +571,8 @@ class OrderController extends Controller
                     'nama_pemesan' => $transaction->nama_user,
                     'nomor_telfon' => $transaction->phone_number,
                     'alamat' => $transaction->alamat_user,
-                    'user_lat' => $transaction->latitude,
-                    'user_long' => $transaction->longitude,
+                    'user_lat' => $transaction->address_long,
+                    'user_long' => $transaction->address_long,
                     'user_id' => $transaction->user_id,
                     'dipesan' => $transaction->created_at->format('d, M Y'),
                     'barang_pesanan' => $relatedOrders,
