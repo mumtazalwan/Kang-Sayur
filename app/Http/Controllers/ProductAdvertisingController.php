@@ -111,7 +111,7 @@ class ProductAdvertisingController extends Controller
 
         $mytime = Carbon::now()->addDay(1)->format('Y-m-d');
         $data = ProductAdvertising::where('expire_through', '>', $mytime)
-            ->where(DB::raw("(DATE_FORMAT(expire_through,'%Y-%m-%d'))"), '=', $mytime)
+            ->where(DB::raw("(DATE_FORMAT(created_at,'%Y-%m-%d'))"), '=', $mytime)
             ->get();
 
         return response()->json([
