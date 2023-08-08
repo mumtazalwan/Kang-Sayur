@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'longitude' => 110.842843,
             'latitude' => -6.753808,
             'created_at' => $now,
-            'update_at' => $now
+            'updated_at' => $now
         ]);
 
         User::create([
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
             'longitude' => 110.842843,
             'latitude' => -6.753808,
             'created_at' => $now,
-            'update_at' => $now
+            'updated_at' => $now
         ]);
 
         User::create([
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
             'longitude' => 110.842843,
             'latitude' => -6.753808,
             'created_at' => $now,
-            'update_at' => $now
+            'updated_at' => $now
         ]);
 
         User::create([
@@ -70,7 +70,7 @@ class UserSeeder extends Seeder
             'longitude' => 110.842843,
             'latitude' => -6.753808,
             'created_at' => $now,
-            'update_at' => $now
+            'updated_at' => $now
         ]);
 
         User::create([
@@ -84,7 +84,7 @@ class UserSeeder extends Seeder
             'longitude' => 110.842843,
             'latitude' => -6.753808,
             'created_at' => $now,
-            'update_at' => $now
+            'updated_at' => $now
         ]);
     }
 }
