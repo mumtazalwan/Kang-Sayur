@@ -180,6 +180,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 // driver
 Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driver'], function () {
     Route::get('/profile', [DriverController::class, 'driverInfo']);
+    Route::get('/analisa', [DriverController::class, 'analisa']);
 
     Route::group(['prefix' => '/order'], function () {
         Route::get('/list', [OrderController::class, 'readyToPickedUp']);
