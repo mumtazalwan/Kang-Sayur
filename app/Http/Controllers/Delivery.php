@@ -59,6 +59,8 @@ class Delivery extends Controller
     // ubah status menjadi selesai
     public function finishOrder(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'transaction_code' => 'required',
             'store_id' => 'required',
@@ -69,7 +71,7 @@ class Delivery extends Controller
         $order = Order::where('store_id', request('store_id'))->where('transaction_code', request('transaction_code'))->get();
 
         if ($orderS == "Sedang diantar") {
-            $order->toQuery()->update(array("status" => 'Selesai'));
+            $order->toQuery()->update(array("status" => 'Selesai', 'delivered_by' => $user->id));
 
             return response()->json([
                 'message' => 'Status berhasil diubah'
@@ -90,6 +92,7 @@ class Delivery extends Controller
             ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
             ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
             ->where('transactions.status', 'Sudah dibayar')
+            ->where('orders.delivered_by', Auth::user()->id)
             ->groupBy('transactions.transaction_code', 'orders.store_id')
             ->orderBy('transactions.created_at', "DESC")
             ->select(
