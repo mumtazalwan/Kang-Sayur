@@ -27,6 +27,7 @@ class AuthenticationController extends Controller
             'phone_number' => 'required|numeric|min:10',
             'longitude' => 'required|between:-180,180',
             'latitude' => 'required|between:-90,90',
+            'tanggal_lahit' => 'required|date_format:Y-m-d H:i:s',
             'password' => 'required|string|min:8'
         ]);
 
@@ -61,6 +62,7 @@ class AuthenticationController extends Controller
                     'address' => request('address'),
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude'),
+                    'tanggal_lahir' => request('tanggal_lahir'),
                     'sandi_id' => $sandiId
                 ]);
             } else {
@@ -71,6 +73,7 @@ class AuthenticationController extends Controller
                     'address' => request('address'),
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude'),
+                    'tanggal_lahir' => request('tanggal_lahir'),
                     'sandi_id' => $sandiId
                 ]);
             }
