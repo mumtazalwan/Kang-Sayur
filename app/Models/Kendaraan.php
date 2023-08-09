@@ -14,6 +14,7 @@ class Kendaraan extends Model
         'toko_id',
         'noTelfon_cadangan',
         'jenis_kendaraan',
+        'nama_kendaraan',
         'nomor_polisi',
         'nomor_rangka',
         'photo_ktp',
