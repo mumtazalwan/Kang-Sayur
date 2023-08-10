@@ -331,11 +331,11 @@ class ProdukController extends Controller
     public function verifikasi(Request $request)
     {
         $produkId = $request->produkId;
-
+        $userData = Auth::user();
         $toko_id = Produk::where('id', $produkId)->first();
         $nama_toko = Toko::where('id', $toko_id->toko_id)->first();
 
-        $data = Status::where('statuses.produk_id', $produkId)
+        Status::where('statuses.produk_id', $produkId)
             ->update([
                 'status' => 'Accepted'
             ]);
@@ -382,6 +382,8 @@ class ProdukController extends Controller
             'status_code' => '200',
             'message' => "berhasil di verifikasi",
             'data' => $data,
+            'device_token' => $userData->device_token,
+            'FCM_SERVICE_KEY' => $fcmservicekey
         ]);
     }
 }
