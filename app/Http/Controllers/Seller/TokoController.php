@@ -611,8 +611,8 @@ class TokoController extends Controller
             ->select('users.name as nama_driver',
                 'users.phone_number as nomor_telfon',
                 'users.photo as foto_driver',
-                'kendaraan.nama_kendaraan',
-                'kendaraan.noor_polisi')
+                'kendaraans.nama_kendaraan',
+                'kendaraans.noor_polisi')
             ->get();
 
         return response()->json([
