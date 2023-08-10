@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Seller;
 
+use App\Events\VerifiyProductNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 use App\Models\Produk;
@@ -36,13 +38,25 @@ class ProdukController extends Controller
     // search all produk
     public function home_search($keyword)
     {
+        $user = Auth::user();
+
         $data = Produk::where('nama_produk', 'LIKE', '%' . $keyword . '%')
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
             ->where('statuses.status', '=', 'Accepted')
             ->groupBy('produk.id')
-            ->select('produk.id', 'tokos.nama_toko', 'produk.nama_produk', 'variants.variant', 'variants.variant_img as image', 'variants.harga_variant as harga')
+            ->select('produk.id',
+                'tokos.nama_toko',
+                'produk.nama_produk',
+                'variants.variant',
+                'variants.variant_img as image',
+                'variants.harga_variant as harga',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                * cos(radians(tokos.latitude))
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                + sin(radians(" . $user->latitude . "))
+                * sin(radians(tokos.latitude))) AS distance"))
             ->get();
 
         if (count($data)) {
@@ -318,16 +332,56 @@ class ProdukController extends Controller
     {
         $produkId = $request->produkId;
 
+        $toko_id = Produk::where('id', $produkId)->first();
+        $nama_toko = Toko::where('id', $toko_id->toko_id)->first();
+
         $data = Status::where('statuses.produk_id', $produkId)
             ->update([
                 'status' => 'Accepted'
             ]);
+
+//        event(new VerifiyProductNotification($toko_id->toko_id, $message, $nama_toko->nama_toko));
+
+        $fcmservicekey = env("FCM_SERVER_KEY");
+        $headers = [
+            'Authorization: key=' . $fcmservicekey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        $data = [
+            "registration_ids" => Auth::user()->device_token,
+            "notification" => [
+                "title" => "Produk Verifikasi",
+                "body" => "HI Toko $nama_toko->nama_toko, Produk anda sudah di verifikasi oleh admin kami loh",
+                "content_available" => true,
+                "priority" => "high",
+            ],
+        ];
+        $dataString = json_encode($data);
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        Log::info($response);
+
+        if ($response === false) {
+            Log::error(curl_error($ch));
+        }
+
+        curl_close($ch);
 
         return response()->json([
             'status_code' => '200',
             'message' => "berhasil di verifikasi",
             'data' => $data,
         ]);
-
     }
 }

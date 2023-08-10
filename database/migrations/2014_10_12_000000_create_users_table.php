@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->string('address')->default("");
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
+            $table->string('device_token');
             $table->rememberToken()->default("");
             $table->timestamps();
         });
