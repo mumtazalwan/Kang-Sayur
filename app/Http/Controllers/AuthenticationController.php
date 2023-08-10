@@ -378,10 +378,6 @@ class AuthenticationController extends Controller
         if ($user && Hash::check($request->password, $user_pw->password)) {
             $token = $user->createToken('user log in')->plainTextToken;
 
-            $user->update([
-                'device_token' => request('devicer_token')
-            ]);
-
             return response()->json([
                 'status' => 200,
                 'message' => "user personal information",
@@ -399,5 +395,25 @@ class AuthenticationController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+    }
+
+    public function device_token_update(Request $request)
+    {
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+            'device_token' => 'required',
+        ]);
+
+        $user = User::where('email', request('email'))->first();
+
+        $user->update([
+            'device_token' => request('device_token')
+        ]);
+
+        return response()->json([
+            'data' => $user
+        ]);
     }
 }
