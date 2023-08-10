@@ -41,6 +41,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/driver/register', [AuthenticationController::class, 'registerAsDriver']);
     Route::post('/login', [AuthenticationController::class, 'login']);
     Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
+    Route::get('/update/device/token', [AuthenticationController::class, 'device_token_update']);
 });
 
 // user
