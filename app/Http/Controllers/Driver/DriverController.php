@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kendaraan;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -59,5 +60,22 @@ class DriverController extends Controller
                 'total_jarak' => $total_jarak
             ]
         ]);
+    }
+
+    public function deleteDriver(Request $request)
+    {
+        $driverId = $request->driverId;
+
+        $user = User::where('id', $driverId)->first();
+        $user->delete();
+
+        $kendaraan = Kendaraan::where('driver_id', $driverId)->first();
+        $kendaraan->delete();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'Driver berhasil di delete'
+        ]);
+
     }
 }
