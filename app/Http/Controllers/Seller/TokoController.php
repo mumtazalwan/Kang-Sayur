@@ -612,7 +612,7 @@ class TokoController extends Controller
                 'users.phone_number as nomor_telfon',
                 'users.photo as foto_driver',
                 'kendaraans.nama_kendaraan',
-                'kendaraans.noor_polisi')
+                'kendaraans.nomor_polisi')
             ->get();
 
         return response()->json([
