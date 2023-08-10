@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Events\VerifiyProductNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -331,18 +332,16 @@ class ProdukController extends Controller
     public function verifikasi(Request $request)
     {
         $produkId = $request->produkId;
-        $userData = Auth::user();
         $toko_id = Produk::where('id', $produkId)->first();
         $nama_toko = Toko::where('id', $toko_id->toko_id)->first();
+        $seller = User::where('id', $nama_toko->seller_id)->first();
 
         Status::where('statuses.produk_id', $produkId)
             ->update([
                 'status' => 'Accepted'
             ]);
 
-//        event(new VerifiyProductNotification($toko_id->toko_id, $message, $nama_toko->nama_toko));
-
-        $fcmservicekey = env("FCM_SERVER_KEY");
+        $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
         $headers = [
             'Authorization: key=' . $fcmservicekey,
             'Content-Type: application/json',
@@ -351,7 +350,7 @@ class ProdukController extends Controller
         $ch = curl_init();
 
         $data = [
-            "registration_ids" => Auth::user()->device_token,
+            "registration_ids" => [$seller->device_token],
             "notification" => [
                 "title" => "Produk Verifikasi",
                 "body" => "HI Toko $nama_toko->nama_toko, Produk anda sudah di verifikasi oleh admin kami loh",
@@ -382,8 +381,7 @@ class ProdukController extends Controller
             'status_code' => '200',
             'message' => "berhasil di verifikasi",
             'data' => $data,
-            'device_token' => $userData->device_token,
-            'FCM_SERVICE_KEY' => $fcmservicekey
+            'user' => $seller
         ]);
     }
 }
