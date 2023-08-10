@@ -16,7 +16,8 @@
         "midtrans/midtrans-php": "^2.5",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^5.10",
-        "staudenmeir/eloquent-has-many-deep": "^1.18"
+        "staudenmeir/eloquent-has-many-deep": "^1.18",
+      "ext-curl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
