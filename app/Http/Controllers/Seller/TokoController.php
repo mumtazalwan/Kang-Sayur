@@ -610,7 +610,7 @@ class TokoController extends Controller
             ->join('users', 'users.id', '=', 'kendaraans.driver_id')
             ->select('users.name as nama_driver',
                 'users.phone_number as nomor_telfon',
-                'users.photo foto_driver',
+                'users.photo as foto_driver',
                 'kendaraan.nama_kendaraan',
                 'kendaraan.noor_polisi')
             ->get();
