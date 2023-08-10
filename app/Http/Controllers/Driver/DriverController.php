@@ -31,11 +31,12 @@ class DriverController extends Controller
     {
         $user = Auth::user();
 
-        $jumlah_menagntar = Order::where('delivered_by', $user->id)->get();
+        $jumlah_menagntar = Order::where('delivered_by', $user->id)->groupBy('transaction_code')->get();
 
         $total_jarak = Order::where('delivered_by', $user->id)
             ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+            ->groupBy('transaction_code')
             ->sum(DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
             * cos(radians(tokos.longitude) - radians(addresses.longitude))

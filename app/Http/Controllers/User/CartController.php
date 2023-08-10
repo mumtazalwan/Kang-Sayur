@@ -64,19 +64,23 @@ class CartController extends Controller
             ->where('carts.variant_id', $variantId)
             ->groupBy('carts.produk_id')
             ->select(DB::raw('COUNT(carts.produk_id) as inCart'))
-            ->first();
+            ->value('status');
 
         if ($customInpt > $currentProduct->inCart) {
-            if (!($currentProduct->status != true)) {
+            if ($currentProduct->status == 'false') {
                 for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
                     Cart::create([
                         'user_id' => $user->id,
                         'produk_id' => $produkId,
                         'variant_id' => $variantId,
                         'toko_id' => $tokoId,
-                        'status' => 'true',
+                        'status' => 'false',
                     ]);
                 }
+
+                return response()->json([
+                    'message' => 'jumlah barang berhasil ditabah sebelumnya false'
+                ]);
             } else {
                 for ($i = $currentProduct->inCart; $i < $customInpt; $i++) {
                     Cart::create([
@@ -87,6 +91,10 @@ class CartController extends Controller
                         'status' => 'true',
                     ]);
                 }
+                return response()->json([
+                    'message' => 'jumlah barang berhasil ditabah sebelumnya true'
+                ]);
+
             }
 
             return response()->json([

@@ -120,6 +120,7 @@ class AuthenticationController extends Controller
             'store_address' => 'required',
             'store_longitude' => 'required|between:-180,180',
             'store_latitude' => 'required|between:-90,90',
+            'device_token' => 'required',
             'open' => 'required|date_format:H:i',
             'close' => 'required|date_format:H:i|after:open',
         ]);
@@ -153,6 +154,7 @@ class AuthenticationController extends Controller
                     'sandi_id' => $sandiId,
                     'phone_number' => request('phone_number'),
                     'address' => request('owner_address'),
+                    'device_token' => request('device_token'),
                     'longitude' => request('store_longitude'),
                     'latitude' => request('store_latitude')
                 ]);
@@ -194,6 +196,7 @@ class AuthenticationController extends Controller
                     'sandi_id' => $sandiId,
                     'phone_number' => request('phone_number'),
                     'address' => request('owner_address'),
+                    'device_token' => request('device_token'),
                     'longitude' => request('store_longitude'),
                     'latitude' => request('store_latitude')
                 ]);
@@ -358,7 +361,8 @@ class AuthenticationController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'device_token' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -373,6 +377,10 @@ class AuthenticationController extends Controller
 
         if ($user && Hash::check($request->password, $user_pw->password)) {
             $token = $user->createToken('user log in')->plainTextToken;
+
+            $user->update([
+                'device_token' => request('devicer_token')
+            ]);
 
             return response()->json([
                 'status' => 200,

@@ -40,6 +40,7 @@ class User extends Authenticatable
         'phone_number',
         'tanggal_lahir',
         'address',
+        'device_token',
         'longitude',
         'latitude'
     ];
