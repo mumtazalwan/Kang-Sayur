@@ -158,6 +158,10 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
         Route::get('/all', [ReviewController::class, 'allreview']);
         Route::put('/reply', [ReviewController::class, 'reply']);
     });
+
+    Route::group(['prefix' => '/inbox'], function () {
+        Route::get('/list-pesanan', [\App\Http\Controllers\InboxController::class, 'listPesanan']);
+    });
 });
 
 // admin
