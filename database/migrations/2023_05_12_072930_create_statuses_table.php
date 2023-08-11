@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('statuses', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->integer('produk_id');
             $table->integer('toko_id');
             $table->enum('status', ['Pending', 'Accepted', 'Rejected'])->default('Pending');
+            $table->timestamps();
         });
     }
 

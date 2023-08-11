@@ -42,7 +42,16 @@ class Produk extends Model
         return $this->hasMany(Review::class, 'product_id')
             ->join('users', 'users.id', '=', 'reviews.id_user')
             ->select([
-                'reviews.*',
+                'reviews.rating as rating_produk',
+                'reviews.comment as komentar_user',
+                'reviews.variant_id',
+                'reviews.transaction_code',
+                'reviews.reply',
+                'reviews.id',
+                'reviews.product_id',
+                'reviews.toko_id',
+                'reviews.direply',
+                DB::raw('DATE_FORMAT(reviews.created_at, "%Y-%m-%d") as tanggal_comment'),
                 'users.name as name_user',
                 'users.photo as gambar_user'
             ]);

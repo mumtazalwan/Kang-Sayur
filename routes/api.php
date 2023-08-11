@@ -160,7 +160,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::group(['prefix' => '/inbox'], function () {
-        Route::get('/list-pesanan', [\App\Http\Controllers\InboxController::class, 'listPesanan']);
+        Route::get('/data-inbox', [\App\Http\Controllers\InboxController::class, 'listInbox']);
     });
 });
 
