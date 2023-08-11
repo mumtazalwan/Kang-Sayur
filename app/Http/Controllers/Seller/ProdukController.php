@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Events\VerifiyProductNotification;
 use App\Http\Controllers\Controller;
+use App\Models\Inbox;
 use App\Models\Kategori;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -376,6 +377,12 @@ class ProdukController extends Controller
         }
 
         curl_close($ch);
+
+        Inbox::create([
+            'user_id' => $seller->id,
+            'judul' => "Produk Verifikasi",
+            'body' => "HI Toko $nama_toko->nama_toko, Produk anda sudah di verifikasi oleh admin kami loh"
+        ]);
 
         return response()->json([
             'status_code' => '200',
