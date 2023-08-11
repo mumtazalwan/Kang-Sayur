@@ -11,6 +11,7 @@ use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Snap;
 
@@ -511,6 +512,50 @@ class OrderController extends Controller
 
                 $dataTransaction->toQuery()->update(array("status" => 'Sudah dibayar'));
                 $dataOrder->toQuery()->update(array("status" => 'Menunggu konfirmasi'));
+
+                $seller = Toko::where('id', $dataOrder->store_id)->first();
+
+                $transaction = Order::where('store_id', $dataOrder->store_id)
+                    ->join('produk', 'produk.id', '=', 'orders.product_id')
+                    ->select('orders.transaction_code as nomor_pesanan', DB::raw('COUNT(orders.id) - 1 as jumlah_pesanan'), 'produk.nama_produk')
+                    ->groupBy('transaction_code')
+                    ->get();
+
+                $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
+                $headers = [
+                    'Authorization: key=' . $fcmservicekey,
+                    'Content-Type: application/json',
+                ];
+
+                $ch = curl_init();
+
+                $data = [
+                    "registration_ids" => [$seller->device_token],
+                    "notification" => [
+                        "title" => "Pesanan Baru $dataOrder->transaction_code",
+                        "body" => "$transaction->nama_produk dan $transaction->jumlah_pesanan lainnya. Ayo segara konfirmasi pesanan",
+                        "content_available" => true,
+                        "priority" => "high",
+                    ],
+                ];
+                $dataString = json_encode($data);
+
+                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+                $response = curl_exec($ch);
+
+                Log::info($response);
+
+                if ($response === false) {
+                    Log::error(curl_error($ch));
+                }
+
+                curl_close($ch);
 
                 // delete stock after payment
 //                $dataDelete = Variant::join('orders', 'orders.variant_id', '=', 'variants.id')

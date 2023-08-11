@@ -246,7 +246,7 @@ class CartController extends Controller
                 'variants.variant',
                 'variants.harga_variant',
                 'variants.variant_img as gambar_produk'])
-            ->get();
+            ->first();
 
         $ongkir = Toko::join('produk', 'produk.toko_id', 'tokos.id')
             ->join('variants', 'variants.product_id', 'produk.id')
