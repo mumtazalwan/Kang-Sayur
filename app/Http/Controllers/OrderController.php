@@ -513,7 +513,7 @@ class OrderController extends Controller
                 $dataTransaction->toQuery()->update(array("status" => 'Sudah dibayar'));
                 $dataOrder->toQuery()->update(array("status" => 'Menunggu konfirmasi'));
 
-                $seller = Toko::where('id', $dataOrder->store_id)->first();
+                $seller = Toko::where('id', $dataOrder->store_id)->get();
 
                 $transaction = Order::where('store_id', $dataOrder->store_id)
                     ->join('produk', 'produk.id', '=', 'orders.product_id')
