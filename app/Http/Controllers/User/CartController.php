@@ -63,7 +63,7 @@ class CartController extends Controller
             ->where('carts.produk_id', $produkId)
             ->where('carts.variant_id', $variantId)
             ->groupBy('carts.produk_id')
-            ->select(DB::raw('COUNT(carts.produk_id) as inCart'))
+            ->select(DB::raw('COUNT(carts.produk_id) as inCart'), 'carts.status')
             ->value('status');
 
         if ($customInpt > $currentProduct->inCart) {
