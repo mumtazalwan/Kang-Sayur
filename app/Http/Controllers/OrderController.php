@@ -516,62 +516,60 @@ class OrderController extends Controller
 
                 foreach ($dataOrder as $orders) {
 
+//                    $transactions = Order::where('transaction_code', $request->order_id)
+//                        ->join('produk', 'produk.id', '=', 'orders.product_id')
+//                        ->join('tokos', 'tokos.id', $orders->store_id)
+//                        ->select('orders.transaction_code as nomor_pesanan',
+//                            DB::raw('COUNT(orders.id) - 1 as jumlah_pesanan'),
+//                            'produk.nama_produk',
+//                            'tokos.nama_toko',
+//                            'tokok.device_token')
+//                        ->groupBy('transaction_code')
+//                        ->get();
+
                     Inbox::create([
                         'user_id' => $orders->store_id,
                         'judul' => "Pesanan Baru, No. $orders->transaction_code",
                         'body' => "HI seller, ada pesanan baru lho.. segera di verifikasi ya"
                     ]);
 
-                }
+                    $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
+                    $headers = [
+                        'Authorization: key=' . $fcmservicekey,
+                        'Content-Type: application/json',
+                    ];
 
-//                $transaction = Order::where('store_id', $dataOrder->store_id)
-//                    ->join('produk', 'produk.id', '=', 'orders.product_id')
-//                    ->join('tokos', 'tokos.id', $dataOrder->store_id)
-//                    ->select('orders.transaction_code as nomor_pesanan',
-//                        DB::raw('COUNT(orders.id) - 1 as jumlah_pesanan'),
-//                        'produk.nama_produk',
-//                        'tokos.nama_toko',
-//                        'tokoks.device_token')
-//                    ->groupBy('transaction_code')
-//                    ->get();
-//
-//                foreach ($transaction as $transactions) {
-//                    $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
-//                    $headers = [
-//                        'Authorization: key=' . $fcmservicekey,
-//                        'Content-Type: application/json',
-//                    ];
-//
-//                    $ch = curl_init();
-//
-//                    $data = [
-//                        "registration_ids" => [$transactions->device_token],
-//                        "notification" => [
-//                            "title" => "Pesanan Baru $dataOrder->transaction_code",
-//                            "body" => "$transactions->nama_produk dan $transactions->jumlah_pesanan lainnya. Ayo segara konfirmasi pesanan",
-//                            "content_available" => true,
-//                            "priority" => "high",
-//                        ],
-//                    ];
-//                    $dataString = json_encode($data);
-//
-//                    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-//                    curl_setopt($ch, CURLOPT_POST, true);
-//                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//                    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-//
-//                    $response = curl_exec($ch);
-//
-//                    Log::info($response);
-//
-//                    if ($response === false) {
-//                        Log::error(curl_error($ch));
-//                    }
-//
-//                    curl_close($ch);
-//                }
+                    $ch = curl_init();
+
+                    $data = [
+                        "registration_ids" => ['dlxfIk2eQ3CRm4bASIVFuu:APA91bGBkEQQkSBo4KfXFiCyAKcrP5QsgCkR3dD0oshs6fu6DjTKWmjJPtYMSSMdmhFcED1I1xaznMZO2BbYhMDUi23qcPrPmlkT6HItMN5hVGAzYUO4sWG12JtgKZ-ajkEFw9wLdScE'],
+                        "notification" => [
+                            "title" => "Pesanan Baru $dataOrder->transaction_code",
+                            "body" => "Ada pesanan nih. Ayo segara konfirmasi pesanan",
+                            "content_available" => true,
+                            "priority" => "high",
+                        ],
+                    ];
+                    $dataString = json_encode($data);
+
+                    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+                    $response = curl_exec($ch);
+
+                    Log::info($response);
+
+                    if ($response === false) {
+                        Log::error(curl_error($ch));
+                    }
+
+                    curl_close($ch);
+
+                }
             }
         }
     }
