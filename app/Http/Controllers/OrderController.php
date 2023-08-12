@@ -501,7 +501,7 @@ class OrderController extends Controller
     }
 
     //callback midtrans
-    public function callback(Request $request)
+    public function  callback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
@@ -544,7 +544,7 @@ class OrderController extends Controller
                     $data = [
                         "registration_ids" => ['dlxfIk2eQ3CRm4bASIVFuu:APA91bGBkEQQkSBo4KfXFiCyAKcrP5QsgCkR3dD0oshs6fu6DjTKWmjJPtYMSSMdmhFcED1I1xaznMZO2BbYhMDUi23qcPrPmlkT6HItMN5hVGAzYUO4sWG12JtgKZ-ajkEFw9wLdScE'],
                         "notification" => [
-                            "title" => "Pesanan Baru $dataOrder->transaction_code",
+                            "title" => "Pesanan Baru $orders->transaction_code",
                             "body" => "Ada pesanan nih. Ayo segara konfirmasi pesanan",
                             "content_available" => true,
                             "priority" => "high",
