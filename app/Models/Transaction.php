@@ -29,7 +29,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Menunggu konfirmasi')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
@@ -44,7 +43,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Sedang disiapkan')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
@@ -59,7 +57,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Sedang diantar')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
@@ -74,7 +71,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Selesai')
             ->where('orders.user_id', $idUser->id)
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
@@ -95,7 +91,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id', 'transaction_code')
-            ->select('orders.*','produk.nama_produk','variants.*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('orders.*', 'produk.nama_produk', 'variants.*', DB::raw('variants.harga_variant - (variants.harga_variant * discount / 100) as harga_variant'), DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     public function statusPrepared()
@@ -109,7 +105,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id', 'transaction_code')
-            ->select('orders.*','produk.nama_produk','variants.*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('orders.*', 'produk.nama_produk', 'variants.*', DB::raw('variants.harga_variant - (variants.harga_variant * discount / 100) as harga_variant'), DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     public function statusReadyDelivered()
@@ -123,7 +119,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id', 'transaction_code')
-            ->select('orders.*','produk.nama_produk','variants.*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('orders.*', 'produk.nama_produk', 'variants.*', DB::raw('variants.harga_variant - (variants.harga_variant * discount / 100) as harga_variant'),DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     public function statusDelivered()
@@ -137,7 +133,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id', 'transaction_code')
-            ->select('orders.*','produk.nama_produk','variants.*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('orders.*', 'produk.nama_produk', 'variants.*', DB::raw('variants.harga_variant - (variants.harga_variant * discount / 100) as harga_variant'),DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     public function statusDone()
@@ -151,7 +147,7 @@ class Transaction extends Model
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
             ->groupBy('variants.id', 'transaction_code')
-            ->select('orders.*','produk.nama_produk','variants.*', DB::raw("count(variants.id) as jumlah_pembelian"));
+            ->select('orders.*', 'produk.nama_produk', 'variants.*', DB::raw('variants.harga_variant - (variants.harga_variant * discount / 100) as harga_variant'),DB::raw("count(variants.id) as jumlah_pembelian"));
     }
 
     // Driver
@@ -161,7 +157,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Menunggu driver')
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')
@@ -175,7 +170,6 @@ class Transaction extends Model
 
         return $this->hasMany(Order::class, 'transaction_code')
             ->where('store_id', $this->store_id)
-
             ->where('orders.status', 'Selesai')
             ->join('variants', 'variants.id', '=', 'orders.variant_id')
             ->join('produk', 'produk.id', '=', 'orders.product_id')

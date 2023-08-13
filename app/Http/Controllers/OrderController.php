@@ -54,26 +54,49 @@ class OrderController extends Controller
             $relatedOrders = $transaction->statusOrderUser;
 
             if ($relatedOrders->isNotEmpty()) {
-                $data[] = [
-                    'icon' => 'status/toko',
-                    'nama_toko' => $transaction->nama_toko,
-                    'profil_toko' => $transaction->img_profile,
-                    'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->order_date,
-                    'kode_transaksi' => $transaction->transaction_code,
-                    'toko_id' => $transaction->store_id,
-                    'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_penerima,
-                        'nomor_telfon' => $transaction->nomor_hp,
-                        'alamat' => $transaction->alamat_lengkap
-                    ],
-                    'barang_pesanan' => $relatedOrders,
-                    'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('pembelian'),
-                        'ongkos_kirim' => $transaction->ongkir,
-                    ],
-                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
-                ];
+                if ($transaction->discount == 0) {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian'),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
+                    ];
+                } else {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
+                    ];
+                }
             }
         }
 
@@ -118,26 +141,49 @@ class OrderController extends Controller
             $relatedOrders = $transaction->statusPreparedUser;
 
             if ($relatedOrders->isNotEmpty()) {
-                $data[] = [
-                    'icon' => 'status/toko',
-                    'nama_toko' => $transaction->nama_toko,
-                    'profil_toko' => $transaction->img_profile,
-                    'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->order_date,
-                    'kode_transaksi' => $transaction->transaction_code,
-                    'toko_id' => $transaction->store_id,
-                    'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_penerima,
-                        'nomor_telfon' => $transaction->nomor_hp,
-                        'alamat' => $transaction->alamat_lengkap
-                    ],
-                    'barang_pesanan' => $relatedOrders,
-                    'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('pembelian'),
-                        'ongkos_kirim' => $transaction->ongkir,
-                    ],
-                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
-                ];
+                if ($transaction->discount == 0) {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian'),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
+                    ];
+                } else {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
+                    ];
+                }
             }
         }
 
@@ -186,28 +232,49 @@ class OrderController extends Controller
             $relatedOrders = $transaction->statusDeliveredUser;
 
             if ($relatedOrders->isNotEmpty()) {
-                $data[] = [
-                    'icon' => 'status/toko',
-                    'nama_toko' => $transaction->nama_toko,
-                    'profil_toko' => $transaction->img_profile,
-                    'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->order_date,
-                    'kode_transaksi' => $transaction->transaction_code,
-                    'toko_id' => $transaction->store_id,
-                    'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_penerima,
-                        'nomor_telfon' => $transaction->nomor_hp,
-                        'user_lat' => $transaction->address_lat,
-                        'user_long' => $transaction->address_long,
-                        'alamat' => $transaction->alamat_lengkap
-                    ],
-                    'barang_pesanan' => $relatedOrders,
-                    'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('pembelian'),
-                        'ongkos_kirim' => $transaction->ongkir,
-                    ],
-                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
-                ];
+                if ($transaction->discount == 0) {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian'),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
+                    ];
+                } else {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
+                    ];
+                }
             }
         }
 
@@ -252,26 +319,49 @@ class OrderController extends Controller
             $relatedOrders = $transaction->statusDoneUser;
 
             if ($relatedOrders->isNotEmpty()) {
-                $data[] = [
-                    'icon' => 'status/toko',
-                    'nama_toko' => $transaction->nama_toko,
-                    'profil_toko' => $transaction->img_profile,
-                    'alamat_toko' => $transaction->alamat,
-                    'tanggal' => $transaction->order_date,
-                    'kode_transaksi' => $transaction->transaction_code,
-                    'toko_id' => $transaction->store_id,
-                    'alamat pengiriman' => [
-                        'nama_pemesan' => $transaction->nama_penerima,
-                        'nomor_telfon' => $transaction->nomor_hp,
-                        'alamat' => $transaction->alamat_lengkap
-                    ],
-                    'barang_pesanan' => $relatedOrders,
-                    'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('pembelian'),
-                        'ongkos_kirim' => $transaction->ongkir,
-                    ],
-                    'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
-                ];
+                if ($transaction->discount == 0) {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian'),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => $relatedOrders->sum('pembelian') + $transaction->ongkir,
+                    ];
+                } else {
+                    $data[] = [
+                        'icon' => 'status/toko',
+                        'nama_toko' => $transaction->nama_toko,
+                        'profil_toko' => $transaction->img_profile,
+                        'alamat_toko' => $transaction->alamat,
+                        'tanggal' => $transaction->order_date,
+                        'kode_transaksi' => $transaction->transaction_code,
+                        'toko_id' => $transaction->store_id,
+                        'alamat pengiriman' => [
+                            'nama_pemesan' => $transaction->nama_penerima,
+                            'nomor_telfon' => $transaction->nomor_hp,
+                            'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'barang_pesanan' => $relatedOrders,
+                        'tagihan' => [
+                            'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
+                            'ongkos_kirim' => $transaction->ongkir,
+                        ],
+                        'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
+                    ];
+                }
             }
         }
 
@@ -425,6 +515,8 @@ class OrderController extends Controller
         $total_keseluruhan = $request->total_keseluruhan;
 
         foreach ($checkout as $key) {
+
+//            if ($key['discount']) {
             Order::create([
                 'transaction_code' => $code,
                 'product_id' => $key['product_id'],
@@ -433,7 +525,20 @@ class OrderController extends Controller
                 'notes' => !isset($key['notes']) ? "" : $key['notes'],
                 'alamat_id' => $key['alamat_id'],
                 'user_id' => $dataUser->id,
+                'discount' => !isset($key['discount']) ? "" : $key['discount']
             ]);
+//            } else {
+//                Order::create([
+//                    'transaction_code' => $code,
+//                    'product_id' => $key['product_id'],
+//                    'variant_id' => $key['variant_id'],
+//                    'store_id' => $key['store_id'],
+//                    'notes' => !isset($key['notes']) ? "" : $key['notes'],
+//                    'alamat_id' => $key['alamat_id'],
+//                    'user_id' => $dataUser->id,
+//                    'discount' => 0
+//                ]);
+//            }
         }
 
         // Set your Merchant Server Key
@@ -501,7 +606,8 @@ class OrderController extends Controller
     }
 
     //callback midtrans
-    public function  callback(Request $request)
+    public
+    function callback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
@@ -575,7 +681,8 @@ class OrderController extends Controller
     }
 
     // driver
-    public function readyToPickedUp()
+    public
+    function readyToPickedUp()
     {
         $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
             ->join('tokos', 'tokos.id', '=', 'orders.store_id')
@@ -622,10 +729,10 @@ class OrderController extends Controller
                     'dipesan' => $transaction->created_at->format('d, M Y'),
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('harga_variant'),
+                        'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => $relatedOrders->sum('harga_variant') + $transaction->ongkir
+                    'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
                 ];
             }
         }
