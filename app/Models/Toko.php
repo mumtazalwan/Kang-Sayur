@@ -16,6 +16,7 @@ class Toko extends Model
     protected $fillable = [
         'nama_toko',
         'img_profile',
+        'img_header',
         'deskripsi',
         'seller_id',
         'alamat',
@@ -53,7 +54,7 @@ class Toko extends Model
                 ]
             )
             ->groupBy('carts.produk_id', 'variant_id')
-            ->orderBy('carts.created_at',  "DESC");
+            ->orderBy('carts.created_at', "DESC");
     }
 
     public function getProdukCheckout()
@@ -83,7 +84,7 @@ class Toko extends Model
             )
             ->where('status', 'true')
             ->groupBy('carts.produk_id', 'variant_id')
-            ->orderBy('carts.created_at',  "DESC");
+            ->orderBy('carts.created_at', "DESC");
 
         return $data;
     }

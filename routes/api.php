@@ -46,9 +46,6 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
-    // update
-    Route::post('/update-profile', [UserController::class, 'updateUser']);
-
     // produk
     Route::get('/produk/all', [ProdukController::class, 'index']);
 
@@ -65,6 +62,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
     // profile
     Route::get('/profile', [UserController::class, 'index']);
+    Route::post('/update-profile', [UserController::class, 'updateUser']);
 
     // address
     Route::group(['prefix' => '/alamat'], function () {
@@ -117,6 +115,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
     Route::get('/profile', [TokoController::class, 'sellerPersonalInformation']);
+    Route::post('/edit/profile', [TokoController::class, 'editToko']);
 
     Route::get('/analysis', [TokoController::class, 'analysis']);
     Route::get('/pemasukan', [TokoController::class, 'income']);

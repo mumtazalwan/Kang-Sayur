@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 class TokoController extends Controller
@@ -28,7 +29,7 @@ class TokoController extends Controller
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
         $data = DB::table('tokos')
-            ->select('tokos.id', 'tokos.nama_toko', 'tokos.img_profile', 'users.name', 'users.email', 'users.phone_number')
+            ->select('tokos.id', 'tokos.nama_toko', 'tokos.img_profile', 'users.name', 'users.email', 'users.phone_number', 'users.address')
             ->join('users', 'users.id', '=', 'tokos.seller_id')
             ->where('tokos.seller_id', $user->id)
             ->first();
@@ -40,6 +41,149 @@ class TokoController extends Controller
         ]);
     }
 
+    public function editToko(Request $request)
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->where('tokos.seller_id', $user->id)->first();
+
+        $request->validate([
+            'nama_toko' => 'required|string',
+            'deskripsi_toko' => 'required',
+            'address' => 'required',
+            'photo_profile' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'photo_header' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'provinsi' => 'required',
+            'kota' => 'required',
+            'open' => 'required|date_format:H:i',
+            'close' => 'required|date_format:H:i|after:open',
+        ]);
+
+        if ($request->photo_profile && $request->photo_header) {
+
+            // store photo profile
+            $timestamp = time();
+            $photoProfile = $timestamp . $request->photo_profile->getClientOriginalName();
+            $pathProfile = '/user_profile/' . $photoProfile;
+            Storage::disk('public')->put($pathProfile, file_get_contents($request->photo_profile));
+
+            // store photo header
+            $timestamp = time();
+            $photoHeader = $timestamp . $request->photo_header->getClientOriginalName();
+            $pathHeader = '/user_profile/' . $photoHeader;
+            Storage::disk('public')->put($pathHeader, file_get_contents($request->photo_header));
+
+            if ($tokoId->img_profile) {
+                $profilePath = public_path($tokoId->img_profile);
+                if (\Illuminate\Support\Facades\File::exists($profilePath)) {
+                    \Illuminate\Support\Facades\File::delete($profilePath);
+                }
+            }
+
+            if ($tokoId->img_header) {
+                $headerPath = public_path($tokoId->img_header);
+                if (\Illuminate\Support\Facades\File::exists($headerPath)) {
+                    \Illuminate\Support\Facades\File::delete($headerPath);
+                }
+            }
+
+            Toko::where('tokos.id', $tokoId->id)
+                ->update([
+                    'img_profile' => '/storage' . $pathProfile,
+                    'img_header' => '/storage' . $pathHeader,
+                    'nama_toko' => request('nama_toko'),
+                    'deskripsi' => request('deskripsi_toko'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('address'),
+                    'latitude' => $tokoId->latitude,
+                    'longitude' => $tokoId->longitude,
+                    'provinsi' => request('provinsi'),
+                    'kota' => request('kota'),
+                    'open' => request('open'),
+                    'close' => request('close')
+                ]);
+        } else if ($request->photo_profile) {
+
+            // store photo profile
+            $timestamp = time();
+            $photoProfile = $timestamp . $request->photo_profile->getClientOriginalName();
+            $pathProfile = '/user_profile/' . $photoProfile;
+            Storage::disk('public')->put($pathProfile, file_get_contents($request->photo_profile));
+
+            if ($tokoId->img_profile) {
+                $profilePath = public_path($tokoId->img_profile);
+                if (\Illuminate\Support\Facades\File::exists($profilePath)) {
+                    \Illuminate\Support\Facades\File::delete($profilePath);
+                }
+            }
+
+            Toko::where('tokos.id', $tokoId->id)
+                ->update([
+                    'img_profile' => '/storage' . $pathProfile,
+                    'img_header' => $tokoId->img_header,
+                    'nama_toko' => request('nama_toko'),
+                    'deskripsi' => request('deskripsi_toko'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('address'),
+                    'latitude' => $tokoId->latitude,
+                    'longitude' => $tokoId->longitude,
+                    'provinsi' => request('provinsi'),
+                    'kota' => request('kota'),
+                    'open' => request('open'),
+                    'close' => request('close')
+                ]);
+        } else if ($request->photo_header) {
+
+            // store photo header
+            $timestamp = time();
+            $photoHeader = $timestamp . $request->photo_header->getClientOriginalName();
+            $pathHeader = '/user_profile/' . $photoHeader;
+            Storage::disk('public')->put($pathHeader, file_get_contents($request->photo_header));
+
+            if ($tokoId->img_header) {
+                $headerPath = public_path($tokoId->img_header);
+                if (\Illuminate\Support\Facades\File::exists($headerPath)) {
+                    \Illuminate\Support\Facades\File::delete($headerPath);
+                }
+            }
+
+            Toko::where('tokos.id', $tokoId->id)
+                ->update([
+                    'img_profile' => $tokoId->img_profile,
+                    'img_header' => '/storage' . $pathHeader,
+                    'nama_toko' => request('nama_toko'),
+                    'deskripsi' => request('deskripsi_toko'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('address'),
+                    'latitude' => $tokoId->latitude,
+                    'longitude' => $tokoId->longitude,
+                    'provinsi' => request('provinsi'),
+                    'kota' => request('kota'),
+                    'open' => request('open'),
+                    'close' => request('close')
+                ]);
+        } else {
+            Toko::where('tokos.id', $tokoId->id)
+                ->update([
+                    'img_profile' => $tokoId->img_profile,
+                    'img_header' => $tokoId->img_header,
+                    'nama_toko' => request('nama_toko'),
+                    'deskripsi' => request('deskripsi_toko'),
+                    'seller_id' => $user->id,
+                    'alamat' => request('address'),
+                    'latitude' => $tokoId->latitude,
+                    'longitude' => $tokoId->longitude,
+                    'provinsi' => request('provinsi'),
+                    'kota' => request('kota'),
+                    'open' => request('open'),
+                    'close' => request('close')
+                ]);
+        }
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'berhasil diupdate',
+        ]);
+    }
 
     public function index()
     {
