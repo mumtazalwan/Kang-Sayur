@@ -61,8 +61,8 @@ class TokoController extends Controller
             'address' => 'required',
             'photo_profile' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'photo_header' => 'file|image|mimes:png,jpg,jpeg|max:3048',
-            'provinsi' => 'required',
-            'kota' => 'required',
+//            'provinsi' => 'required',
+//            'kota' => 'required',
             'open' => 'required|date_format:H:i',
             'close' => 'required|date_format:H:i|after:open',
         ]);
@@ -105,8 +105,8 @@ class TokoController extends Controller
                     'alamat' => request('address'),
                     'latitude' => $tokoId->latitude,
                     'longitude' => $tokoId->longitude,
-                    'provinsi' => request('provinsi'),
-                    'kota' => request('kota'),
+                    'provinsi' => $tokoId->provinsi,
+                    'kota' => $tokoId->kota,
                     'open' => request('open'),
                     'close' => request('close')
                 ]);
@@ -135,8 +135,8 @@ class TokoController extends Controller
                     'alamat' => request('address'),
                     'latitude' => $tokoId->latitude,
                     'longitude' => $tokoId->longitude,
-                    'provinsi' => request('provinsi'),
-                    'kota' => request('kota'),
+                    'provinsi' => $tokoId->provinsi,
+                    'kota' => $tokoId->kota,
                     'open' => request('open'),
                     'close' => request('close')
                 ]);
@@ -165,8 +165,8 @@ class TokoController extends Controller
                     'alamat' => request('address'),
                     'latitude' => $tokoId->latitude,
                     'longitude' => $tokoId->longitude,
-                    'provinsi' => request('provinsi'),
-                    'kota' => request('kota'),
+                    'provinsi' => $tokoId->provinsi,
+                    'kota' => $tokoId->kota,
                     'open' => request('open'),
                     'close' => request('close')
                 ]);
@@ -181,8 +181,8 @@ class TokoController extends Controller
                     'alamat' => request('address'),
                     'latitude' => $tokoId->latitude,
                     'longitude' => $tokoId->longitude,
-                    'provinsi' => request('provinsi'),
-                    'kota' => request('kota'),
+                    'provinsi' => $tokoId->provinsi,
+                    'kota' => $tokoId->kota,
                     'open' => request('open'),
                     'close' => request('close')
                 ]);
