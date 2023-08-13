@@ -21,6 +21,7 @@ class Order extends Model
         'status_diulas',
         'store_id',
         'user_id',
-        'created_at'
+        'created_at',
+        'discount'
     ];
 }

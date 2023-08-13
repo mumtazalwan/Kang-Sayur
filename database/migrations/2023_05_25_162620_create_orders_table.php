@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->enum('status_diulas', ['menunggu diulas', 'sudah diulas'])->default('menunggu diulas');
             $table->enum('status', ['Menunggu pembayaran', 'Menunggu konfirmasi', 'Sedang disiapkan', 'Menunggu driver', 'Sedang diantar', 'Selesai'])->default('Menunggu pembayaran');
             $table->integer('delivered_by')->nullable();
+            $table->double('discount')->default(0);
             $table->timestamps();
         });
     }
