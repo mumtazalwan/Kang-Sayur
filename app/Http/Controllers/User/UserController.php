@@ -77,18 +77,6 @@ class UserController extends Controller
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude')
                 ]);
-
-//            Address::where('addresses.user_id', $user->id)
-//                ->where('addresses.prioritas_alamat', 'Utama')
-//                ->update([
-//                    'user_id' => $user->id,
-//                    'nama_penerima' => request('name'),
-//                    'nomor_hp' => request('phone_number'),
-//                    'alamat_lengkap' => request('address'),
-//                    'latitude' => request('latitude'),
-//                    'longitude' => request('longitude'),
-//                    'prioritas_alamat' => "Utama",
-//                ]);
         } else {
 
             User::where('users.id', $user->id)
@@ -104,18 +92,6 @@ class UserController extends Controller
                     'latitude' => request('latitude'),
                     'longitude' => request('longitude')
                 ]);
-
-//            Address::where('addresses.user_id', $user->id)
-//                ->where('addresses.prioritas_alamat', 'Utama')
-//                ->update([
-//                    'user_id' => $user->id,
-//                    'nama_penerima' => request('name'),
-//                    'nomor_hp' => request('phone_number'),
-//                    'alamat_lengkap' => request('address'),
-//                    'latitude' => request('latitude'),
-//                    'longitude' => request('longitude'),
-//                    'prioritas_alamat' => "Utama",
-//                ]);
         }
 
         return response()->json([
