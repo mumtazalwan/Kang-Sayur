@@ -35,7 +35,7 @@ class SaleController extends Controller
                 'produk.nama_produk',
                 'tokos.id as toko_id',
                 'tokos.nama_toko',
-                'tokos.img_profile as profile_toko',
+                'variants.variant_img as gambar_produk',
                 'variants.id as variant_id',
                 'variants.harga_variant as harga_awal',
                 'sales.harga_sale',
