@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\SaleSession;
-use App\Http\Requests\StoreSaleRequest;
-use App\Http\Requests\UpdateSaleRequest;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -73,5 +72,59 @@ class SaleController extends Controller
             'end' => $time->end,
             'data' => $session
         ]);
+    }
+
+    public function session()
+    {
+        $mytime = Carbon::now()->format('H:i:s');
+
+        $data = SaleSession::whereTime('start', '>', $mytime)->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'list sale session',
+            'data' => $data
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        $request->validate([
+            'session_id' => 'required|numeric',
+            'produk_id' => 'required|numeric',
+            'variant_id' => 'required|numeric',
+            'harga_sale' => 'required|numeric',
+            'stok' => 'required|numeric'
+        ]);
+
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+        $mydate = Carbon::now();
+
+        $sale_quota = Sale::where('session_id', request('session_id'))
+            ->join('sale_sessions', 'sale_sessions.id', '=', 'sales.session_id')
+            ->whereDate('created_at', $mydate)
+            ->get();
+
+        if (count($sale_quota) >= 10) {
+            return response()->json([
+                'status' => '200',
+                'message' => 'maaf sale sudah penuh, silahkan coba di sesi lain/tanggal lain',
+                'sale_q' => count($sale_quota)
+            ]);
+        } else {
+            Sale::create([
+                'session_id' => request('session_id'),
+                'produk_id' => request('produk_id'),
+                'variant_id' => request('variant_id'),
+                'harga_sale' => request('harga_sale'),
+                'stok' => request('stok'),
+                'created_at' => $mydate
+            ]);
+            return response()->json([
+                'status' => '200',
+                'message' => 'succes',
+            ]);
+        }
     }
 }
