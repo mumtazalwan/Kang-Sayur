@@ -256,7 +256,7 @@ class ProdukController extends Controller
         $user = Auth::user();
         $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
 
-        $data = DB::table('produk')
+        $data = Produk::with('variant')
             ->select(
                 'produk.nama_produk',
                 'produk.id as produk_id',
@@ -265,7 +265,8 @@ class ProdukController extends Controller
                 'produk.created_at as tanggal_verivikasi',
                 'statuses.status',
                 'variants.stok',
-                'variants.variant'
+                'variants.variant',
+                'produk.id'
             )
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
