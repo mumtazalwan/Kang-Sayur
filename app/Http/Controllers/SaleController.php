@@ -56,7 +56,14 @@ class SaleController extends Controller
         Sale::whereDate('created_at', '<', $mydate)->delete();
 
         if ($time == null) {
-            return response()->json(['message' => 'tidak ada promo kilat']);
+            return response()->json([
+                'status' => '200',
+                'message' => 'List Sale',
+                'title' => 'Promo kilat',
+                'start' => $time->start,
+                'end' => $time->end,
+                'data' => []
+            ]);
         }
         return response()->json([
             'status' => '200',
