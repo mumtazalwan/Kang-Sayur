@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Delivery;
 use App\Http\Controllers\Driver\DriverController;
+use App\Http\Controllers\InboxController;
 use Illuminate\Http\Request;
 
 // controller
@@ -121,6 +122,11 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::get('/pemasukan', [TokoController::class, 'income']);
     Route::get('/grafik/penjualan', [TokoController::class, 'graphic']);
 
+    Route::group(['prefix' => '/sale'], function () {
+        Route::get('/session', [SaleController::class, 'session']);
+        Route::post('/create', [SaleController::class, 'create']);
+    });
+
     Route::group(['prefix' => '/produk'], function () {
         Route::post('/create', [ProdukController::class, 'create']);
         Route::get('/display', [ProdukController::class, 'listProduct']);
@@ -159,7 +165,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::group(['prefix' => '/inbox'], function () {
-        Route::get('/data-inbox', [\App\Http\Controllers\InboxController::class, 'listInbox']);
+        Route::get('/data-inbox', [InboxController::class, 'listInbox']);
     });
 });
 

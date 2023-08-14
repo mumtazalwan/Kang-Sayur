@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 
@@ -83,15 +84,15 @@ class TokoController extends Controller
 
             if ($tokoId->img_profile) {
                 $profilePath = public_path($tokoId->img_profile);
-                if (\Illuminate\Support\Facades\File::exists($profilePath)) {
-                    \Illuminate\Support\Facades\File::delete($profilePath);
+                if (File::exists($profilePath)) {
+                    File::delete($profilePath);
                 }
             }
 
             if ($tokoId->img_header) {
                 $headerPath = public_path($tokoId->img_header);
-                if (\Illuminate\Support\Facades\File::exists($headerPath)) {
-                    \Illuminate\Support\Facades\File::delete($headerPath);
+                if (File::exists($headerPath)) {
+                    File::delete($headerPath);
                 }
             }
 
@@ -120,8 +121,8 @@ class TokoController extends Controller
 
             if ($tokoId->img_profile) {
                 $profilePath = public_path($tokoId->img_profile);
-                if (\Illuminate\Support\Facades\File::exists($profilePath)) {
-                    \Illuminate\Support\Facades\File::delete($profilePath);
+                if (File::exists($profilePath)) {
+                    File::delete($profilePath);
                 }
             }
 
@@ -150,8 +151,8 @@ class TokoController extends Controller
 
             if ($tokoId->img_header) {
                 $headerPath = public_path($tokoId->img_header);
-                if (\Illuminate\Support\Facades\File::exists($headerPath)) {
-                    \Illuminate\Support\Facades\File::delete($headerPath);
+                if (File::exists($headerPath)) {
+                    File::delete($headerPath);
                 }
             }
 

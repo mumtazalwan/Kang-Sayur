@@ -11,17 +11,12 @@ class Sale extends Model
 {
     use HasFactory;
 
-//    public function product()
-//    {
-//        return $this->belongsTo(Produk::class, 'produk_id')
-//            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
-//            ->join('variants', 'variants.product_id', '=', 'produk.id')
-//            ->select('produk.id',
-//                'produk.nama_produk',
-//                'tokos.id as toko_id',
-//                'tokos.nama_toko',
-//                'tokos.img_profile as profile_toko',
-//                'variants.id as variant_id',
-//            );
-//    }
+    public $fillable = [
+        'session_id',
+        'produk_id',
+        'variant_id',
+        'harga_sale',
+        'stok',
+        'created_at'
+    ];
 }
