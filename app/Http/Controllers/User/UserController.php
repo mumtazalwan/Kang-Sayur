@@ -156,4 +156,73 @@ class UserController extends Controller
             'message' => 'berhasil menambahkan alamat'
         ]);
     }
+
+    public function updateAlamat(Request $request)
+    {
+        $user = Auth::user();
+
+        $prioritas_alamat = $request->prioritas_alamat;
+
+        $request->validate([
+            'alamat_id' => 'required',
+            'name' => 'required|string',
+            'address' => 'required',
+            'phone_number' => 'required|numeric',
+            'longitude' => 'required|between:-180,180',
+            'latitude' => 'required|between:-90,90',
+            'label_alamat' => 'required',
+            'catatan' => 'required'
+        ]);
+
+        if ($prioritas_alamat) {
+
+            Address::where('user_id', $user->id)
+                ->where('prioritas_alamat', 'Utama')
+                ->update([
+                    'user_id' => $user->id,
+                    'nama_penerima' => request('name'),
+                    'nomor_hp' => request('phone_number'),
+                    'alamat_lengkap' => request('address'),
+                    'longitude' => request('longitude'),
+                    'latitude' => request('latitude'),
+                    'label_alamat' => request('label_alamat'),
+                    'prioritas_alamat' => 'Tambahan',
+                    'catatan' => request('catatan')
+                ]);
+
+            $alamat = Address::where('user_id', $user->id)
+                ->where('id', request('alamat_id'))
+                ->update([
+                    'user_id' => $user->id,
+                    'nama_penerima' => request('name'),
+                    'nomor_hp' => request('phone_number'),
+                    'alamat_lengkap' => request('address'),
+                    'longitude' => request('longitude'),
+                    'latitude' => request('latitude'),
+                    'label_alamat' => request('label_alamat'),
+                    'prioritas_alamat' => $prioritas_alamat,
+                    'catatan' => request('catatan')
+                ]);
+        } else {
+            $alamat = Address::where('user_id', $user->id)
+                ->where('id', request('alamat_id'))
+                ->update([
+                    'user_id' => $user->id,
+                    'nama_penerima' => request('name'),
+                    'nomor_hp' => request('phone_number'),
+                    'alamat_lengkap' => request('address'),
+                    'longitude' => request('longitude'),
+                    'latitude' => request('latitude'),
+                    'label_alamat' => request('label_alamat'),
+                    'prioritas_alamat' => 'Tambahan',
+                    'catatan' => request('catatan')
+                ]);
+        }
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'berhasil mengubah alamat',
+            'data' => $alamat
+        ]);
+    }
 }

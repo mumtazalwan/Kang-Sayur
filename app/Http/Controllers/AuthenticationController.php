@@ -120,7 +120,6 @@ class AuthenticationController extends Controller
             'store_address' => 'required',
             'store_longitude' => 'required|between:-180,180',
             'store_latitude' => 'required|between:-90,90',
-            'device_token' => 'required',
             'open' => 'required|date_format:H:i',
             'close' => 'required|date_format:H:i|after:open',
         ]);
