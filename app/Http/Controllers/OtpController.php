@@ -17,6 +17,13 @@ class OtpController extends Controller
         ]);
 
         $otp = rand(1000, 9999);
+
+        $otpExistence = Otp::where('otp', $otp)->get();
+
+        if ($otpExistence) {
+            $otp = rand(1000, 9999);
+        }
+
         $expired = Carbon::now()->addMinute(2);
 
         Mail::send(new OtpMail(request('email'), $otp));

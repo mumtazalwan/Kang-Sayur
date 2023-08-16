@@ -77,6 +77,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::group(['prefix' => '/alamat'], function () {
         Route::get('/list', [UserController::class, 'list_alamat']);
         Route::post('/tambah', [UserController::class, 'tambah_alamat']);
+        Route::post('/update', [UserController::class, 'updateAlamat']);
     });
 
     Route::group(['prefix' => '/toko'], function () {
