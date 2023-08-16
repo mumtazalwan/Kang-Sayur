@@ -121,7 +121,7 @@ class ReviewController extends Controller
                 'reviews.img_product as gambar_review',
                 'reviews.created_at as tanggal_review',
                 'reviews.direply',
-                'reviews.comment'
+                'reviews.reply'
             ])
             ->get();
 
