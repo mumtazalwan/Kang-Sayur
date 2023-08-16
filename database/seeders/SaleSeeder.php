@@ -45,13 +45,5 @@ class SaleSeeder extends Seeder
             'harga_sale' => 1000,
             'stok' => 50
         ]);
-
-        Sale::create([
-            'session_id' => 5,
-            'produk_id' => 6,
-            'variant_id' => 11,
-            'harga_sale' => 27500,
-            'stok' => 50
-        ]);
     }
 }

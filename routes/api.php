@@ -7,6 +7,7 @@ use App\Http\Controllers\InboxController;
 use Illuminate\Http\Request;
 
 // controller
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\OrderController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ProductAdvertisingController;
+use App\Mail\OtpMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/midtrans/callback', [OrderController::class, 'callback']);
 
+Route::group(['prefix' => '/otp'], function () {
+    Route::post('/generate', [\App\Http\Controllers\OtpController::class, 'generate']);
+    Route::post('/verify', [\App\Http\Controllers\OtpController::class, 'verify']);
+});
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/user/register', [AuthenticationController::class, 'registerAsUser']);
     Route::post('/seller/register', [AuthenticationController::class, 'registerAsSeller']);
@@ -47,6 +54,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 // user
 Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user'], function () {
+
     // produk
     Route::get('/produk/all', [ProdukController::class, 'index']);
 

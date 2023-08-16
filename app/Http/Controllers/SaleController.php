@@ -37,6 +37,7 @@ class SaleController extends Controller
                 'variants.variant_img as gambar_produk',
                 'variants.id as variant_id',
                 'variants.harga_variant as harga_awal',
+                'variants.variant',
                 'sales.harga_sale',
                 'sales.stok', DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
                 * cos(radians(tokos.latitude))
@@ -90,11 +91,11 @@ class SaleController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'session_id' => 'required|numeric',
-            'produk_id' => 'required|numeric',
-            'variant_id' => 'required|numeric',
-            'harga_sale' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'session_id' => 'required',
+            'produk_id' => 'required',
+            'variant_id' => 'required',
+            'harga_sale' => 'required',
+            'stok' => 'required'
         ]);
 
         $user = Auth::user();
