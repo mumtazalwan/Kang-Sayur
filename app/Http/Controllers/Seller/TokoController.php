@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Expr\Cast\Double;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 class TokoController extends Controller
@@ -259,8 +260,8 @@ class TokoController extends Controller
 
         $detail->category = $kategori;
         $detail->produk = $produk;
-        $detail->rating = $rating;
-        $detail->tingkat_kepuasan = $rating * 20;
+        $detail->rating = doubleval($rating);
+        $detail->tingkat_kepuasan = doubleval($rating * 20);
         $detail->transaksi_berhasil = count($succesPayment);
         $detail->diulas_sebanyak = count($reviewCount);
 
