@@ -53,7 +53,8 @@ class Produk extends Model
                 'reviews.direply',
                 DB::raw('DATE_FORMAT(reviews.created_at, "%Y-%m-%d") as tanggal_comment'),
                 'users.name as name_user',
-                'users.photo as gambar_user'
+                'users.photo as gambar_user',
+                'reviews.img_product'
             ]);
     }
 }

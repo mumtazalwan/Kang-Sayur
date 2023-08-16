@@ -594,7 +594,9 @@ class OrderController extends Controller
             ->where('user_id', Auth::user()->id)
             ->get();
 
-        $deleteCart->toQuery()->delete();
+        if (count($deleteCart)) {
+            $deleteCart->toQuery()->delete();
+        }
 
         return response()->json([
             'status' => 'succes',
