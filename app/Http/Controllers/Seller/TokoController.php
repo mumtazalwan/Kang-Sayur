@@ -38,6 +38,7 @@ class TokoController extends Controller
                 'tokos.alamat',
                 'tokos.open',
                 'tokos.close',
+                'tokos.deskripsi',
                 'users.name',
                 'users.email',
                 'users.phone_number',
