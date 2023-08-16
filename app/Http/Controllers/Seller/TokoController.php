@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Kendaraan;
 use App\Models\LogVisitor;
+use App\Models\Order;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -214,7 +215,8 @@ class TokoController extends Controller
         $user = Auth::user();
 
         $detail = DB::table('tokos')
-            ->select('tokos.*')
+            ->select('tokos.*', 'users.phone_number')
+            ->join('users', 'users.id', '=', 'tokos.seller_id')
             ->where('tokos.id', $tokoId)
             ->first();
 
@@ -244,14 +246,23 @@ class TokoController extends Controller
             ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
             ->first()->rating;
 
+        $reviewCount = Review::where('toko_id', $tokoId)->get();
+
         if ($rating == null) {
             $rating = 5;
         }
+
+        $succesPayment = Order::where('store_id', $tokoId)
+            ->where('orders.status', 'Selesai')
+            ->groupBy('orders.transaction_code')
+            ->get();
 
         $detail->category = $kategori;
         $detail->produk = $produk;
         $detail->rating = $rating;
         $detail->tingkat_kepuasan = $rating * 20;
+        $detail->transaksi_berhasil = count($succesPayment);
+        $detail->diulas_sebanyak = count($reviewCount);
 
         LogVisitor::create([
             'toko_id' => $tokoId,
