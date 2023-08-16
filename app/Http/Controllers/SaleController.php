@@ -78,13 +78,54 @@ class SaleController extends Controller
     public function session()
     {
         $mytime = Carbon::now()->format('H:i:s');
+        $mydate = Carbon::now()->format('Y.m.d');
 
-        $data = SaleSession::whereTime('start', '>', $mytime)->get();
+        $session = Sale::join('sale_sessions', 'sale_sessions.id', '=', 'sales.session_id')
+            ->join('produk', 'produk.id', '=', 'sales.produk_id')
+            ->join('statuses', 'statuses.produk_id', '=', 'sales.produk_id')->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->join('variants', 'variants.id', '=', 'sales.variant_id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->whereTime('sale_sessions.start', '<=', $mytime)
+            ->whereTime('sale_sessions.end', '>=', $mytime)
+            ->whereDate('sales.created_at', '=', $mydate)
+            ->select('produk.id as produk_id',
+                'produk.nama_produk',
+                'tokos.id as toko_id',
+                'tokos.nama_toko',
+                'variants.variant_img as gambar_produk',
+                'variants.id as variant_id',
+                'variants.harga_variant as harga_awal',
+                'variants.variant',
+                'sales.harga_sale',
+                'sales.stok',
+                DB::raw('100 - (sales.harga_sale/(variants.harga_variant/100)) as diskon')
+            )
+            ->groupBy('produk.id')
+            ->get();
 
+        $time = SaleSession::whereTime('start', '<=', $mytime)
+            ->whereTime('end', '>=', $mytime)
+            ->first();
+
+        Sale::whereDate('created_at', '<', $mydate)->delete();
+
+        if ($time == null) {
+            return response()->json([
+                'status' => '200',
+                'message' => 'List Sale',
+                'title' => 'Promo kilat',
+                'start' => $time->start,
+                'end' => $time->end,
+                'data' => []
+            ]);
+        }
         return response()->json([
             'status' => '200',
-            'message' => 'list sale session',
-            'data' => $data
+            'message' => 'List Sale',
+            'title' => 'Promo kilat',
+            'start' => $time->start,
+            'end' => $time->end,
+            'data' => $session
         ]);
     }
 
