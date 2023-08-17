@@ -396,10 +396,17 @@ class ProdukController extends Controller
 
     public function terlaris()
     {
+        $user = Auth::user();
+
         $data = Order::join('produk', 'produk.id', '=', 'orders.product_id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->join('statuses', 'statuses.produk_id', '=', 'orders.product_id')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->select('*', DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                * cos(radians(tokos.latitude))
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                + sin(radians(" . $user->latitude . "))
+                * sin(radians(tokos.latitude))) AS distance"))
             ->groupBy('produk.id')
             ->orderBy(DB::raw('COUNT(orders.product_id)'), 'DESC')
             ->get();
