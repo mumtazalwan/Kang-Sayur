@@ -217,6 +217,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
 Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driver'], function () {
 
     Route::get('/profile', [DriverController::class, 'driverInfo']);
+    Route::post('/edit/profile', [DriverController::class, 'updateProfile']);
     Route::get('/analisa', [DriverController::class, 'analisa']);
 
     Route::group(['prefix' => '/order'], function () {
