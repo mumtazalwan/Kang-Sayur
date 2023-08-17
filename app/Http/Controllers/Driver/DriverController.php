@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
@@ -95,6 +96,52 @@ class DriverController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil ubah paswword'
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            // user
+            'name' => 'required|string',
+            'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
+            'phone_number' => 'required|numeric|digits:11',
+            'nomor_polisi' => 'required',
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->photo) {
+
+            // store photo
+            $timestamp = time();
+            $photoName = $timestamp . $request->photo->getClientOriginalName();
+            $path = '/user_profile/' . $photoName;
+            Storage::disk('public')->put($path, file_get_contents($request->photo));
+
+            User::where('id', $user->id)
+                ->update([
+                    'name' => request('name'),
+                    'photo' => '/storage' . $path,
+                    'phone_number' => request('phone_number')
+                ]);
+        } else {
+            User::where('id', $user->id)
+                ->update([
+                    'name' => request('name'),
+                    'photo' => $user->photo,
+                    'phone_number' => request('phone_number')
+                ]);
+        }
+
+        Kendaraan::where('driver_id', $user->id)
+            ->update([
+                'nomor_polisi' => request('nomor_polisi')
+            ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Data driver berhasil diupdate'
         ]);
     }
 }
