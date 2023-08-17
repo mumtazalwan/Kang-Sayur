@@ -106,6 +106,7 @@ class DriverController extends Controller
             'name' => 'required|string',
             'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'phone_number' => 'required|numeric|digits:11',
+            'nama_kendaraan' => 'required',
             'nomor_polisi' => 'required',
         ]);
 
@@ -136,7 +137,8 @@ class DriverController extends Controller
 
         Kendaraan::where('driver_id', $user->id)
             ->update([
-                'nomor_polisi' => request('nomor_polisi')
+                'nomor_polisi' => request('nomor_polisi'),
+                'nama_kendaraan' => request('nama_kendaraan'),
             ]);
 
         return response()->json([
