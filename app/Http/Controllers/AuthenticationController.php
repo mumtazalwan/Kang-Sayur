@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OtpMail;
+use App\Mail\ResetPassword;
 use App\Models\Address;
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
@@ -11,6 +13,7 @@ use App\Models\Toko;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
@@ -410,6 +413,18 @@ class AuthenticationController extends Controller
 
         return response()->json([
             'data' => $user
+        ]);
+    }
+
+    public function sendEmailResetPassword()
+    {
+        $user = Auth::user();
+
+        Mail::send(new ResetPassword($user->email, $user->name));
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Email berhasil terkirim, silahkan cek email anda'
         ]);
     }
 }

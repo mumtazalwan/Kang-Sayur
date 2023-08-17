@@ -125,6 +125,11 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
 // seller
 Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'seller'], function () {
+
+    Route::group(['prefix' => '/password'], function () {
+        Route::get('/send/mail', [AuthenticationController::class, 'sendEmailResetPassword']);
+    });
+
     Route::get('/profile', [TokoController::class, 'sellerPersonalInformation']);
     Route::post('/edit/profile', [TokoController::class, 'editToko']);
 
