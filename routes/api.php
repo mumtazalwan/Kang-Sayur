@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/midtrans/callback', [OrderController::class, 'callback']);
 
+Route::post('/twostep/email', [AuthenticationController::class, 'detectEmail']);
+
 Route::group(['prefix' => '/otp'], function () {
     Route::post('/generate', [OtpController::class, 'generate']);
     Route::post('/verify', [OtpController::class, 'verify']);

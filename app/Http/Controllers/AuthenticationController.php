@@ -443,4 +443,23 @@ class AuthenticationController extends Controller
             'message' => 'Berhasil ubah paswword'
         ]);
     }
+
+    public function detectEmail(Request $request)
+    {
+        $email = $request->email;
+
+        $dataChecker = User::where('email', $email)->first();
+
+        if ($dataChecker) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'maaf, email yang anda masukan sudah terdaftar'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'email dapat didaftarkan'
+        ]);
+    }
 }
