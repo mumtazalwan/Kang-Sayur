@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Driver;
 use App\Http\Controllers\Controller;
 use App\Models\Kendaraan;
 use App\Models\Order;
+use App\Models\Sandi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -77,5 +79,22 @@ class DriverController extends Controller
             'message' => 'Driver berhasil di delete'
         ]);
 
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $driverId = $request->driverId;
+        $newPassword = $request->newPassword;
+        $user = Auth::user();
+
+        Sandi::where('id', $driverId)
+            ->update([
+                'password' => Hash::make($newPassword)
+            ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil ubah paswword'
+        ]);
     }
 }
