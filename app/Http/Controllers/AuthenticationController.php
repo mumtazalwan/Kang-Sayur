@@ -427,4 +427,20 @@ class AuthenticationController extends Controller
             'message' => 'Email berhasil terkirim, silahkan cek email anda'
         ]);
     }
+
+    public function updatePassword(Request $request)
+    {
+        $newPassword = $request->newPassword;
+        $user = Auth::user();
+
+        Sandi::where('id', $user->sandi_id)
+            ->update([
+                'password' => Hash::make($newPassword)
+            ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil ubah paswword'
+        ]);
+    }
 }
