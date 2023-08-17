@@ -128,6 +128,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 
     Route::group(['prefix' => '/password'], function () {
         Route::get('/send/mail', [AuthenticationController::class, 'sendEmailResetPassword']);
+        Route::post('/update', [AuthenticationController::class, 'updatePassword']);
     });
 
     Route::get('/profile', [TokoController::class, 'sellerPersonalInformation']);
