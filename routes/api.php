@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Delivery;
 use App\Http\Controllers\Driver\DriverController;
 use App\Http\Controllers\InboxController;
+use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 
 // controller
@@ -39,8 +40,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/midtrans/callback', [OrderController::class, 'callback']);
 
 Route::group(['prefix' => '/otp'], function () {
-    Route::post('/generate', [\App\Http\Controllers\OtpController::class, 'generate']);
-    Route::post('/verify', [\App\Http\Controllers\OtpController::class, 'verify']);
+    Route::post('/generate', [OtpController::class, 'generate']);
+    Route::post('/verify', [OtpController::class, 'verify']);
 });
 
 Route::group(['prefix' => 'auth'], function () {
@@ -57,6 +58,11 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
 
     // produk
     Route::get('/produk/all', [ProdukController::class, 'index']);
+
+    Route::group(['prefix' => '/password'], function () {
+        Route::get('/send/mail', [AuthenticationController::class, 'sendEmailResetPassword']);
+        Route::post('/update', [AuthenticationController::class, 'updatePassword']);
+    });
 
     // home
     Route::get('/produk/home/search/{keyword}', [ProdukController::class, 'home_search']);
