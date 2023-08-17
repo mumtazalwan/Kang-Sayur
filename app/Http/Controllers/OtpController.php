@@ -79,14 +79,14 @@ class OtpController extends Controller
                     ]);
                 } else {
                     return response()->json([
-                        'status' => 200,
+                        'status' => 401,
                         'message' => 'Kode OTP Salah',
                         'status_verifikasi' => 'Failed'
                     ]);
                 }
             } else {
                 return response()->json([
-                    'status' => 200,
+                    'status' => 419,
                     'message' => 'Kode OTP Expire',
                     'status_verifikasi' => 'Wrong'
                 ]);

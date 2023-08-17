@@ -68,6 +68,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/display-iklan', [ProductAdvertisingController::class, 'display_iklan']);
     Route::get('/produk/kategori', [ProdukController::class, 'nearestProdukByCategoryId']);
     Route::get('/kategori', [ProdukController::class, 'categories']);
+    Route::get('/produk/terlaris', [ProdukController::class, 'terlaris']);
 
     // profile
     Route::get('/profile', [UserController::class, 'index']);
