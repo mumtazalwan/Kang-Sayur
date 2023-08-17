@@ -153,7 +153,6 @@ class AuthenticationController extends Controller
                     'sandi_id' => $sandiId,
                     'phone_number' => request('phone_number'),
                     'address' => request('owner_address'),
-                    'device_token' => request('device_token'),
                     'longitude' => request('store_longitude'),
                     'latitude' => request('store_latitude')
                 ]);
@@ -195,7 +194,6 @@ class AuthenticationController extends Controller
                     'sandi_id' => $sandiId,
                     'phone_number' => request('phone_number'),
                     'address' => request('owner_address'),
-                    'device_token' => request('device_token'),
                     'longitude' => request('store_longitude'),
                     'latitude' => request('store_latitude')
                 ]);

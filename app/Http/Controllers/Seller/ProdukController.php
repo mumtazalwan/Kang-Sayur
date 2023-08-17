@@ -6,6 +6,7 @@ use App\Events\VerifiyProductNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Inbox;
 use App\Models\Kategori;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -390,6 +391,23 @@ class ProdukController extends Controller
             'message' => "berhasil di verifikasi",
             'data' => $data,
             'user' => $seller
+        ]);
+    }
+
+    public function terlaris()
+    {
+        $data = Order::join('produk', 'produk.id', '=', 'orders.product_id')
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->join('statuses', 'statuses.produk_id', '=', 'orders.product_id')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->groupBy('produk.id')
+            ->orderBy(DB::raw('COUNT(orders.product_id)'), 'DESC')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'list produk terlaris',
+            'data' => $data
         ]);
     }
 }
