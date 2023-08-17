@@ -168,7 +168,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 
 
     Route::group(['prefix' => '/driver'], function () {
-        Route::get('/list', [TokoController::class, 'list_ driver']);
+        Route::get('/list', [TokoController::class, 'list_driver']);
         Route::post('/delete', [DriverController::class, 'deleteDriver']);
     });
 
