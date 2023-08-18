@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Produk;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,6 +75,18 @@ class ReviewController extends Controller
                 'variant_id' => request('variant_id'),
                 'transaction_code' => request('transaction_code'),
             ]);
+
+            $reviews = Review::where('product_id', request('product_id'))
+                ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
+                ->first()->rating;
+
+            if ($reviews) {
+                Produk::where('id', request('product_id'))
+                    ->update([
+                        'rating' => $reviews
+                    ]);
+            }
+
         } else {
             Review::create([
                 'id_user' => $idUser,
