@@ -102,7 +102,7 @@ class DriverController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            // user
+            'driver_id' => 'required',
             'name' => 'required|string',
             'photo' => 'file|image|mimes:png,jpg,jpeg|max:3048',
             'phone_number' => 'required|numeric|digits:11',
@@ -110,7 +110,7 @@ class DriverController extends Controller
             'nomor_polisi' => 'required',
         ]);
 
-        $user = Auth::user();
+        $user = User::where('id', request('driver_id'))->first();
 
         if ($request->photo) {
 
