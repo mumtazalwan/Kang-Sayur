@@ -85,34 +85,128 @@ class Delivery extends Controller
 
     public function delivered(Request $request)
     {
-        $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
-            ->join('tokos', 'tokos.id', '=', 'orders.store_id')
-            ->join('users', 'users.id', '=', 'orders.user_id')
-            ->join('produk', 'produk.id', '=', 'orders.product_id')
-            ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
-            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
-            ->where('transactions.status', 'Sudah dibayar')
-            ->where('orders.delivered_by', Auth::user()->id)
-            ->groupBy('transactions.transaction_code', 'orders.store_id')
-            ->orderBy('transactions.created_at', "DESC")
-            ->select(
-                'orders.*',
-                'tokos.*',
-                'kategori.nama_kategori',
-                'users.name as nama_user',
-                'users.id as user_id',
-                'users.address as alamat_user',
-                'users.photo as user_profile',
-                'users.phone_number',
-                'users.latitude as user_latitude',
-                'users.longitude as user_longitude',
-                DB::raw("6371 * acos(cos(radians(users.latitude))
+        $filterId = $request->filterId;
+
+        switch ($filterId) {
+            case 1://terlama
+                $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+                    ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+                    ->join('users', 'users.id', '=', 'orders.user_id')
+                    ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
+                    ->where('transactions.status', 'Sudah dibayar')
+                    ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
+                    ->groupBy('transactions.transaction_code', 'orders.store_id')
+                    ->orderBy('transactions.created_at', "DESC")
+                    ->select(
+                        'addresses.latitude as address_lat',
+                        'addresses.longitude as address_long',
+                        'orders.*',
+                        'tokos.*',
+                        'users.name as nama_user',
+                        'users.id as user_id',
+                        'users.address as alamat_user',
+                        'users.photo as user_profile',
+                        'users.phone_number',
+                        'users.latitude as user_latitude',
+                        'users.longitude as user_longitude',
+                        DB::raw("6371 * acos(cos(radians(addresses.latitude))
             * cos(radians(tokos.latitude))
-            * cos(radians(tokos.longitude) - radians(users.longitude))
-            + sin(radians(users.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
             * sin(radians(tokos.latitude))) * 3000 as ongkir")
-            )
-            ->get();
+                    )
+                    ->get();
+                break;
+
+            case 2: //terjauh
+                $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+                    ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+                    ->join('users', 'users.id', '=', 'orders.user_id')
+                    ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
+                    ->where('transactions.status', 'Sudah dibayar')
+                    ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
+                    ->groupBy('transactions.transaction_code', 'orders.store_id')
+                    ->orderBy('ongkir', "DESC")
+                    ->select(
+                        'addresses.latitude as address_lat',
+                        'addresses.longitude as address_long',
+                        'orders.*',
+                        'tokos.*',
+                        'users.name as nama_user',
+                        'users.id as user_id',
+                        'users.address as alamat_user',
+                        'users.photo as user_profile',
+                        'users.phone_number',
+                        'users.latitude as user_latitude',
+                        'users.longitude as user_longitude',
+                        DB::raw("6371 * acos(cos(radians(addresses.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
+                    )
+                    ->get();
+                break;
+
+            case 3: //terdekat
+                $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+                    ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+                    ->join('users', 'users.id', '=', 'orders.user_id')
+                    ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
+                    ->where('transactions.status', 'Sudah dibayar')
+                    ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
+                    ->groupBy('transactions.transaction_code', 'orders.store_id')
+                    ->orderBy('ongkir', "ASC")
+                    ->select(
+                        'addresses.latitude as address_lat',
+                        'addresses.longitude as address_long',
+                        'orders.*',
+                        'tokos.*',
+                        'users.name as nama_user',
+                        'users.id as user_id',
+                        'users.address as alamat_user',
+                        'users.photo as user_profile',
+                        'users.phone_number',
+                        'users.latitude as user_latitude',
+                        'users.longitude as user_longitude',
+                        DB::raw("6371 * acos(cos(radians(addresses.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
+                    )
+                    ->get();
+                break;
+
+            default:
+                $transactions = Transaction::join('orders', 'orders.transaction_code', 'transactions.transaction_code')
+                    ->join('tokos', 'tokos.id', '=', 'orders.store_id')
+                    ->join('users', 'users.id', '=', 'orders.user_id')
+                    ->join('kendaraans', 'kendaraans.toko_id', '=', 'tokos.id')
+                    ->where('transactions.status', 'Sudah dibayar')
+                    ->join('addresses', 'addresses.id', '=', 'orders.alamat_id')
+                    ->groupBy('transactions.transaction_code', 'orders.store_id')
+                    ->orderBy('transactions.created_at', "ASC")
+                    ->select(
+                        'addresses.latitude as address_lat',
+                        'addresses.longitude as address_long',
+                        'orders.*',
+                        'tokos.*',
+                        'users.name as nama_user',
+                        'users.id as user_id',
+                        'users.address as alamat_user',
+                        'users.photo as user_profile',
+                        'users.phone_number',
+                        'users.latitude as user_latitude',
+                        'users.longitude as user_longitude',
+                        DB::raw("6371 * acos(cos(radians(addresses.latitude))
+            * cos(radians(tokos.latitude))
+            * cos(radians(tokos.longitude) - radians(addresses.longitude))
+            + sin(radians(addresses.latitude))
+            * sin(radians(tokos.latitude))) * 3000 as ongkir")
+                    )
+                    ->get();
+        }
 
         $data = [];
 
