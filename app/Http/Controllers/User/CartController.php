@@ -327,10 +327,20 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
-        Cart::where('user_id', $user->id)
-            ->update([
-                'status' => 'true'
-            ]);
+        $check = Cart::where('user_id', $user->id)->get();
+        $cartOn = Cart::where('user_id', $user->id)->where('status', 'true')->get();
+
+        if (count($check) == count($cartOn)) {
+            Cart::where('user_id', $user->id)
+                ->update([
+                    'status' => 'false'
+                ]);
+        } else {
+            Cart::where('user_id', $user->id)
+                ->update([
+                    'status' => 'true'
+                ]);
+        }
 
         return response()->json([
             'status' => 200,
