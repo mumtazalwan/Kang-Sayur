@@ -71,6 +71,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/promo/kilat', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering/user/kunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
+    Route::get('/iklan-toko', [\App\Http\Controllers\StoreAdvertisingController::class, 'list']);
 
     // explore
     Route::get('/display-iklan', [ProductAdvertisingController::class, 'display_iklan']);
@@ -173,6 +174,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::group(['prefix' => '/iklan'], function () {
         Route::get('/kategori-toko', [ProductAdvertisingController::class, 'kategori']);
         Route::post('/add', [ProductAdvertisingController::class, 'add']);
+        Route::post('/toko/add', [\App\Http\Controllers\StoreAdvertisingController::class, 'add']);
     });
 
 
