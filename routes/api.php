@@ -109,6 +109,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/add', [CartController::class, 'addToChart']);
         Route::get('/minus', [CartController::class, 'minus']);
         Route::get('/delete', [CartController::class, 'deleteAll']);
+        Route::get('/select/all', [CartController::class, 'selectAll']);
         Route::get('/custom', [CartController::class, 'custom']);
         Route::get('/checkout', [CartController::class, 'checkout']);
         Route::post('/instantbuy', [CartController::class, 'instantbuy']);
