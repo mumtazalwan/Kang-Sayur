@@ -96,10 +96,6 @@ class CartController extends Controller
                 ]);
 
             }
-
-            return response()->json([
-                'message' => 'jumlah barang berhasil ditabah'
-            ]);
         } else if ($customInpt < $currentProduct->inCart) {
 
             for ($i = $currentProduct->inCart; $i > $customInpt; $i--) {
@@ -325,5 +321,20 @@ class CartController extends Controller
                 'subtotal' => 0
             ]);
         }
+    }
+
+    public function selectAll()
+    {
+        $user = Auth::user();
+
+        Cart::where('user_id', $user->id)
+            ->update([
+                'status' => 'true'
+            ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil pilih semua cart'
+        ]);
     }
 }
