@@ -18,6 +18,7 @@ class InboxController extends Controller
 
         $data = Inbox::where('user_id', $tokoId)
             ->select('inboxes.user_id', 'inboxes.judul', 'inboxes.body', 'inboxes.image', DB::raw('DATE_FORMAT(inboxes.created_at, "%Y-%m-%d") as tanggal'))
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return response()->json([
