@@ -147,6 +147,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::get('/analysis', [TokoController::class, 'analysis']);
     Route::get('/pemasukan', [TokoController::class, 'income']);
     Route::get('/grafik/penjualan', [TokoController::class, 'graphic']);
+    Route::get('/download/grafik', [TokoController::class, 'downloadGraphic']);
 
     Route::group(['prefix' => '/sale'], function () {
         Route::get('/session', [SaleController::class, 'session']);
