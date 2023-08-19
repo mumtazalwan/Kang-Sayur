@@ -65,6 +65,7 @@
             $sum += $data->total;
             $counter++;
         @endphp
+    @endforeach
         <tr class="amount">
             <td width="60%">Total</td>
             <td width="40%">Rp. {{ number_format($sum, 0, ',', '.') }}</td>
