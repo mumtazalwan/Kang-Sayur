@@ -134,7 +134,11 @@ class ProdukController extends Controller
         $kategoriId = $request->kategoriId;
         $tokoId = $request->tokoId;
 
-        $data = Produk::where('kategori_id', $kategoriId)->where('toko_id', $tokoId)->get();
+        $data = Produk::join('statuses', 'statuses.produk_id', '=', 'produk.id')
+            ->where('statuses.status', '=', 'Accepted')
+            ->where('kategori_id', $kategoriId)->where('produk.toko_id', $tokoId)
+            ->select('produk.*')
+            ->get();
 
         if (count($data)) {
             return response()->json([
@@ -391,6 +395,69 @@ class ProdukController extends Controller
             'message' => "berhasil di verifikasi",
             'data' => $data,
             'user' => $seller
+        ]);
+    }
+
+    public function verifikasi_ditolak(Request $request)
+    {
+        $produkId = $request->produkId;
+        $alasan = $request->alasan;
+        $toko_id = Produk::where('id', $produkId)->first();
+        $nama_toko = Toko::where('id', $toko_id->toko_id)->first();
+        $seller = User::where('id', $nama_toko->seller_id)->first();
+
+        Status::where('statuses.produk_id', $produkId)
+            ->update([
+                'status' => 'Rejected',
+                'alasan' => $alasan
+            ]);
+
+        $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
+        $headers = [
+            'Authorization: key=' . $fcmservicekey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        $data = [
+            "registration_ids" => [$seller->device_token],
+            "notification" => [
+                "title" => "Produk Verifikasi",
+                "body" => "HI Toko $nama_toko->nama_toko, Produk anda ditolak karena $alasan, jika terdapat kendala bisa hubungi pihak kami",
+                "content_available" => true,
+                "priority" => "high",
+            ],
+        ];
+        $dataString = json_encode($data);
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        Log::info($response);
+
+        if ($response === false) {
+            Log::error(curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        Inbox::create([
+            'user_id' => $seller->id,
+            'judul' => "Produk Verifikasi",
+            'body' => "HI Toko $nama_toko->nama_toko, Produk anda ditolak karena $alasan, jika terdapat kendala bisa hubungi pihak kami"
+        ]);
+
+        return response()->json([
+            'status_code' => '200',
+            'message' => "verifikasi ditolak",
+            'alasan' => $alasan,
         ]);
     }
 
