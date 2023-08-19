@@ -14,6 +14,7 @@ class Status extends Model
     protected $fillable = [
         'produk_id',
         'toko_id',
-        'status'
+        'status',
+        'alasan'
     ];
 }
