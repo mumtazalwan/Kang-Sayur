@@ -52,22 +52,23 @@
     </tr>
     @php
         $sum = 0;
+        $counter = 1;
     @endphp
     @foreach($order_count as $data)
         <tr>
-            <td width="20%">{{$data->id}}</td>
-            <td width="40%">{{ \Carbon\Carbon::parse($data->date)->formatLocalized('%A %d %B %Y') }}</td>
+            <td width="20%">{{$counter}}</td>
+            <td width="40%">{{ $data->date }}</td>
             <td width="40%">Rp. {{ number_format($data->total, 0, ',', '.') }}
             </td>
         </tr>
         @php
             $sum += $data->total;
+            $counter++;
         @endphp
-    @endforeach
-    <tr class="amount">
-        <td width="60%">Total</td>
-        <td width="40%">Rp. {{ number_format($sum, 0, ',', '.') }}</td>
-    </tr>
+        <tr class="amount">
+            <td width="60%">Total</td>
+            <td width="40%">Rp. {{ number_format($sum, 0, ',', '.') }}</td>
+        </tr>
 </table>
 </body>
 </html>
