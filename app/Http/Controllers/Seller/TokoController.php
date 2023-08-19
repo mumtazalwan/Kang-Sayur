@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Graphic;
 use App\Models\Kendaraan;
 use App\Models\LogVisitor;
 use App\Models\Order;
 use App\Models\Review;
+use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 
 use App\Models\Toko;
@@ -593,6 +595,45 @@ class TokoController extends Controller
             'grafik_penjualan' => $order_count
 
         ]);
+    }
+
+    public function downloadGraphic()
+    {
+        $user = Auth::user();
+        $tokoId = DB::table('tokos')->select('tokos.id')->where('tokos.seller_id', $user->id)->value('id');
+
+        $thisMonth = Carbon::now()->format('m');
+        $thisYear = Carbon::now()->format('Y');
+
+        $order_count = DB::table('orders')
+            ->select(
+                DB::raw("DATE_FORMAT(orders.created_at, '%d-%b-%Y') as date"),
+                DB::raw('SUM(variants.harga_variant) as total')
+            )
+            ->join('transactions', 'transactions.transaction_code', '=', 'orders.transaction_code')
+            ->join('produk', 'produk.id', '=', 'orders.product_id')
+            ->join('variants', 'variants.id', '=', 'orders.variant_id')
+            ->where('orders.store_id', $tokoId)
+            ->where('orders.status', 'Selesai')
+            ->whereMonth('orders.created_at', $thisMonth)
+            ->whereYear('orders.created_at', $thisYear)
+            ->groupBy('date')
+            ->orderBy('orders.created_at', 'ASC')
+            ->get();
+
+        $fileName = 'demo.pdf';
+        $data = [
+            'title' => "Tes PDF"
+        ];
+
+        $html = view()->make('pdfSample', $data)->with('order_count', $order_count)->render();
+        $pdf = new TCPDF;
+        $pdf::SetTitle('Laporan Data Pemasukan Bulan Ini');
+        $pdf::AddPage();
+        $pdf::writeHTML($html, true, false, true, false, "");
+        $pdf::Output(public_path($fileName), "F");
+
+        return response()->download(public_path($fileName));
     }
 
     //Admin

@@ -342,9 +342,12 @@ class CartController extends Controller
                 ]);
         }
 
+        $lasStatus = Cart::where('user_id', $user->id)->first();
+
         return response()->json([
             'status' => 200,
-            'message' => 'Berhasil pilih semua cart'
+            'message' => 'Berhasil pilih semua cart',
+            'status_selected' => $lasStatus->status
         ]);
     }
 }
