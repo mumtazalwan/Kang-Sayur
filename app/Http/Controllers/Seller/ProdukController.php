@@ -225,6 +225,7 @@ class ProdukController extends Controller
             ->select(
                 'produk.id',
                 'produk.nama_produk',
+                'tokos.nama_toko',
                 'tokos.alamat',
                 DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
                 * cos(radians(tokos.latitude))
