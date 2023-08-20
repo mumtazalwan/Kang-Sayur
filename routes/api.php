@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\Delivery;
 use App\Http\Controllers\Driver\DriverController;
 use App\Http\Controllers\InboxController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\StoreAdvertisingController;
 use Illuminate\Http\Request;
 
 // controller
@@ -71,7 +74,7 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/produk/promo/kilat', [SaleController::class, 'index']);
     Route::get('/produk/populer', [LogVisitorController::class, 'getProductPopuler']);
     Route::get('/produk/sering/user/kunjungi', [LogVisitorController::class, 'getUserMostVisitor']);
-    Route::get('/iklan-toko', [\App\Http\Controllers\StoreAdvertisingController::class, 'list']);
+    Route::get('/iklan-toko', [StoreAdvertisingController::class, 'list']);
 
     // explore
     Route::get('/display-iklan', [ProductAdvertisingController::class, 'display_iklan']);
@@ -133,9 +136,10 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/riwayat-ulasan', [ReviewController::class, 'riwayat']);
 
     Route::group(['prefix' => '/chat'], function () {
-        Route::get('/list', [\App\Http\Controllers\ConversationController::class, 'listUser']);
-        Route::get('/room', [\App\Http\Controllers\ConversationController::class, 'roomChatUser']);
-        Route::post('/send', [\App\Http\Controllers\MessageController::class, 'send']);
+        Route::post('/start', [ConversationController::class, 'start']);
+        Route::get('/list', [ConversationController::class, 'listUser']);
+        Route::get('/room', [ConversationController::class, 'roomChatUser']);
+        Route::post('/send', [MessageController::class, 'send']);
     });
 });
 
@@ -181,7 +185,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     Route::group(['prefix' => '/iklan'], function () {
         Route::get('/kategori-toko', [ProductAdvertisingController::class, 'kategori']);
         Route::post('/add', [ProductAdvertisingController::class, 'add']);
-        Route::post('/toko/add', [\App\Http\Controllers\StoreAdvertisingController::class, 'add']);
+        Route::post('/toko/add', [StoreAdvertisingController::class, 'add']);
     });
 
 
@@ -205,9 +209,9 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::group(['prefix' => '/chat'], function () {
-        Route::get('/list', [\App\Http\Controllers\ConversationController::class, 'list']);
-        Route::get('/room', [\App\Http\Controllers\ConversationController::class, 'roomChat']);
-        Route::post('/send', [\App\Http\Controllers\MessageController::class, 'send']);
+        Route::get('/list', [ConversationController::class, 'list']);
+        Route::get('/room', [ConversationController::class, 'roomChat']);
+        Route::post('/send', [MessageController::class, 'send']);
     });
 });
 

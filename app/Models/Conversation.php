@@ -11,7 +11,7 @@ class Conversation extends Model
 
     public $fillable = [
         'person_one',
-        'preson_two',
+        'person_two',
         'updated_at'
     ];
 }
