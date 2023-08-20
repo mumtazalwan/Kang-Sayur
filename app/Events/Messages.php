@@ -38,7 +38,7 @@ class Messages implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('conversation.' . $this->conversationId),
+            new Channel('conversation.' . $this->conversationId),
         ];
     }
 
@@ -58,7 +58,8 @@ class Messages implements ShouldBroadcast
         $convo = Message::where('conversation_id', $this->conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->select('messages.*', 'roles.name as role')
+            ->join('users', 'users.id', '=', 'messages.user_id')
+            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 

@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Sale;
 use App\Models\Toko;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -643,22 +644,13 @@ class OrderController extends Controller
                             ]);
                     }
 
-//                    $transactions = Order::where('transaction_code', $request->order_id)
-//                        ->join('produk', 'produk.id', '=', 'orders.product_id')
-//                        ->join('tokos', 'tokos.id', $orders->store_id)
-//                        ->select('orders.transaction_code as nomor_pesanan',
-//                            DB::raw('COUNT(orders.id) - 1 as jumlah_pesanan'),
-//                            'produk.nama_produk',
-//                            'tokos.nama_toko',
-//                            'tokok.device_token')
-//                        ->groupBy('transaction_code')
-//                        ->get();
-
                     Inbox::create([
                         'user_id' => $orders->store_id,
                         'judul' => "Pesanan Baru, No. $orders->transaction_code",
                         'body' => "HI seller, ada pesanan baru lho.. segera di verifikasi ya"
                     ]);
+
+                    $device_token = User::where('id', $orders->user_id)->first();
 
                     $fcmservicekey = "AAAAyKjEhRs:APA91bEhFcJBjxY6U-I-eXoHFLVrdWE1WAVaI9ZhsGjFfpfdmRDdL1s8Mc7HLSptWJVB_i1gyluUaa22r0Q6mXxQ8gVRepRNgyoJjCnDG4Jdi6DgMgOo-CiX8017bV_pY2oVuTN0OVUi";
                     $headers = [
@@ -669,7 +661,7 @@ class OrderController extends Controller
                     $ch = curl_init();
 
                     $data = [
-                        "registration_ids" => ['dlxfIk2eQ3CRm4bASIVFuu:APA91bGBkEQQkSBo4KfXFiCyAKcrP5QsgCkR3dD0oshs6fu6DjTKWmjJPtYMSSMdmhFcED1I1xaznMZO2BbYhMDUi23qcPrPmlkT6HItMN5hVGAzYUO4sWG12JtgKZ-ajkEFw9wLdScE'],
+                        "registration_ids" => [$device_token->device_token],
                         "notification" => [
                             "title" => "Pesanan Baru $orders->transaction_code",
                             "body" => "Ada pesanan nih. Ayo segara konfirmasi pesanan",

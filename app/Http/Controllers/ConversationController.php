@@ -63,7 +63,8 @@ class ConversationController extends Controller
         $convo = Message::where('conversation_id', $conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->select('messages.*', 'roles.name as role')
+            ->join('users', 'users.id', '=', 'messages.user_id')
+            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 
@@ -107,7 +108,7 @@ class ConversationController extends Controller
             $otherId = $list->interlocutors;
             $conversation_id = $list->id;
             $dataJoin = Toko::where('seller_id', $otherId)->select('tokos.id as toko_id', 'tokos.nama_toko', 'tokos.img_profile')->first();
-            $lastConvo = Message::where('conversation_id', $conversation_id)->orderBy('updated_at', 'DESC')->first();
+            $lastConvo = Message::where('conversation_id', $conversation_id)->select('messages.id', 'messages.conversation_id', 'messages.user_id', 'messages.message', DB::raw('DATE_FORMAT(messages.created_at, "%Y-%m-%d %H:%i:%s") as terakhir_dikirim'))->orderBy('updated_at', 'DESC')->first();
 
             $dataJoin->conversation_id = $conversation_id;
             $dataJoin->lastConvo = $lastConvo ?? "";
@@ -138,7 +139,8 @@ class ConversationController extends Controller
         $convo = Message::where('conversation_id', $conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->select('messages.*', 'roles.name as role')
+            ->join('users', 'users.id', '=', 'messages.user_id')
+            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 
