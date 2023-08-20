@@ -131,6 +131,12 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
     Route::get('/menunggu-diulas', [ReviewController::class, 'menunggu_diulas']);
     Route::post('/ulasan', [ReviewController::class, 'review']);
     Route::get('/riwayat-ulasan', [ReviewController::class, 'riwayat']);
+
+    Route::group(['prefix' => '/chat'], function () {
+        Route::get('/list', [\App\Http\Controllers\ConversationController::class, 'listUser']);
+        Route::get('/room', [\App\Http\Controllers\ConversationController::class, 'roomChatUser']);
+        Route::post('/send', [\App\Http\Controllers\MessageController::class, 'send']);
+    });
 });
 
 // seller
@@ -196,6 +202,12 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
 
     Route::group(['prefix' => '/inbox'], function () {
         Route::get('/data-inbox', [InboxController::class, 'listInbox']);
+    });
+
+    Route::group(['prefix' => '/chat'], function () {
+        Route::get('/list', [\App\Http\Controllers\ConversationController::class, 'list']);
+        Route::get('/room', [\App\Http\Controllers\ConversationController::class, 'roomChat']);
+        Route::post('/send', [\App\Http\Controllers\MessageController::class, 'send']);
     });
 });
 

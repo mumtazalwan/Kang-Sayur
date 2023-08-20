@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder
             TransactionSeeder::class,
             VariantSeeder::class,
             KendaraanSeeder::class,
-            AddressSeeder::class
+            AddressSeeder::class,
+            ConversationSeeder::class,
+            MessageSeeder::class
         ]);
     }
 }
