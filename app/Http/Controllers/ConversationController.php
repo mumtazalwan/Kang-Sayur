@@ -6,6 +6,7 @@ use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Toko;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,7 +65,7 @@ class ConversationController extends Controller
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
             ->join('users', 'users.id', '=', 'messages.user_id')
-            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
+            ->select('messages.*', 'users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 
@@ -92,6 +93,43 @@ class ConversationController extends Controller
 
     // pov user
 
+    public function start(Request $request)
+    {
+        $interlocutor = $request->interlocutor;
+        $user = Auth::user();
+
+        $checking1 = Conversation::where('person_one', $user->id)
+            ->orWhere('person_one', $user->id);
+
+        $checking2 = Conversation::where('person_two', $interlocutor)
+            ->orWhere('person_two', $interlocutor);
+
+        $result = Conversation::where(function ($query) use ($checking1, $checking2) {
+            $query->whereExists($checking1)
+                ->whereExists($checking2);
+        })
+            ->first();
+
+        if ($result) {
+            return response()->json([
+                'status' => 200,
+                'convo_id' => $result->id,
+            ]);
+        } else {
+            $newConvo = Conversation::create([
+                'person_one' => $user->id,
+                'person_two' => $interlocutor,
+                'updated_at' => Carbon::now()
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'convo_id' => $newConvo->id,
+            ]);
+        }
+    }
+
+
     public function listUser()
     {
         $user = Auth::user();
@@ -113,13 +151,22 @@ class ConversationController extends Controller
             $dataJoin->conversation_id = $conversation_id;
             $dataJoin->lastConvo = $lastConvo ?? "";
 
-            return $dataJoin;
-        });
+            if ($lastConvo) {
+                $dataJoin->conversation_id = $conversation_id;
+                $dataJoin->lastConvo = $lastConvo ?? "";
+
+                return $dataJoin;
+            } else {
+                return null;
+            }
+        })->filter();
+
+        $final = $convos->values()->toArray();
 
         return response()->json([
             'status' => 200,
             'message' => 'List percakapan user',
-            'list' => $convos
+            'list' => $final
         ]);
     }
 
@@ -140,7 +187,7 @@ class ConversationController extends Controller
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
             ->join('users', 'users.id', '=', 'messages.user_id')
-            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
+            ->select('messages.*', 'users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 
