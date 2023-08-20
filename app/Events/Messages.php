@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Events;
+
+use App\Models\Conversation;
+use App\Models\Message;
+use App\Models\User;
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class Messages implements ShouldBroadcast
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * Create a new event instance.
+     */
+
+    public $conversationId;
+
+    public function __construct($conversationId)
+    {
+        $this->conversationId = $conversationId;
+    }
+
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return array<int, \Illuminate\Broadcasting\Channel>
+     */
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel('conversation.' . $this->conversationId),
+        ];
+    }
+
+    public function broadcastWith()
+    {
+        $user = Auth::user();
+
+        $list = Conversation::where(function ($query) use ($user) {
+            $query->where('person_one', $user->id)
+                ->orWhere('person_two', $user->id);
+        })
+            ->select(DB::raw("CASE WHEN person_one <> $user->id THEN person_one ELSE person_two END AS interlocutors"))
+            ->first();
+
+        $interlocutors = User::where('id', $list->interlocutors)->first();
+
+        $convo = Message::where('conversation_id', $this->conversationId)
+            ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
+            ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->select('messages.*', 'roles.name as role')
+            ->orderBy('messages.updated_at')
+            ->get();
+
+        $lastConvo = Message::where('conversation_id', $this->conversationId)->orderBy('updated_at', 'DESC')->first();
+
+        $itemsWithStatus = [];
+
+        foreach ($convo as $convos) {
+            if ($convos->updated_at == $lastConvo->updated_at) {
+                $convos->isCurrentMessage = true;
+            } else {
+                $convos->isCurrentMessage = false;
+            }
+
+            $itemsWithStatus = $convo;
+        }
+
+        return [
+            'status' => 200,
+            'message' => 'Roomchat',
+            'interlocutors' => $interlocutors,
+            'messages' => $itemsWithStatus,
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return "getMessagesList";
+    }
+}
