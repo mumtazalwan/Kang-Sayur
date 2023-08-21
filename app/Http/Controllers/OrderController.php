@@ -649,7 +649,7 @@ class OrderController extends Controller
 
                 foreach ($dataOrder as $orders) {
 
-                    if ($orders->discount = 0) {
+                    if ($orders->discount == 0) {
                         $stok = Variant::where('id', $orders->variant_id)->first();
 
                         Variant::where('id', $orders->variant_id)
