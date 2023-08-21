@@ -235,6 +235,7 @@ class OrderController extends Controller
 
             $driver = Order::where('orders.transaction_code', $transaction->transaction_code)
                 ->join('users', 'users.id', '=', 'orders.delivered_by')
+                ->join('kendaraans', 'kendaraans.driver_id', '=', 'orders.delivered_by')
                 ->first();
 
             if ($relatedOrders->isNotEmpty()) {
@@ -253,7 +254,11 @@ class OrderController extends Controller
                             'alamat' => $transaction->alamat_lengkap
                         ],
                         'driver' => [
-                            'nama_driver' => $driver->name
+                            'nama_driver' => $driver->name,
+                            'foto_driver' => $driver->photo,
+                            'plat_kendaraan' => $driver->nomor_polisi,
+                            'nama_kendaraan' => $driver->nama_kendaraan,
+                            'photo_kendaraan' => $driver->photo_kendaraan
                         ],
                         'barang_pesanan' => $relatedOrders,
                         'tagihan' => [
@@ -277,7 +282,11 @@ class OrderController extends Controller
                             'alamat' => $transaction->alamat_lengkap
                         ],
                         'driver' => [
-                            'nama_driver' => $driver->name
+                            'nama_driver' => $driver->name,
+                            'foto_driver' => $driver->photo,
+                            'plat_kendaraan' => $driver->nomor_polisi,
+                            'nama_kendaraan' => $driver->nama_kendaraan,
+                            'photo_kendaraan' => $driver->photo_kendaraan
                         ],
                         'barang_pesanan' => $relatedOrders,
                         'tagihan' => [

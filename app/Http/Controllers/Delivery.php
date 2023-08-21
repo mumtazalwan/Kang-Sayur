@@ -17,6 +17,8 @@ class Delivery extends Controller
 
     public function takeOrder(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'transaction_code' => 'required',
             'store_id' => 'required',
@@ -28,6 +30,7 @@ class Delivery extends Controller
 
         if ($orderS == "Menunggu driver") {
             $order->toQuery()->update(array("status" => 'Sedang diantar'));
+            $order->toQuery()->update(array("status" => 'Selesai', 'delivered_by' => $user->id));
 
             return response()->json([
                 'message' => 'Status berhasil diubah'
@@ -68,11 +71,8 @@ class Delivery extends Controller
         ]);
 
         $orderS = Order::where('store_id', request('store_id'))->where('transaction_code', request('transaction_code'))->first()->status;
-        $order = Order::where('store_id', request('store_id'))->where('transaction_code', request('transaction_code'))->get();
 
         if ($orderS == "Sedang diantar") {
-            $order->toQuery()->update(array("status" => 'Selesai', 'delivered_by' => $user->id));
-
             return response()->json([
                 'message' => 'Status berhasil diubah'
             ]);
