@@ -233,6 +233,10 @@ class OrderController extends Controller
         foreach ($transactions as $transaction) {
             $relatedOrders = $transaction->statusDeliveredUser;
 
+            $driver = Order::where('orders.transaction_code', $transaction->transaction_code)
+                ->join('users', 'users.id', '=', 'orders.delivered_by')
+                ->first();
+
             if ($relatedOrders->isNotEmpty()) {
                 if ($transaction->discount == 0) {
                     $data[] = [
@@ -247,6 +251,9 @@ class OrderController extends Controller
                             'nama_pemesan' => $transaction->nama_penerima,
                             'nomor_telfon' => $transaction->nomor_hp,
                             'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'driver' => [
+                            'nama_driver' => $driver->name
                         ],
                         'barang_pesanan' => $relatedOrders,
                         'tagihan' => [
@@ -268,6 +275,9 @@ class OrderController extends Controller
                             'nama_pemesan' => $transaction->nama_penerima,
                             'nomor_telfon' => $transaction->nomor_hp,
                             'alamat' => $transaction->alamat_lengkap
+                        ],
+                        'driver' => [
+                            'nama_driver' => $driver->name
                         ],
                         'barang_pesanan' => $relatedOrders,
                         'tagihan' => [

@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\Toko;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -53,13 +54,19 @@ class Messages implements ShouldBroadcast
             ->select(DB::raw("CASE WHEN person_one <> $user->id THEN person_one ELSE person_two END AS interlocutors"))
             ->first();
 
-        $interlocutors = User::where('id', $list->interlocutors)->first();
+//        if ($this->interlocutorRole = 'user') {
+//            $interlocutors = Toko::where('seller_id', $list->interlocutors)->first();
+//        } else if ($this->interlocutorRole = 'seller') {
+//            $interlocutors = User::where('id', $list->interlocutors)->first();
+//        } else if ($this->interlocutorRole = 'driver') {
+//            $interlocutors = User::where('id', $list->interlocutors)->first();
+//        }
 
         $convo = Message::where('conversation_id', $this->conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
             ->join('users', 'users.id', '=', 'messages.user_id')
-            ->select('messages.*','users.name', 'users.photo', 'roles.name as role')
+            ->select('messages.*', 'users.name', 'users.photo', 'roles.name as role')
             ->orderBy('messages.updated_at')
             ->get();
 
@@ -80,7 +87,6 @@ class Messages implements ShouldBroadcast
         return [
             'status' => 200,
             'message' => 'Roomchat',
-            'interlocutors' => $interlocutors,
             'messages' => $itemsWithStatus,
         ];
     }

@@ -59,8 +59,6 @@ class ConversationController extends Controller
             ->select(DB::raw("CASE WHEN person_one <> $user->id THEN person_one ELSE person_two END AS interlocutors"))
             ->first();
 
-        $interlocutors = User::where('id', $list->interlocutors)->first();
-
         $convo = Message::where('conversation_id', $conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
@@ -86,7 +84,6 @@ class ConversationController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Roomchat',
-            'interlocutors' => $interlocutors,
             'messages' => $itemsWithStatus,
         ]);
     }
@@ -181,8 +178,6 @@ class ConversationController extends Controller
         })->select(DB::raw("CASE WHEN person_one <> $user->id THEN person_one ELSE person_two END AS interlocutors"))
             ->first();
 
-        $interlocutors = Toko::where('seller_id', $list->interlocutors)->first();
-
         $convo = Message::where('conversation_id', $conversationId)
             ->join('model_has_roles', 'model_has_roles.model_id', '=', 'messages.user_id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
@@ -208,7 +203,6 @@ class ConversationController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Roomchat',
-            'interlocutors' => $interlocutors,
             'messages' => $itemsWithStatus,
         ]);
     }
