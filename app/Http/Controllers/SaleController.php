@@ -118,8 +118,8 @@ class SaleController extends Controller
                 'status' => '200',
                 'message' => 'List Sale',
                 'title' => 'Promo kilat',
-                'start' => $time->start,
-                'end' => $time->end,
+                'start' => $time->start ?? "00:00:00",
+                'end' => $time->end ?? "00:00:00",
                 'data' => []
             ]);
         }
