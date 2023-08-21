@@ -860,10 +860,10 @@ class OrderController extends Controller
                     'dipesan' => $transaction->created_at->format('d, M Y'),
                     'barang_pesanan' => $relatedOrders,
                     'tagihan' => [
-                        'total_harga' => $relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100),
+                        'total_harga' => $relatedOrders->sum('harga_variant') - ($relatedOrders->sum('harga_variant') * $transaction->discount / 100),
                         'ongkos_kirim' => $transaction->ongkir,
                     ],
-                    'total' => ($relatedOrders->sum('pembelian') - ($relatedOrders->sum('pembelian') * $transaction->discount / 100)) + $transaction->ongkir,
+                    'total' => ($relatedOrders->sum('harga_variant') - ($relatedOrders->sum('harga_variant') * $transaction->discount / 100)) + $transaction->ongkir,
                 ];
             }
         }
