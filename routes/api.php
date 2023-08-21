@@ -249,4 +249,10 @@ Route::group(['middleware' => ['role:driver', 'auth:sanctum'], 'prefix' => 'driv
     Route::group(['prefix' => '/riwayat'], function () {
         Route::get('/selesai/diantar', [Delivery::class, 'delivered']);
     });
+
+    Route::group(['prefix' => '/chat'], function () {
+        Route::get('/list', [ConversationController::class, 'list']);
+        Route::get('/room', [ConversationController::class, 'roomChat']);
+        Route::post('/send', [MessageController::class, 'send']);
+    });
 });
