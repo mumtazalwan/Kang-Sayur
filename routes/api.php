@@ -207,6 +207,7 @@ Route::group(['middleware' => ['role:seller', 'auth:sanctum'], 'prefix' => 'sell
     });
 
     Route::group(['prefix' => '/chat'], function () {
+        Route::post('/start', [ConversationController::class, 'start']);
         Route::get('/list', [ConversationController::class, 'list']);
         Route::get('/room', [ConversationController::class, 'roomChat']);
         Route::post('/send', [MessageController::class, 'send']);
@@ -230,6 +231,12 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
         Route::post('/verifikasi', [ProdukController::class, 'verifikasi']);
         Route::post('/verifikasi/ditolak', [ProdukController::class, 'verifikasi_ditolak']);
         Route::get('/verifikasi/list', [ProdukController::class, 'verifikasi_list']);
+    });
+
+    Route::group(['prefix' => '/chat'], function () {
+        Route::get('/list', [ConversationController::class, 'list']);
+        Route::get('/room', [ConversationController::class, 'roomChat']);
+        Route::post('/send', [MessageController::class, 'send']);
     });
 });
 
