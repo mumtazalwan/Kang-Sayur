@@ -249,6 +249,8 @@ class OrderController extends Controller
                         'kode_transaksi' => $transaction->transaction_code,
                         'toko_id' => $transaction->store_id,
                         'alamat pengiriman' => [
+                            'user_lat' => $transaction->user_latitude,
+                            'user_long' => $transaction->user_longitude,
                             'nama_pemesan' => $transaction->nama_penerima,
                             'nomor_telfon' => $transaction->nomor_hp,
                             'alamat' => $transaction->alamat_lengkap
@@ -277,6 +279,8 @@ class OrderController extends Controller
                         'kode_transaksi' => $transaction->transaction_code,
                         'toko_id' => $transaction->store_id,
                         'alamat pengiriman' => [
+                            'user_lat' => $transaction->user_latitude,
+                            'user_long' => $transaction->user_longitude,
                             'nama_pemesan' => $transaction->nama_penerima,
                             'nomor_telfon' => $transaction->nomor_hp,
                             'alamat' => $transaction->alamat_lengkap
