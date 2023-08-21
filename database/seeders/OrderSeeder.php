@@ -16,55 +16,14 @@ class OrderSeeder extends Seeder
         Order::create(
             [
                 'transaction_code' => 1571005688725,
-                'product_id' => 1,
-                'variant_id' => 2,
-                'store_id' => 1,
-                'user_id' => 1,
-                'notes' => 'cuci bersih dulu yah',
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
                 'alamat_id' => 1,
-                'status' => 'Menunggu konfirmasi',
-                'created_at' => '2023-06-01 00:00:00'
-            ]
-        );
-
-        Order::create(
-            [
-                'transaction_code' => 1571005688725,
-                'product_id' => 1,
-                'variant_id' => 2,
-                'store_id' => 1,
-                'user_id' => 1,
-                'notes' => 'cuci bersih dulu yah',
-                'alamat_id' => 1,
-                'status' => 'Menunggu konfirmasi',
-                'created_at' => '2023-06-01 00:00:00'
-            ]
-        );
-
-        Order::create(
-            [
-                'transaction_code' => 1571005688725,
-                'product_id' => 1,
-                'variant_id' => 2,
-                'store_id' => 1,
-                'user_id' => 1,
-                'notes' => 'cuci bersih dulu yah',
-                'alamat_id' => 1,
-                'status' => 'Menunggu konfirmasi',
-                'created_at' => '2023-06-01 00:00:00'
-            ]
-        );
-
-        Order::create(
-            [
-                'transaction_code' => 1571005688725,
-                'product_id' => 8,
-                'variant_id' => 16,
                 'store_id' => 2,
                 'user_id' => 1,
-                'notes' => 'cuci bersih dulu yah',
-                'alamat_id' => 1,
-                'status' => 'Menunggu konfirmasi',
+                'status' => 'Selesai',
+                'delivered_by' => 3,
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
@@ -72,338 +31,196 @@ class OrderSeeder extends Seeder
         Order::create(
             [
                 'transaction_code' => 1571005688725,
-                'product_id' => 2,
-                'variant_id' => 3,
-                'store_id' => 1,
-                'user_id' => 1,
-                'notes' => 'cuci bersih dulu yah',
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
                 'alamat_id' => 1,
-                'status' => 'Menunggu konfirmasi',
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
                 'created_at' => '2023-06-01 00:00:00'
             ]
         );
 
-        //
+        Order::create(
+            [
+                'transaction_code' => 1671005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-02 00:00:00'
+            ]
+        );
 
-//        Order::create(
-//            [
-//                'transaction_code' => 1671005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-01 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 1671005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-01 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 1671005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-01 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 1671005688725,
-//                'product_id' => 8,
-//                'variant_id' => 15,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-01 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 1671005688725,
-//                'product_id' => 2,
-//                'variant_id' => 3,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-01 00:00:00'
-//            ]
-//        );
-//
-//        //
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 2571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-02 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 2571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-02 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 2571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-02 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 2571005688725,
-//                'product_id' => 8,
-//                'variant_id' => 16,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-02 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 2571005688725,
-//                'product_id' => 2,
-//                'variant_id' => 4,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-02 00:00:00'
-//            ]
-//        );
-//
-//        //
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 3571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-03 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 3571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-03 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 3571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-03 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 3571005688725,
-//                'product_id' => 8,
-//                'variant_id' => 16,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-03 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 3571005688725,
-//                'product_id' => 2,
-//                'variant_id' => 4,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-03 00:00:00'
-//            ]
-//        );
-//
-//        //
-//        Order::create(
-//            [
-//                'transaction_code' => 4571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 1,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 4571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 4571005688725,
-//                'product_id' => 1,
-//                'variant_id' => 2,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 4571005688725,
-//                'product_id' => 8,
-//                'variant_id' => 15,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 4571005688725,
-//                'product_id' => 2,
-//                'variant_id' => 4,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-06-04 00:00:00'
-//            ]
-//        );
-//
-//        //
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 5571005688725,
-//                'product_id' => 8,
-//                'variant_id' => 15,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-03-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 5571005688725,
-//                'product_id' => 2,
-//                'variant_id' => 4,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Selesai',
-//                'created_at' => '2023-03-04 00:00:00'
-//            ]
-//        );
-//
-//        //
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 6571005688725,
-//                'product_id' => 8,
-//                'variant_id' => 15,
-//                'store_id' => 2,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Menunggu konfirmasi',
-//                'created_at' => '2023-01-04 00:00:00'
-//            ]
-//        );
-//
-//        Order::create(
-//            [
-//                'transaction_code' => 6571005688725,
-//                'product_id' => 2,
-//                'variant_id' => 16,
-//                'store_id' => 1,
-//                'user_id' => 1,
-//                'notes' => 'cuci bersih dulu yah',
-//                'status' => 'Menunggu konfirmasi',
-//                'created_at' => '2023-01-04 00:00:00'
-//            ]
-//        );
+        Order::create(
+            [
+                'transaction_code' => 1671005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-02 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 2571005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-03 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 2571005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-03 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 3571005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 3571005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-06-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 4571005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-07-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 4571005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-07-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 5571005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-08-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 5571005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-08-05 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 6571005688725,
+                'product_id' => 6,
+                'variant_id' => 12,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-08-22 00:00:00'
+            ]
+        );
+
+        Order::create(
+            [
+                'transaction_code' => 6571005688725,
+                'product_id' => 6,
+                'variant_id' => 13,
+                'notes' => 'Bebek jepangnya yang kawai ya',
+                'alamat_id' => 1,
+                'store_id' => 2,
+                'user_id' => 1,
+                'status' => 'Selesai',
+                'delivered_by' => 3,
+                'created_at' => '2023-08-22 00:00:00'
+            ]
+        );
     }
 }

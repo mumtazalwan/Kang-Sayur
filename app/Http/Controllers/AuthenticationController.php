@@ -420,7 +420,12 @@ class AuthenticationController extends Controller
     {
         $user = Auth::user();
 
-        Mail::send(new ResetPassword($user->email, $user->name));
+        $role = User::where('users.id', $user->id)
+            ->join('model_has_roles', 'model_has_roles.model_id', '=', 'users.id')
+            ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->first();
+
+        Mail::send(new ResetPassword($user->email, $user->name, $role->name));
 
         return response()->json([
             'status' => 200,
