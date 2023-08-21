@@ -225,7 +225,7 @@ class TokoController extends Controller
             ->first();
 
         $kategori = DB::table('produk')
-            ->select('kategori.id', 'kategori.nama_kategori')
+            ->select('kategori.id', 'kategori.nama_kategori', 'kategori.kategori_img')
             ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
             ->groupBy('kategori.id', 'kategori.nama_kategori')
             ->where('produk.toko_id', $tokoId)

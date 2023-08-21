@@ -11,7 +11,6 @@ use App\Http\Controllers\StoreAdvertisingController;
 use Illuminate\Http\Request;
 
 // controller
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\OrderController;
@@ -23,7 +22,6 @@ use App\Http\Controllers\Seller\TokoController;
 use App\Http\Controllers\Seller\ProdukController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ProductAdvertisingController;
-use App\Mail\OtpMail;
 
 /*
 |--------------------------------------------------------------------------

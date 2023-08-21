@@ -131,20 +131,35 @@ class ProdukController extends Controller
     //list produk berdasarkan kategori id dan toko id
     public function produkStoreByCategoryId(Request $request)
     {
+        $user = Auth::user();
         $kategoriId = $request->kategoriId;
         $tokoId = $request->tokoId;
 
         $data = Produk::join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->where('statuses.status', '=', 'Accepted')
             ->where('kategori_id', $kategoriId)->where('produk.toko_id', $tokoId)
-            ->select('produk.*')
+            ->select(
+                'produk.id',
+                'produk.nama_produk',
+                'tokos.nama_toko',
+                'tokos.alamat',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+                * cos(radians(tokos.latitude))
+                * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
+                + sin(radians(" . $user->latitude . "))
+                * sin(radians(tokos.latitude))) AS distance"),
+                'variants.variant_img',
+                'variants.harga_variant')
+            ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
+            ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->groupBy('produk.id')
             ->get();
 
         if (count($data)) {
             return response()->json([
                 'status_code' => '200',
                 'message' => 'List produk berdasarkan kategori',
-                'data' => $data->setHidden(['id', 'deskripsi', 'toko_id', 'id_onsale', 'created_at', 'updated_at', 'kategori_id', 'katalog_id', 'varian_id', 'ulasan_id', 'is_onsale']),
+                'data' => $data
             ]);
         } else {
             return response()->json([
