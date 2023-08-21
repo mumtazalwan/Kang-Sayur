@@ -95,22 +95,21 @@ class ConversationController extends Controller
         $interlocutor = $request->interlocutor;
         $user = Auth::user();
 
-        $checking1 = Conversation::where('person_one', $user->id)
-            ->orWhere('person_one', $user->id);
-
-        $checking2 = Conversation::where('person_two', $interlocutor)
-            ->orWhere('person_two', $interlocutor);
-
-        $result = Conversation::where(function ($query) use ($checking1, $checking2) {
-            $query->whereExists($checking1)
-                ->whereExists($checking2);
-        })
-            ->first();
+        $result = Conversation::where(function ($query) use ($user, $interlocutor) {
+            $query->where(function ($subquery) use ($user, $interlocutor) {
+                $subquery->where('person_one', $user->id)
+                    ->where('person_two', $interlocutor);
+            })->orWhere(function ($subquery) use ($user, $interlocutor) {
+                $subquery->where('person_one', $interlocutor)
+                    ->where('person_two', $user->id);
+            });
+        })->first();
 
         if ($result) {
             return response()->json([
                 'status' => 200,
                 'convo_id' => $result->id,
+                'res' => $result
             ]);
         } else {
             $newConvo = Conversation::create([

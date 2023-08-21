@@ -165,6 +165,7 @@ class ProdukController extends Controller
             return response()->json([
                 'status_code' => '200',
                 'message' => 'Tidak ada produk di kategori ini!',
+                'data' => $data
             ]);
         }
     }
@@ -266,6 +267,7 @@ class ProdukController extends Controller
             return response()->json([
                 'status_code' => '200',
                 'message' => 'Maaf tidak ada produk dengan jarak toko kurang dari 25 km berdasarkan kategori id ini',
+                'data' => [],
             ]);
         }
     }
