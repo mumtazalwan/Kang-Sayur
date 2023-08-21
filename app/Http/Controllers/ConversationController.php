@@ -37,13 +37,22 @@ class ConversationController extends Controller
             $dataJoin->conversation_id = $conversation_id;
             $dataJoin->lastConvo = $lastConvo ?? "";
 
-            return $dataJoin;
-        });
+            if ($lastConvo) {
+                $dataJoin->conversation_id = $conversation_id;
+                $dataJoin->lastConvo = $lastConvo ?? "";
+
+                return $dataJoin;
+            } else {
+                return null;
+            }
+        })->filter();
+
+        $final = $convos->values()->toArray();
 
         return response()->json([
             'status' => 200,
-            'message' => 'List percakapan user',
-            'list' => $convos
+            'message' => 'List percakapan seller',
+            'list' => $final
         ]);
     }
 
@@ -144,8 +153,8 @@ class ConversationController extends Controller
             $dataJoin = Toko::where('seller_id', $otherId)->select('tokos.id as toko_id', 'tokos.nama_toko', 'tokos.img_profile')->first();
             $lastConvo = Message::where('conversation_id', $conversation_id)->select('messages.id', 'messages.conversation_id', 'messages.user_id', 'messages.message', DB::raw('DATE_FORMAT(messages.created_at, "%Y-%m-%d %H:%i:%s") as terakhir_dikirim'))->orderBy('updated_at', 'DESC')->first();
 
-            $dataJoin->conversation_id = $conversation_id;
-            $dataJoin->lastConvo = $lastConvo ?? "";
+//            $dataJoin->conversation_id = $conversation_id;
+//            $dataJoin->lastConvo = $lastConvo ?? "";
 
             if ($lastConvo) {
                 $dataJoin->conversation_id = $conversation_id;

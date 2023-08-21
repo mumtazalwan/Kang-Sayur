@@ -44,7 +44,7 @@ class SaleController extends Controller
                 * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
                 + sin(radians(" . $user->latitude . "))
                 * sin(radians(tokos.latitude))) AS distance"),
-                DB::raw('100 - (sales.harga_sale/(variants.harga_variant/100)) as diskon')
+                DB::raw('100 - (sales.harga_sale/(variants.harga_variant/100)) as diskon'),
             )
             ->groupBy('produk.id')
             ->get();
