@@ -350,9 +350,20 @@ class TokoController extends Controller
             ->where('toko_id', $tokoId)
             ->first();
 
+        $finis_order = DB::table('transactions')
+            ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
+            ->where('orders.store_id', $tokoId)
+            ->where('orders.status', 'Selesai')
+            ->get();
+
+        $rating_produk = Review::where('toko_id', $tokoId)
+            ->select(DB::raw('SUM(reviews.rating) / COUNT(reviews.rating) as rating'))
+            ->first()->rating;
+
         $order_count = DB::table('transactions')
             ->join('orders', 'orders.transaction_code', '=', 'transactions.transaction_code')
             ->where('orders.store_id', $tokoId)
+            ->where('orders.status', 'Menunggu konfirmasi')
             ->get();
 
         return response()->json([
@@ -360,8 +371,8 @@ class TokoController extends Controller
             'data' => [
                 'pesanan' => count($order_count),
                 'pengunjung_toko' => $pengunjung->visited,
-                'rating_produk' => 4.5,
-                'produk_terjual' => 100,
+                'rating_produk' => doubleval($rating_produk ?? 5),
+                'produk_terjual' => count($finis_order),
                 'laporan' => 0,
                 'rating_pelayanan' => 5
             ],

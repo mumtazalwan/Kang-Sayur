@@ -49,6 +49,8 @@ class SaleController extends Controller
             ->groupBy('produk.id')
             ->get();
 
+        $now = Carbon::now();
+
         $time = SaleSession::whereTime('start', '<=', $mytime)
             ->whereTime('end', '>=', $mytime)
             ->first();
@@ -62,6 +64,7 @@ class SaleController extends Controller
                 'title' => 'Promo kilat',
                 'start' => $time->start,
                 'end' => $time->end,
+                'sec_diff' => $now->diffInSeconds($time->end),
                 'data' => []
             ]);
         }
@@ -71,6 +74,7 @@ class SaleController extends Controller
             'title' => 'Promo kilat',
             'start' => $time->start,
             'end' => $time->end,
+            'sec_diff' => $now->diffInSeconds($time->end),
             'data' => $session
         ]);
     }

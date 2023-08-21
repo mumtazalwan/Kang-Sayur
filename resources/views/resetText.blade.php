@@ -13,7 +13,7 @@
 <p>Kami telah menerima permintaan pengaturan ulang kata sandi untuk akun Anda. Mohon klik tautan di bawah ini untuk membuat kata sandi baru:</p>
 <br>
 
-<p><h2><a href="https://kangsayurseller.page.link/ubah-kata-sandi">Tautan Pengaturan Ulang Kata Sandi</a></h2></p><br>
+<p><h2><a href="{{$deep_link}}">Tautan Pengaturan Ulang Kata Sandi</a></h2></p><br>
 
 <p>Jika Anda tidak merasa melakukan permintaan ini, Anda dapat mengabaikan email ini. Akun Anda tetap aman dan kata sandi lama akan tetap berlaku.</p>
 

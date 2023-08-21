@@ -29,8 +29,7 @@ class Delivery extends Controller
         $order = Order::where('store_id', request('store_id'))->where('transaction_code', request('transaction_code'))->get();
 
         if ($orderS == "Menunggu driver") {
-            $order->toQuery()->update(array("status" => 'Sedang diantar'));
-            $order->toQuery()->update(array("status" => 'Selesai', 'delivered_by' => $user->id));
+            $order->toQuery()->update(array("status" => 'Sedang diantar', 'delivered_by' => $user->id));
 
             return response()->json([
                 'message' => 'Status berhasil diubah'
