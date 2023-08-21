@@ -328,6 +328,7 @@ class ProdukController extends Controller
             ->where('produk.toko_id', $tokoId)
             ->join('statuses', 'statuses.produk_id', '=', 'produk.id')
             ->join('variants', 'variants.product_id', '=', 'produk.id')
+            ->orderBy('tanggal_verivikasi', 'DESC')
             ->where('statuses.status', 'Pending')
             ->get();
 
