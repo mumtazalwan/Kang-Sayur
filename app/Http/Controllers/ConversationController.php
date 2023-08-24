@@ -34,9 +34,6 @@ class ConversationController extends Controller
             $dataJoin = User::where('id', $otherId)->select('users.id as user_id', 'users.name', 'users.photo')->first();
             $lastConvo = Message::where('conversation_id', $conversation_id)->orderBy('created_at', 'DESC')->first();
 
-            $dataJoin->conversation_id = $conversation_id;
-            $dataJoin->lastConvo = $lastConvo ?? "";
-
             if ($lastConvo) {
                 $dataJoin->conversation_id = $conversation_id;
                 $dataJoin->lastConvo = $lastConvo ?? "";
@@ -93,7 +90,7 @@ class ConversationController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Roomchat',
-            'messages' => $itemsWithStatus,
+            'messages' => $itemsWithStatus ?? [],
         ]);
     }
 
