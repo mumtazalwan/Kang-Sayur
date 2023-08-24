@@ -503,4 +503,43 @@ class ProdukController extends Controller
             'data' => $data
         ]);
     }
+
+    public function take_down(Request $request)
+    {
+        $produk_id = $request->produk_id;
+        $toko_id = $request->toko_id;
+        $alasan = $request->alasan;
+
+        $store = Toko::where('id', $toko_id)->first();
+
+        $status = Status::where('produk_id', $produk_id)
+            ->where('toko_id', $toko_id)
+            ->get();
+
+        $produk = Produk::where('id', $produk_id)->first();
+
+        if ($status) {
+            Status::where('produk_id', $produk_id)
+                ->where('toko_id', $toko_id)
+                ->update([
+                    'status' => 'Rejected'
+                ]);
+
+            Inbox::create([
+                'user_id' => $store->seller_id,
+                'judul' => "Pemberhentian Produk: Perubahan Status dan Informasi Penting",
+                'body' => "HI Toko $store->nama_toko, Dengan ini kami memberitahukan bahwa produk $produk dinonaktifkan dengan alasan $alasan, jika terdapat kenjanggalan, anda dapat menghubungi admin kami"
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil mentakedown produk'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => 'maaf tidak ada produk ini'
+            ]);
+        }
+    }
 }
