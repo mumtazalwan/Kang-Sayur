@@ -9,8 +9,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\StoreAdvertisingController;
 use Illuminate\Http\Request;
-
-// controller
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\OrderController;
