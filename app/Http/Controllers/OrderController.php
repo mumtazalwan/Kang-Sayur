@@ -256,6 +256,7 @@ class OrderController extends Controller
                             'alamat' => $transaction->alamat_lengkap
                         ],
                         'driver' => [
+                            'driver_id' => $driver->id,
                             'nama_driver' => $driver->name,
                             'foto_driver' => $driver->photo,
                             'plat_kendaraan' => $driver->nomor_polisi,
