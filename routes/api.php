@@ -137,6 +137,10 @@ Route::group(['middleware' => ['role:user', 'auth:sanctum'], 'prefix' => 'user']
         Route::get('/room', [ConversationController::class, 'roomChatUser']);
         Route::post('/send', [MessageController::class, 'send']);
     });
+
+    Route::group(['prefix' => '/inbox'], function () {
+        Route::get('/data-inbox', [InboxController::class, 'listInboxUser']);
+    });
 });
 
 // seller
@@ -229,6 +233,7 @@ Route::group(['middleware' => ['role:admin', 'auth:sanctum'], 'prefix' => 'admin
         Route::post('/verifikasi', [ProdukController::class, 'verifikasi']);
         Route::post('/verifikasi/ditolak', [ProdukController::class, 'verifikasi_ditolak']);
         Route::get('/verifikasi/list', [ProdukController::class, 'verifikasi_list']);
+        Route::post('/take/down', [ProdukController::class, 'take_down']);
     });
 
     Route::group(['prefix' => '/chat'], function () {

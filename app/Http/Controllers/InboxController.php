@@ -27,4 +27,20 @@ class InboxController extends Controller
             'data' => $data
         ]);
     }
+
+    public function listInboxUser()
+    {
+        $user = Auth::user();
+
+        $data = Inbox::where('user_id', $user->id)
+            ->select('inboxes.user_id', 'inboxes.judul', 'inboxes.body', 'inboxes.image', DB::raw('DATE_FORMAT(inboxes.created_at, "%Y-%m-%d") as tanggal'))
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'list inbox',
+            'data' => $data ?? []
+        ]);
+    }
 }
