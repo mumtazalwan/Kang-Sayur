@@ -488,7 +488,12 @@ class ProdukController extends Controller
             ->join('variants', 'variants.product_id', '=', 'produk.id')
             ->join('statuses', 'statuses.produk_id', '=', 'orders.product_id')
             ->join('tokos', 'tokos.id', '=', 'produk.toko_id')
-            ->select('*', DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
+            ->select('produk.nama_produk',
+                'tokos.nama_toko',
+                'variants.harga_variant',
+                'produk.id',
+                'variants.variant_img',
+                DB::raw("6371 * acos(cos(radians(" . $user->latitude . "))
                 * cos(radians(tokos.latitude))
                 * cos(radians(tokos.longitude) - radians(" . $user->longitude . "))
                 + sin(radians(" . $user->latitude . "))
@@ -528,7 +533,7 @@ class ProdukController extends Controller
             Inbox::create([
                 'user_id' => $store->seller_id,
                 'judul' => "Pemberhentian Produk: Perubahan Status dan Informasi Penting",
-                'body' => "HI Toko $store->nama_toko, Dengan ini kami memberitahukan bahwa produk $produk dinonaktifkan dengan alasan $alasan, jika terdapat kenjanggalan, anda dapat menghubungi admin kami"
+                'body' => "HI Toko $store->nama_toko, Dengan ini kami memberitahukan bahwa produk $produk->nama_produk dinonaktifkan dengan alasan $alasan, jika terdapat kenjanggalan, anda dapat menghubungi admin kami"
             ]);
 
             return response()->json([

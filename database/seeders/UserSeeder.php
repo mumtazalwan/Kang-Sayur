@@ -86,5 +86,33 @@ class UserSeeder extends Seeder
             'created_at' => $now,
             'updated_at' => $now
         ]);
+
+        User::create([
+            'name' => 'Juju',
+            'photo' => '/storage/user_profile/akbar.jpg',
+            'email' => 'juju123@gmail.com',
+            'sandi_id' => 2,
+            'jenis_kelamin' => 0,
+            'tanggal_lahir' => '2001-10-10',
+            'address' => 'Jl. Raya PR Sukun, Gebog, Gondosari, Kec. Gebog, Kabupaten Kudus, Jawa Tengah 59333',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808,
+            'created_at' => $now,
+            'updated_at' => $now
+        ]);
+
+        User::create([
+            'name' => 'Hidro',
+            'photo' => '/storage/user_profile/1684847191asa.jpg',
+            'email' => 'hidro123@gmail.com',
+            'sandi_id' => 2,
+            'jenis_kelamin' => 1,
+            'tanggal_lahir' => '2006-03-10',
+            'address' => '33 Hominy Place, Skiatook,ok, 34030  United States',
+            'longitude' => 110.842843,
+            'latitude' => -6.753808,
+            'created_at' => $now,
+            'updated_at' => $now
+        ]);
     }
 }
